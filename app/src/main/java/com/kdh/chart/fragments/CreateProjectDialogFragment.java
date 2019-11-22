@@ -47,7 +47,7 @@ public class CreateProjectDialogFragment extends DialogFragment {
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         //super.onCreateDialog(savedInstanceState);
         LayoutInflater layoutInflater = getActivity().getLayoutInflater();
-        view = layoutInflater.inflate(R.layout.fragment_create_chart_dialog, null, false);
+        view = layoutInflater.inflate(R.layout.fragment_create_project_dialog, null, false);
         projectNameEdt = view.findViewById(R.id.edt_project_name);
         return new MaterialAlertDialogBuilder(getActivity(), R.style.ThemeOverlay_MaterialComponents_MaterialAlertDialog)
                 .setTitle("Enter project name")
