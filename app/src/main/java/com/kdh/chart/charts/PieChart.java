@@ -12,14 +12,17 @@ import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.view.View;
 
+import com.kdh.chart.datatypes.SimpleInputRow;
+
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Locale;
 import java.util.Random;
 
-public class PieChart extends View {
+public class PieChart extends View implements ChartView {
 
-    public enum AnimType {NO_ANIMATION, TOGETHER, SEQUENTIALLY}
+    //public enum AnimType {NO_ANIMATION, TOGETHER, SEQUENTIALLY}
 
     public class Item {
 
@@ -50,8 +53,6 @@ public class PieChart extends View {
         items = new ArrayList<Item>();
         initPaint();
         initAnimator();
-        int[] ints = {1};
-        updateAngle(ints, AnimType.NO_ANIMATION);
     }
 
     private void initPaint() {
@@ -76,17 +77,13 @@ public class PieChart extends View {
 
     }
 
-    private int getRandomColor() {
-        Random rnd = new Random();
-        int color = Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
-        return color;
-    }
 
 
-    public void updateAngle(int[] values, AnimType animType) {
+
+/*    public void updateAngle(int[] values, AnimType animType) {
         switch (animType) {
             case TOGETHER:
-                updateAngleTogether(values);
+                updateData(values);
                 break;
             case SEQUENTIALLY:
                 updateAngleSequentially(values);
@@ -95,9 +92,9 @@ public class PieChart extends View {
                 updateAngleNoAnimation(values);
                 break;
         }
-    }
+    }*/
 
-    public void updateAngleNoAnimation(int[] values) {
+/*    public void updateAngleNoAnimation(int[] values) {
         animSet.cancel();
         items.clear();
         int sum = 0;
@@ -120,24 +117,24 @@ public class PieChart extends View {
         }
         Collections.reverse(items);
         invalidate();
-    }
-
-    public void updateAngleTogether(int[] values) {
+    }*/
+    @Override
+    public void updateData(List<SimpleInputRow> list) {
         animSet.cancel();
         items.clear();
         animators.clear();
-        int sum = 0;
+        float sum = 0;
         float currentAngle = 0;
         int color = 0;
-        for (int value : values) {
-            sum += value;
+        for (SimpleInputRow row : list) {
+            sum += Float.parseFloat(row.getValue());
         }
         float u = 360f / sum;
         float p = 100f / sum;
         Random rnd = new Random();
-        for (int value : values) {
-            color = getRandomColor();
-
+        for (SimpleInputRow row : list) {
+            color = row.getColor();
+            float value = Float.parseFloat(row.getValue());
             final Item item = new Item(currentAngle, color);
             item.percent = value * p;
             currentAngle += value * u;
@@ -163,7 +160,7 @@ public class PieChart extends View {
         animSet.start();
     }
 
-    public void updateAngleSequentially(int[] values) {
+    /*public void updateAngleSequentially(int[] values) {
         animSet.cancel();
         items.clear();
         animators.clear();
@@ -201,7 +198,7 @@ public class PieChart extends View {
 
         animSet.playSequentially(animators);
         animSet.start();
-    }
+    }*/
 
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {

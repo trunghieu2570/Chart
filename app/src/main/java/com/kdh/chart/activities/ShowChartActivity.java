@@ -1,66 +1,76 @@
 package com.kdh.chart.activities;
 
-import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.TextView;
+import android.widget.ListView;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.kdh.chart.R;
-import com.kdh.chart.charts.PieChart;
-import com.kdh.chart.fragments.InputBottomSheetFragment;
+import com.kdh.chart.adapters.LegendTableRowAdapter;
+import com.kdh.chart.charts.ChartView;
+import com.kdh.chart.datatypes.SimpleInputRow;
+import com.kdh.chart.fragments.SimpleInputFragment;
+
+import java.util.ArrayList;
+import java.util.Random;
 
 public class ShowChartActivity extends AppCompatActivity {
 
-    private Button updateButton;
-    private Button updateTogetherButton;
-    private Button updateSequentiallyButton;
-    private Button fixChart;
-    private PieChart pieChart;
-    private TextView tv_chartName;
-    private String values;
+    private ChartView mChartView;
+    private SimpleInputFragment mInputTable;
+    private ArrayList<SimpleInputRow> simpleInputRows;
+    private ListView legendTableListView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.show_pie_chart);
+        setContentView(R.layout.activity_show_chart);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         setTitle("Your Pie Chart");
         actionBar.setDisplayHomeAsUpEnabled(true);
-
+        simpleInputRows = new ArrayList<>();
+        String[] fields = new String[]{"Tỉ trọng A", "Tỉ trọng B", "Tỉ trọng C"};
+        for (String lb : fields) {
+            simpleInputRows.add(new SimpleInputRow(lb, R.color.blue_500, "","tỉ trọng 1"));
+        }
+        mInputTable = new SimpleInputFragment(simpleInputRows);
 
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
-        pieChart = findViewById(R.id.pieChart);
+        mChartView = findViewById(R.id.pieChart);
+        //legendTableListView = findViewById(R.id.lv_legend_table);
 
-        values="1";
-
-        SetInputValues();
+        //Gán sự kiện khi cập nhật data
+        mInputTable.setOnUpdateDataListener(new SimpleInputFragment.OnUpdateDataListener() {
+            @Override
+            public void onUpdate(ArrayList<SimpleInputRow> lists) {
+                SetValue(simpleInputRows);
+            }
+        });
         showBottomSheetDialog();
     }
+    private int getRandomColor() {
+        Random rnd = new Random();
+        int color = Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
+        return color;
+    }
 
-    public void SetInputValues()
+    private void SetValue(ArrayList<SimpleInputRow> list)
     {
+        mChartView.updateData(list);
+        //createLegendTable(list);
+    }
 
-
-        Intent intent=getIntent();
-        Bundle bundle = intent.getBundleExtra(InputPie.BUNDLE);
-
-        if (intent != null) {
-            bundle = intent.getBundleExtra(InputPie.BUNDLE);
-            if (bundle != null) {
-                values=bundle.getString(InputPie.VALUE).toString();
-                tv_chartName.setText("Pie Chart: "+bundle.getString(InputPie.CHART_NAME).toString());
-                updateButton.callOnClick();
-            }
-        }
+    private void createLegendTable(ArrayList<SimpleInputRow> list) {
+        LegendTableRowAdapter rowsAdapter = new LegendTableRowAdapter(this, R.layout.legend_table_row, list);
+        legendTableListView.setAdapter(rowsAdapter);
     }
 
     private int[] convertStringToIntArray(String str) {
@@ -73,8 +83,7 @@ public class ShowChartActivity extends AppCompatActivity {
     }
 
     private void showBottomSheetDialog() {
-        InputBottomSheetFragment bottomSheetFragment = InputBottomSheetFragment.newInstance();
-        bottomSheetFragment.show(getSupportFragmentManager(),InputBottomSheetFragment.TAG);
+        mInputTable.show(getSupportFragmentManager(), SimpleInputFragment.TAG);
     }
 
     @Override
@@ -84,22 +93,19 @@ public class ShowChartActivity extends AppCompatActivity {
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.edit_chart) {
-            showBottomSheetDialog();
-            return true;
+        switch (id) {
+            case R.id.edit_chart:
+                showBottomSheetDialog();
+                return true;
+            case android.R.id.home:
+                finish();
+                return true;
         }
-
-        if (id == android.R.id.home) {
-            finish();
-            return true;
-        }
-
         return super.onOptionsItemSelected(item);
+    }
+
+    public ArrayList<SimpleInputRow> getInputRows() {
+        return simpleInputRows;
     }
 }

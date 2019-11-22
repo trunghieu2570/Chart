@@ -22,8 +22,7 @@
 
     <com.otaliastudios.zoom.ZoomLayout
         android:layout_width="match_parent"
-        android:layout_height="413dp"
-        android:scrollbars="vertical|horizontal"
+        android:layout_height="match_parent"
         app:alignment="center"
         app:animationDuration="280"
         app:hasClickableChildren="false"
@@ -44,10 +43,17 @@
         app:verticalPanEnabled="true"
         app:zoomEnabled="true">
 
-        <com.kdh.chart.charts.PieChart
-            android:id="@+id/pieChart"
-            android:layout_width="332dp"
-            android:layout_height="334dp" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <com.kdh.chart.charts.PieChart
+                android:id="@+id/pieChart"
+                android:layout_width="332dp"
+                android:layout_height="334dp" />
+        </LinearLayout>
+
+
     </com.otaliastudios.zoom.ZoomLayout>
 
 
