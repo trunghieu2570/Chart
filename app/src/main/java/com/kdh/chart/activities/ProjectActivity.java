@@ -1,6 +1,5 @@
 package com.kdh.chart.activities;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,6 +19,7 @@ import com.kdh.chart.R;
 import com.kdh.chart.adapters.ChartListViewAdapter;
 import com.kdh.chart.datatypes.Chart;
 import com.kdh.chart.datatypes.ChartTypeItem;
+import com.kdh.chart.fragments.CreateChartDialogFragment;
 import com.kdh.chart.fragments.CreateProjectDialogFragment;
 
 import java.util.ArrayList;
@@ -116,8 +116,9 @@ public class ProjectActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 switch (position) {
                     case 0:
-                        Intent intent = new Intent(ProjectActivity.this, ShowChartActivity.class);
-                        startActivity(intent);
+                        Chart chart = new Chart(Chart.ChartType.PIE);
+                        CreateChartDialogFragment fragment = CreateChartDialogFragment.newInstance(chart);
+                        fragment.show(getSupportFragmentManager(), "create_chart");
                         cancelBottonSheetDialog();
                         break;
                 }

@@ -127,14 +127,14 @@ public class PieChart extends View implements ChartView {
         float currentAngle = 0;
         int color = 0;
         for (SimpleInputRow row : list) {
-            sum += Float.parseFloat(row.getValue());
+            sum += Float.parseFloat(0 + row.getValue());
         }
         float u = 360f / sum;
         float p = 100f / sum;
         Random rnd = new Random();
         for (SimpleInputRow row : list) {
             color = row.getColor();
-            float value = Float.parseFloat(row.getValue());
+            float value = Float.parseFloat(0 + row.getValue());
             final Item item = new Item(currentAngle, color);
             item.percent = value * p;
             currentAngle += value * u;

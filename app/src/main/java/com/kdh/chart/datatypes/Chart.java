@@ -25,6 +25,10 @@ public class Chart implements Serializable {
         this.mDescription = description;
     }
 
+    public Chart(ChartType chartType) {
+        this.mType = chartType;
+    }
+
     public ChartType getType() {
         return mType;
     }
