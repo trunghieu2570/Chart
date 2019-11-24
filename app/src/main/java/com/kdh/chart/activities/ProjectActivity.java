@@ -20,6 +20,7 @@ import com.kdh.chart.adapters.ChartListViewAdapter;
 import com.kdh.chart.datatypes.Chart;
 import com.kdh.chart.datatypes.ChartTypeItem;
 import com.kdh.chart.fragments.CreateChartDialogFragment;
+import com.kdh.chart.fragments.CreateLineChartDialogFragment;
 import com.kdh.chart.fragments.CreateProjectDialogFragment;
 
 import java.util.ArrayList;
@@ -114,13 +115,20 @@ public class ProjectActivity extends AppCompatActivity {
         chooseChartListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Chart chart;
+
                 switch (position) {
                     case 0:
-                        Chart chart = new Chart(Chart.ChartType.PIE);
-                        CreateChartDialogFragment fragment = CreateChartDialogFragment.newInstance(chart);
+                        chart = new Chart(Chart.ChartType.PIE);
+                        final CreateChartDialogFragment fragment = CreateChartDialogFragment.newInstance(chart);
                         fragment.show(getSupportFragmentManager(), "create_chart");
                         cancelBottonSheetDialog();
                         break;
+                    case 1:
+                        chart = new Chart(Chart.ChartType.LINE);
+                        final CreateLineChartDialogFragment fragment2 = CreateLineChartDialogFragment.newInstance(chart);
+                        fragment2.show(getSupportFragmentManager(), "create_chart");
+                        cancelBottonSheetDialog();
                 }
             }
         });

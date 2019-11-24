@@ -22,14 +22,14 @@ import com.kdh.chart.datatypes.SimpleInputRow;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class AddNewRowDialogFragment extends DialogFragment {
+public class AddSimpleInputRowDialogFragment extends DialogFragment {
 
     private View view;
     private EditText rowNameEdt;
     private EditText descriptionEdt;
 
 
-    public AddNewRowDialogFragment() {
+    public AddSimpleInputRowDialogFragment() {
         // Required empty public constructor
     }
 
@@ -54,7 +54,7 @@ public class AddNewRowDialogFragment extends DialogFragment {
                                 "",
                                 descriptionEdt.getText().toString());
 
-                        ((ShowChartActivity) getActivity()).getInputRows().add(row);
+                        ((ShowChartActivity) getActivity()).getSimpleInputRows().add(row);
                         getDialog().dismiss();
                     }
                 })

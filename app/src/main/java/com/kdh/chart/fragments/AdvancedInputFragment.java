@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.HorizontalScrollView;
 import android.widget.ListView;
 
 import androidx.annotation.Nullable;
@@ -19,35 +20,39 @@ import androidx.fragment.app.Fragment;
 
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.kdh.chart.R;
-import com.kdh.chart.adapters.SimpleInputRowAdapter;
-import com.kdh.chart.datatypes.SimpleInputRow;
+import com.kdh.chart.adapters.AdvancedInputRowAdapter;
+import com.kdh.chart.datatypes.AdvancedInputRow;
 
 import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class SimpleInputFragment extends BottomSheetDialogFragment {
+public class AdvancedInputFragment extends BottomSheetDialogFragment {
 
 
-    public static final String TAG = "SimpleInputFragment";
+    public static final String TAG = "AdvancedInputFragment";
     private OnUpdateDataListener onUpdateDataListener;
-    private ArrayList<SimpleInputRow> rowsList;
+    private ArrayList<AdvancedInputRow> rowsList;
+    private int defaultNumOfCols;
+    private ListView rowsListView;
+    private AdvancedInputRowAdapter rowsAdapter;
 
 
-    public SimpleInputFragment() {
+    public AdvancedInputFragment() {
         // Required empty public constructor
     }
 
-    public SimpleInputFragment(ArrayList<SimpleInputRow> rowsList) {
+    public AdvancedInputFragment(ArrayList<AdvancedInputRow> rowsList, int defaultNumOfCols) {
         this.rowsList = rowsList;
+        this.defaultNumOfCols = defaultNumOfCols;
     }
 
     public void setOnUpdateDataListener(OnUpdateDataListener onUpdateDataListener) {
         this.onUpdateDataListener = onUpdateDataListener;
     }
 
-    public ArrayList<SimpleInputRow> getRowsList() {
+    public ArrayList<AdvancedInputRow> getRowsList() {
         return rowsList;
     }
 
@@ -66,14 +71,31 @@ public class SimpleInputFragment extends BottomSheetDialogFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_input_bottom_sheet, container, false);
-        final Toolbar toolbar = view.findViewById(R.id.toolbar);
-        final Button addRowButton = view.findViewById(R.id.btn_add_row);
+        final View mainView = inflater.inflate(R.layout.fragment_input_bottom_sheet, container, false);
+        final Toolbar toolbar = mainView.findViewById(R.id.toolbar);
+        final Button addRowButton = mainView.findViewById(R.id.btn_add_row);
+        final Button addColumnButton = mainView.findViewById(R.id.btn_add_col);
         addRowButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AddSimpleInputRowDialogFragment fragment = new AddSimpleInputRowDialogFragment();
+                AddAdvancedInputRowDialogFragment fragment = AddAdvancedInputRowDialogFragment.newInstance(defaultNumOfCols);
+                fragment.setOnPositiveButtonClickedListener(new AddAdvancedInputRowDialogFragment.OnPositiveButtonClickedListener() {
+                    @Override
+                    public void onClick() {
+                        drawSingleTableData(mainView);
+                    }
+                });
                 fragment.show(getFragmentManager(), "new row");
+            }
+        });
+        addColumnButton.setEnabled(true);
+        addColumnButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                for (AdvancedInputRow row : rowsList) {
+                    row.getValues().add("");
+                }
+                drawSingleTableData(mainView);
             }
         });
         toolbar.inflateMenu(R.menu.menu_input_table);
@@ -92,12 +114,12 @@ public class SimpleInputFragment extends BottomSheetDialogFragment {
             }
         });
         toolbar.setNavigationIcon(R.drawable.ic_keyboard_arrow_up_white_24dp);
-        drawSingleTableData(view);
-        return view;
+        drawSingleTableData(mainView);
+        return mainView;
     }
 
 
-    private ArrayList<SimpleInputRow> getData() {
+    private ArrayList<AdvancedInputRow> getData() {
         return rowsList;
     }
 
@@ -106,20 +128,24 @@ public class SimpleInputFragment extends BottomSheetDialogFragment {
         //frame
         FrameLayout frameLayout = view.findViewById(R.id.frame);
         frameLayout.removeAllViews();
+        //scroll
+        HorizontalScrollView horizontalScrollView = new HorizontalScrollView(context);
+        horizontalScrollView.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         //list
-        ListView rowsListView = new ListView(context);
+        rowsListView = new ListView(context);
         rowsListView.setDivider(null);
         rowsListView.setDividerHeight(0);
         rowsListView.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
 
-        SimpleInputRowAdapter rowsAdapter = new SimpleInputRowAdapter(context, R.layout.input_data_row, rowsList);
+        rowsAdapter = new AdvancedInputRowAdapter(context, R.layout.advanced_input_data_row, rowsList);
         rowsListView.setAdapter(rowsAdapter);
         //end list
-        frameLayout.addView(rowsListView);
+        horizontalScrollView.addView(rowsListView);
+        frameLayout.addView(horizontalScrollView);
     }
 
     public interface OnUpdateDataListener {
-        void onUpdate(ArrayList<SimpleInputRow> lists);
+        void onUpdate(ArrayList<AdvancedInputRow> lists);
     }
 
 }

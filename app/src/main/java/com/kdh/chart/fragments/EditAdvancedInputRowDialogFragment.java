@@ -16,13 +16,13 @@ import androidx.fragment.app.Fragment;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.kdh.chart.R;
 import com.kdh.chart.activities.ShowChartActivity;
-import com.kdh.chart.datatypes.SimpleInputRow;
+import com.kdh.chart.datatypes.AdvancedInputRow;
 
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class EditRowDialogFragment extends DialogFragment {
+public class EditAdvancedInputRowDialogFragment extends DialogFragment {
 
     private View view;
     private EditText rowNameEdt;
@@ -31,16 +31,16 @@ public class EditRowDialogFragment extends DialogFragment {
     private OnClickNeutralButtonListener onClickNeutralButtonListener;
 
 
-    public EditRowDialogFragment() {
+    public EditAdvancedInputRowDialogFragment() {
         // Required empty public constructor
     }
 
-    public static EditRowDialogFragment newInstance(int item, String s1, String s2) {
+    public static EditAdvancedInputRowDialogFragment newInstance(int item, String s1, String s2) {
         Bundle args = new Bundle();
         args.putInt("item", item);
         args.putCharSequence("name", s1);
         args.putCharSequence("description", s2);
-        EditRowDialogFragment fragment = new EditRowDialogFragment();
+        EditAdvancedInputRowDialogFragment fragment = new EditAdvancedInputRowDialogFragment();
         fragment.setArguments(args);
         return fragment;
     }
@@ -64,7 +64,7 @@ public class EditRowDialogFragment extends DialogFragment {
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        SimpleInputRow row = ((ShowChartActivity) getContext()).getSimpleInputRows().get(item);
+                        AdvancedInputRow row = ((ShowChartActivity) getContext()).getAdvancedInputRows().get(item);
                         row.setLabel(rowNameEdt.getText().toString());
                         row.setDescription(descriptionEdt.getText().toString());
                         onClickPositiveButtonListener.onClick();
@@ -80,7 +80,7 @@ public class EditRowDialogFragment extends DialogFragment {
                 .setNeutralButton("Delete", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        ((ShowChartActivity) getContext()).getSimpleInputRows().remove(item);
+                        ((ShowChartActivity) getContext()).getAdvancedInputRows().remove(item);
                         onClickNeutralButtonListener.onClick();
                         getDialog().dismiss();
                     }

@@ -29,19 +29,31 @@
             android:theme="@style/AppTheme.AppBarOverlay"
             app:popupTheme="@style/AppTheme.PopupOverlay"
             android:layout_height="40dp">
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-                <Button
-                    android:id="@+id/btn_add_row"
-                    android:layout_centerInParent="true"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:backgroundTint="@color/colorPrimaryDark"
-                    style="?android:attr/borderlessButtonStyle"
-                    android:textColor="@android:color/white"
-                    android:text="Add row"/>
-            </RelativeLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:orientation="horizontal"
+                    android:layout_height="match_parent">
+                    <Button
+                        android:layout_gravity="center_horizontal"
+                        android:id="@+id/btn_add_row"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="@color/colorPrimaryDark"
+                        style="?android:attr/borderlessButtonStyle"
+                        android:textColor="@android:color/white"
+                        android:text="Add row"/>
+
+                    <Button
+                        android:id="@+id/btn_add_col"
+                        style="?android:attr/borderlessButtonStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:backgroundTint="@color/colorPrimaryDark"
+                        android:enabled="false"
+                        android:text="Add column"
+                        android:textColor="@android:color/white" />
+                </LinearLayout>
 
         </androidx.appcompat.widget.Toolbar>
         <FrameLayout

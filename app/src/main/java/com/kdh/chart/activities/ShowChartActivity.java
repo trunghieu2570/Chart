@@ -1,7 +1,6 @@
 package com.kdh.chart.activities;
 
 import android.content.res.TypedArray;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -12,26 +11,35 @@ import android.widget.ListView;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.DialogFragment;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.kdh.chart.R;
-import com.kdh.chart.adapters.LegendTableRowAdapter;
 import com.kdh.chart.charts.ChartView;
+import com.kdh.chart.charts.LineChart;
 import com.kdh.chart.charts.PieChart;
+import com.kdh.chart.datatypes.AdvancedInputRow;
 import com.kdh.chart.datatypes.Chart;
 import com.kdh.chart.datatypes.SimpleInputRow;
+import com.kdh.chart.fragments.AdvancedInputFragment;
 import com.kdh.chart.fragments.CreateChartDialogFragment;
+import com.kdh.chart.fragments.CreateLineChartDialogFragment;
 import com.kdh.chart.fragments.SimpleInputFragment;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 public class ShowChartActivity extends AppCompatActivity {
 
     private ChartView mChartView;
-    private SimpleInputFragment mInputTable;
+    private DialogFragment mInputTable;
     private ArrayList<SimpleInputRow> simpleInputRows;
+    private ArrayList<AdvancedInputRow> advancedInputRows;
     private ListView legendTableListView;
+    private String chartName;
+    private int numOfRows;
+    private int numOfCols;
+    private Chart chartType;
+    private LinearLayout layout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,12 +49,25 @@ public class ShowChartActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         final Bundle bundle = getIntent().getBundleExtra(CreateChartDialogFragment.BUNDLE);
-        final String chartName = bundle.getString(CreateChartDialogFragment.CHART_NAME);
-        final int numOfRows = bundle.getInt(CreateChartDialogFragment.NUM_ROWS);
-        final Chart chartType = (Chart) bundle.getSerializable(CreateChartDialogFragment.CHART_TYPE);
+        chartName = bundle.getString(CreateChartDialogFragment.CHART_NAME);
+        numOfRows = bundle.getInt(CreateChartDialogFragment.NUM_ROWS);
+        numOfCols = bundle.getInt(CreateLineChartDialogFragment.NUM_COLS);
+        chartType = (Chart) bundle.getSerializable(CreateChartDialogFragment.CHART_TYPE);
         if (chartName != null)
             setTitle(chartName);
         actionBar.setDisplayHomeAsUpEnabled(true);
+        layout = findViewById(R.id.layout);
+        switch (chartType.getType()) {
+            case PIE:
+                showPieChart();
+                break;
+            case LINE:
+                showLineChart();
+                break;
+        }
+    }
+
+    private void showPieChart() {
         simpleInputRows = new ArrayList<>();
         TypedArray colors = getResources().obtainTypedArray(R.array.mdcolor_500);
         for (int i = 0; i < numOfRows; i++) {
@@ -55,37 +76,58 @@ public class ShowChartActivity extends AppCompatActivity {
         }
         colors.recycle();
         mInputTable = new SimpleInputFragment(simpleInputRows);
-
-        final LinearLayout layout = findViewById(R.id.layout);
-        switch (chartType.getType()) {
-            case PIE:
-                mChartView = new PieChart(this, null);
-                break;
-        }
         layout.removeAllViews();
+        mChartView = new PieChart(this, null);
         layout.addView((View) mChartView);
-        mInputTable.setOnUpdateDataListener(new SimpleInputFragment.OnUpdateDataListener() {
+        ((SimpleInputFragment) mInputTable).setOnUpdateDataListener(new SimpleInputFragment.OnUpdateDataListener() {
             @Override
             public void onUpdate(ArrayList<SimpleInputRow> lists) {
                 if (checkValue(simpleInputRows))
-                    setValues(simpleInputRows);
+                    mChartView.updateData(simpleInputRows);
                 else
                     Snackbar.make((View) mChartView, "Invalid data", Snackbar.LENGTH_SHORT).show();
             }
         });
-        showBottomSheetDialog();
+        mInputTable.show(getSupportFragmentManager(), SimpleInputFragment.TAG);
     }
 
-    private int getRandomColor() {
+    private void showLineChart() {
+        advancedInputRows = new ArrayList<>();
+        TypedArray colors = getResources().obtainTypedArray(R.array.mdcolor_500);
+        int color = getResources().getColor(R.color.blue_500);
+        ArrayList<String> values = new ArrayList<>();
+        for (int j = 0; j < numOfCols; j++)
+            values.add("Column"+j);
+        advancedInputRows.add(new AdvancedInputRow("Field name", color, values, ""));
+        for (int i = 0; i < numOfRows; i++) {
+            color = getResources().getColor(R.color.blue_500);
+            values = new ArrayList<>();
+            for (int j = 0; j < numOfCols; j++)
+                values.add("");
+            advancedInputRows.add(new AdvancedInputRow("Tỉ lệ" + i, colors.getColor(i, color), values, "tỉ trọng " + i));
+        }
+        colors.recycle();
+        mInputTable = new AdvancedInputFragment(advancedInputRows, numOfCols);
+        layout.removeAllViews();
+        mChartView = new LineChart(this, null);
+        layout.addView((View) mChartView);
+        ((AdvancedInputFragment) mInputTable).setOnUpdateDataListener(new AdvancedInputFragment.OnUpdateDataListener() {
+            @Override
+            public void onUpdate(ArrayList<AdvancedInputRow> lists) {
+                //if (checkValue(advancedInputRows))
+                mChartView.updateData(advancedInputRows);
+                //else
+                //Snackbar.make((View) mChartView, "Invalid data", Snackbar.LENGTH_SHORT).show();
+            }
+        });
+        mInputTable.show(getSupportFragmentManager(), AdvancedInputFragment.TAG);
+    }
+
+    /*private int getRandomColor() {
         Random rnd = new Random();
         int color = Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
         return color;
-    }
-
-    private void setValues(ArrayList<SimpleInputRow> list) {
-        mChartView.updateData(list);
-        //createLegendTable(list);
-    }
+    }*/
 
     private boolean checkValue(ArrayList<SimpleInputRow> list) {
         float sum = 0;
@@ -98,10 +140,10 @@ public class ShowChartActivity extends AppCompatActivity {
         return sum != 0;
     }
 
-    private void createLegendTable(ArrayList<SimpleInputRow> list) {
+    /*private void createLegendTable(ArrayList<SimpleInputRow> list) {
         LegendTableRowAdapter rowsAdapter = new LegendTableRowAdapter(this, R.layout.legend_table_row, list);
         legendTableListView.setAdapter(rowsAdapter);
-    }
+    }*/
 
     private int[] convertStringToIntArray(String str) {
         String[] tmp = str.split(" ");
@@ -112,9 +154,6 @@ public class ShowChartActivity extends AppCompatActivity {
         return result;
     }
 
-    private void showBottomSheetDialog() {
-        mInputTable.show(getSupportFragmentManager(), SimpleInputFragment.TAG);
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -136,7 +175,17 @@ public class ShowChartActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public ArrayList<SimpleInputRow> getInputRows() {
+    private void showBottomSheetDialog() {
+        if (mInputTable instanceof AdvancedInputFragment)
+            mInputTable.show(getSupportFragmentManager(), AdvancedInputFragment.TAG);
+        else mInputTable.show(getSupportFragmentManager(), SimpleInputFragment.TAG);
+    }
+
+    public ArrayList<SimpleInputRow> getSimpleInputRows() {
         return simpleInputRows;
+    }
+
+    public ArrayList<AdvancedInputRow> getAdvancedInputRows() {
+        return advancedInputRows;
     }
 }
