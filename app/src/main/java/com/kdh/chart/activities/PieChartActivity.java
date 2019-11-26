@@ -19,6 +19,7 @@ import com.kdh.chart.charts.PieChartView;
 import com.kdh.chart.datatypes.ChartLocation;
 import com.kdh.chart.datatypes.PieChart;
 import com.kdh.chart.datatypes.Project;
+import com.kdh.chart.datatypes.ProjectLocation;
 import com.kdh.chart.datatypes.SimpleInputRow;
 import com.kdh.chart.fragments.CreatePieChartDialogFragment;
 import com.kdh.chart.fragments.SimpleInputFragment;
@@ -43,10 +44,11 @@ public class PieChartActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         //receive bundle
         final Bundle bundle = getIntent().getBundleExtra(CreatePieChartDialogFragment.BUNDLE);
-        final Project project = (Project) bundle.getSerializable(CreatePieChartDialogFragment.PROJECT);
+        final ProjectLocation projectLocation = (ProjectLocation) bundle.getSerializable(CreatePieChartDialogFragment.PROJECT_LOCATION);
         final PieChart pieChart = (PieChart) bundle.getSerializable(CreatePieChartDialogFragment.CHART);
         final ChartLocation location = (ChartLocation) bundle.getSerializable(CreatePieChartDialogFragment.LOCATION);
         final String chartName = pieChart.getChartName();
+        final Project project = projectLocation.getProject();
         final int numOfRows = bundle.getInt(CreatePieChartDialogFragment.NUM_ROWS);
         //set title
         if (chartName != null)
@@ -78,8 +80,8 @@ public class PieChartActivity extends AppCompatActivity {
                     //save data to file
                     project.setModifiedTime(Calendar.getInstance().getTime().toString());
                     pieChart.setModifiedTime(Calendar.getInstance().getTime().toString());
-                    ProjectFileManager.saveChart(project, pieChart, location);
-                    ProjectFileManager.saveProject(project);
+                    ProjectFileManager.saveChart(projectLocation, pieChart, location);
+                    ProjectFileManager.saveProject(projectLocation);
                 }
 
                 else

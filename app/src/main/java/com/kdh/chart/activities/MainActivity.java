@@ -12,8 +12,10 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
+import com.kdh.chart.ProjectFileManager;
 import com.kdh.chart.R;
 import com.kdh.chart.datatypes.Project;
+import com.kdh.chart.datatypes.ProjectLocation;
 import com.kdh.chart.fragments.CreateProjectDialogFragment;
 
 import java.util.ArrayList;
@@ -49,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
 
         final ListView recentListView = findViewById(R.id.listview_recent);
         //project list
+        ArrayList<ProjectLocation> projectLocations = ProjectFileManager.loadProjects();
         ArrayList<Project> projects = new ArrayList<>();
         projects.add(new Project("Project 1", Calendar.getInstance().getTime().toString()));
         projects.add(new Project("Project 2", Calendar.getInstance().getTime().toString()));

@@ -18,6 +18,7 @@ import com.kdh.chart.ProjectFileManager;
 import com.kdh.chart.R;
 import com.kdh.chart.activities.ProjectActivity;
 import com.kdh.chart.datatypes.Project;
+import com.kdh.chart.datatypes.ProjectLocation;
 
 import java.util.Calendar;
 
@@ -26,7 +27,7 @@ public class CreateProjectDialogFragment extends DialogFragment {
 
     public static final String PROJECT_NAME = "prjname";
     public static final String BUNDLE = "bundle";
-    public static final String PROJECT = "project";
+    public static final String PROJECT_LOCATION = "project";
 
     private EditText projectNameEdt;
     private EditText chartFieldsEdt;
@@ -58,12 +59,15 @@ public class CreateProjectDialogFragment extends DialogFragment {
                     public void onClick(DialogInterface dialogInterface, int i) {
                         projectNameEdt = view.findViewById(R.id.edt_project_name);
                         final Project project = new Project(projectNameEdt.getText().toString(), Calendar.getInstance().getTime().toString());
-
-                        ProjectFileManager.saveProject(project);
+                        final ProjectLocation projectLocation = new ProjectLocation(
+                                ProjectFileManager.makeDefaultProjectPath(project).toString(),
+                                project
+                        );
+                        ProjectFileManager.saveProject(projectLocation);
 
                         Intent intent = new Intent(getActivity(), ProjectActivity.class);
                         Bundle bundle = new Bundle();
-                        bundle.putSerializable(PROJECT, project);
+                        bundle.putSerializable(PROJECT_LOCATION, projectLocation);
                         //bundle.putString(PROJECT_NAME, projectNameEdt.getText().toString());
                         intent.putExtra(BUNDLE, bundle);
                         startActivity(intent);

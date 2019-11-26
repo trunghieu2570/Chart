@@ -1,6 +1,6 @@
 package com.kdh.chart.datatypes;
 
-public enum ChartTypes {
+public enum ChartTypeEnum {
     PIE,
     LINE,
     GROUPED,

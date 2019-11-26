@@ -4,38 +4,43 @@ import android.os.Environment;
 import android.util.Log;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import com.kdh.chart.datatypes.Chart;
 import com.kdh.chart.datatypes.ChartLocation;
 import com.kdh.chart.datatypes.Project;
+import com.kdh.chart.datatypes.ProjectLocation;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FilenameFilter;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class ProjectFileManager {
 
     public static final String DEFAULT_FOLDER = "ChartProjects";
 
-    public static void saveProject(final Project project) {
+    public static File makeDefaultProjectPath(Project project) {
         File sdcard = Environment.getExternalStorageDirectory();
         File mainDir = new File(sdcard, DEFAULT_FOLDER);
-        Log.d("PRINT", mainDir.toString());
-        if (!mainDir.exists()) {
-            mainDir.mkdir();
-        }
         File projectDir = new File(mainDir, project.getName().replace(' ', '_'));
-        if (!projectDir.exists()) {
-            projectDir.mkdir();
-        }
-        File file = new File(projectDir, project.getName().replace(' ', '_') + ".chprj");
+        return new File(projectDir, project.getName().replace(' ', '_') + ".chprj");
+    }
+
+    public static void saveProject(final ProjectLocation location) {
+        File saveFile = new File(location.getLocation());
+        saveFile.getParentFile().mkdirs();
         Gson gson = new Gson();
-        String content = gson.toJson(project);
+        String content = gson.toJson(location.getProject());
         FileOutputStream fileOutputStream;
         try {
-            if (!file.exists()) {
-                file.createNewFile();
+            if (!saveFile.exists()) {
+                saveFile.createNewFile();
             }
-            fileOutputStream = new FileOutputStream(file);
+            fileOutputStream = new FileOutputStream(saveFile);
             fileOutputStream.write(content.getBytes());
             fileOutputStream.close();
         } catch (IOException ex) {
@@ -43,18 +48,50 @@ public class ProjectFileManager {
         }
     }
 
-    public static void saveChart(final Project project, final Chart chart, final ChartLocation location) {
+    public static ArrayList<ProjectLocation> loadProjects() {
         File sdcard = Environment.getExternalStorageDirectory();
         File mainDir = new File(sdcard, DEFAULT_FOLDER);
         Log.d("PRINT", mainDir.toString());
         if (!mainDir.exists()) {
             mainDir.mkdir();
+            return null;
         }
-        File projectDir = new File(mainDir, project.getName().replace(' ', '_'));
-        if (!projectDir.exists()) {
-            projectDir.mkdir();
+        final ArrayList<ProjectLocation> result = new ArrayList<>();
+        final Gson gson = new Gson();
+        File[] paths = mainDir.listFiles();
+        for (File path : paths) {
+            if (path.isDirectory()) {
+                File[] projectFiles = path.listFiles(new FilenameFilter() {
+                    @Override
+                    public boolean accept(File file, String s) {
+                        return s.endsWith(".chprj");
+                    }
+                });
+                for (File projectFile : projectFiles) {
+                    try {
+                        final BufferedReader reader = new BufferedReader(new FileReader(projectFile));
+                        final Project tmp = gson.fromJson(reader, Project.class);
+                        reader.close();
+                        final ProjectLocation location = new ProjectLocation(projectFile.toString(), tmp);
+                        result.add(location);
+                    } catch (JsonSyntaxException jse) {
+                        jse.printStackTrace();
+                    } catch (FileNotFoundException fnf) {
+                        fnf.printStackTrace();
+                    } catch (IOException io) {
+                        io.printStackTrace();
+                    }
+
+                }
+            }
         }
-        File file = new File(projectDir, location.getLocation());
+        return result;
+    }
+
+    public static void saveChart(final ProjectLocation projectLocation, final Chart chart, final ChartLocation chartLocation) {
+
+        File projectFolder = new File(projectLocation.getLocation()).getParentFile();
+        File file = new File(projectFolder, chartLocation.getLocation());
         Gson gson = new Gson();
         String content = gson.toJson(chart);
         FileOutputStream fileOutputStream;

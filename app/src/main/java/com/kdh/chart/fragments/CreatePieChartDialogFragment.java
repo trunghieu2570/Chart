@@ -19,9 +19,10 @@ import com.kdh.chart.ProjectFileManager;
 import com.kdh.chart.R;
 import com.kdh.chart.activities.PieChartActivity;
 import com.kdh.chart.datatypes.ChartLocation;
-import com.kdh.chart.datatypes.ChartTypes;
+import com.kdh.chart.datatypes.ChartTypeEnum;
 import com.kdh.chart.datatypes.PieChart;
 import com.kdh.chart.datatypes.Project;
+import com.kdh.chart.datatypes.ProjectLocation;
 
 import java.util.Calendar;
 
@@ -33,7 +34,7 @@ public class CreatePieChartDialogFragment extends DialogFragment {
 
     public static final String NUM_ROWS = "number_of_rows";
     public static final String BUNDLE = "bundle";
-    public static final String PROJECT = "project";
+    public static final String PROJECT_LOCATION = "project";
     public static final String CHART = "chart";
     public static final String LOCATION = "location";
 
@@ -41,9 +42,9 @@ public class CreatePieChartDialogFragment extends DialogFragment {
     public CreatePieChartDialogFragment() { }
 
 
-    public static CreatePieChartDialogFragment newInstance(Project project) {
+    public static CreatePieChartDialogFragment newInstance(ProjectLocation location) {
         Bundle args = new Bundle();
-        args.putSerializable(PROJECT, project);
+        args.putSerializable(PROJECT_LOCATION, location);
         CreatePieChartDialogFragment fragment = new CreatePieChartDialogFragment();
         fragment.setArguments(args);
         return fragment;
@@ -63,7 +64,7 @@ public class CreatePieChartDialogFragment extends DialogFragment {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         //init
-                        final Project project = (Project) getArguments().getSerializable(PROJECT);
+                        final ProjectLocation projectLocation = (ProjectLocation) getArguments().getSerializable(PROJECT_LOCATION);
                         final PieChart chart = new PieChart(
                                 chartNameEdt.getText().toString(),
                                 "This is a PieChart",
@@ -71,18 +72,19 @@ public class CreatePieChartDialogFragment extends DialogFragment {
                         );
                         final ChartLocation chartLocation = new ChartLocation(
                                 chart.getChartName().replace(' ', '_') + ".json",
-                                ChartTypes.PIE
+                                ChartTypeEnum.PIE
                         );
+                        final Project project = projectLocation.getProject();
                         //modify
                         project.addChart(chartLocation);
                         project.setModifiedTime(Calendar.getInstance().getTime().toString());
                         //save data
-                        ProjectFileManager.saveProject(project);
-                        ProjectFileManager.saveChart(project, chart, chartLocation);
+                        ProjectFileManager.saveProject(projectLocation);
+                        ProjectFileManager.saveChart(projectLocation, chart, chartLocation);
                         //pass bundle
                         final Intent intent = new Intent(getActivity(), PieChartActivity.class);
                         final Bundle bundle = new Bundle();
-                        bundle.putSerializable(PROJECT, project);
+                        bundle.putSerializable(PROJECT_LOCATION, projectLocation);
                         bundle.putSerializable(CHART, chart);
                         bundle.putSerializable(LOCATION, chartLocation);
                         bundle.putInt(NUM_ROWS, Integer.parseInt("0" + chartRowsEdt.getText().toString()));

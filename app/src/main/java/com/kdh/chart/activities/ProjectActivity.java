@@ -18,8 +18,8 @@ import com.google.android.material.floatingactionbutton.ExtendedFloatingActionBu
 import com.kdh.chart.R;
 import com.kdh.chart.adapters.ChartListViewAdapter;
 import com.kdh.chart.datatypes.Chart;
-import com.kdh.chart.datatypes.ChartTypeItem;
 import com.kdh.chart.datatypes.Project;
+import com.kdh.chart.datatypes.ProjectLocation;
 import com.kdh.chart.fragments.CreateLineChartDialogFragment;
 import com.kdh.chart.fragments.CreatePieChartDialogFragment;
 import com.kdh.chart.fragments.CreateProjectDialogFragment;
@@ -43,7 +43,8 @@ public class ProjectActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         //actionBar.setDisplayHomeAsUpEnabled(true);
         final Bundle bundle = getIntent().getBundleExtra(CreateProjectDialogFragment.BUNDLE);
-        final Project project = (Project) bundle.getSerializable(CreateProjectDialogFragment.PROJECT);
+        final ProjectLocation projectLocation = (ProjectLocation) bundle.getSerializable(CreateProjectDialogFragment.PROJECT_LOCATION);
+        final Project project = projectLocation.getProject();
         final String projectName = project.getName();
         setTitle(projectName);
 
@@ -51,7 +52,7 @@ public class ProjectActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showBottonSheetDialog(project);
+                showBottonSheetDialog(projectLocation);
             }
         });
 
@@ -91,7 +92,7 @@ public class ProjectActivity extends AppCompatActivity {
     }
 
 
-    private void showBottonSheetDialog(final Project project) {
+    private void showBottonSheetDialog(final ProjectLocation projectLocation) {
         View dlview = getLayoutInflater().inflate(R.layout.fragment_main_bottom_sheet, null);
         //choose chart
 
@@ -118,12 +119,12 @@ public class ProjectActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 switch (position) {
                     case 0:
-                        final CreatePieChartDialogFragment fragment = CreatePieChartDialogFragment.newInstance(project);
+                        final CreatePieChartDialogFragment fragment = CreatePieChartDialogFragment.newInstance(projectLocation);
                         fragment.show(getSupportFragmentManager(), "create_chart");
                         cancelBottonSheetDialog();
                         break;
                     case 1:
-                        final CreateLineChartDialogFragment fragment2 = CreateLineChartDialogFragment.newInstance(project);
+                        final CreateLineChartDialogFragment fragment2 = CreateLineChartDialogFragment.newInstance(projectLocation);
                         fragment2.show(getSupportFragmentManager(), "create_chart");
                         cancelBottonSheetDialog();
                         break;
@@ -138,5 +139,34 @@ public class ProjectActivity extends AppCompatActivity {
     private void cancelBottonSheetDialog() {
         if (bottomSheetDialog != null)
             bottomSheetDialog.cancel();
+    }
+
+    public class ChartTypeItem {
+
+        private int imageResouce;
+        private String nameChart;
+
+        public ChartTypeItem(int imageResouce, String nameChart) {
+            this.imageResouce = imageResouce;
+            this.nameChart = nameChart;
+        }
+
+        public void setimageResouce(int imageResouce) {
+            this.imageResouce = imageResouce;
+        }
+
+        public void setNameChart(String nameChart) {
+            this.nameChart = nameChart;
+        }
+
+        public int getimageResouce() {
+            return imageResouce;
+        }
+
+        public String getNameChart() {
+            return nameChart;
+        }
+
+
     }
 }

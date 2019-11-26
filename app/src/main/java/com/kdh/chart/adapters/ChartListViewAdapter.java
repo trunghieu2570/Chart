@@ -12,16 +12,16 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.kdh.chart.R;
-import com.kdh.chart.datatypes.ChartTypeItem;
+import com.kdh.chart.activities.ProjectActivity;
 
 import java.util.ArrayList;
 
-public class ChartListViewAdapter extends ArrayAdapter<ChartTypeItem> {
+public class ChartListViewAdapter extends ArrayAdapter<ProjectActivity.ChartTypeItem> {
 
     private Context context;
     private int resouce;
-    private ArrayList<ChartTypeItem> arrTypeChart;
-    public ChartListViewAdapter(@NonNull Context context, int resource, @NonNull ArrayList<ChartTypeItem> objects) {
+    private ArrayList<ProjectActivity.ChartTypeItem> arrTypeChart;
+    public ChartListViewAdapter(@NonNull Context context, int resource, @NonNull ArrayList<ProjectActivity.ChartTypeItem> objects) {
         super(context, resource, objects);
         this.context=context;
         this.resouce=resource;
@@ -34,7 +34,7 @@ public class ChartListViewAdapter extends ArrayAdapter<ChartTypeItem> {
         if(convertView == null) {
             convertView = LayoutInflater.from(context).inflate(this.resouce, parent, false);
         }
-        ChartTypeItem typeChart=arrTypeChart.get(position);
+        ProjectActivity.ChartTypeItem typeChart=arrTypeChart.get(position);
         if(typeChart != null) {
             ImageView imageView = convertView.findViewById(R.id.img);
             TextView chartName = convertView.findViewById(R.id.btnName);

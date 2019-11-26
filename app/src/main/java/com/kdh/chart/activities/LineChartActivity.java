@@ -20,6 +20,7 @@ import com.kdh.chart.datatypes.AdvancedInputRow;
 import com.kdh.chart.datatypes.ChartLocation;
 import com.kdh.chart.datatypes.LineChart;
 import com.kdh.chart.datatypes.Project;
+import com.kdh.chart.datatypes.ProjectLocation;
 import com.kdh.chart.fragments.AdvancedInputFragment;
 import com.kdh.chart.fragments.CreateLineChartDialogFragment;
 import com.kdh.chart.fragments.CreatePieChartDialogFragment;
@@ -43,10 +44,11 @@ public class LineChartActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         //receive bundle
         final Bundle bundle = getIntent().getBundleExtra(CreatePieChartDialogFragment.BUNDLE);
-        final Project project = (Project) bundle.getSerializable(CreatePieChartDialogFragment.PROJECT);
+        final ProjectLocation projectLocation = (ProjectLocation) bundle.getSerializable(CreatePieChartDialogFragment.PROJECT_LOCATION);
         final LineChart lineChart = (LineChart) bundle.getSerializable(CreatePieChartDialogFragment.CHART);
         final ChartLocation location = (ChartLocation) bundle.getSerializable(CreatePieChartDialogFragment.LOCATION);
         final String chartName = lineChart.getChartName();
+        final Project project = projectLocation.getProject();
         final int numOfRows = bundle.getInt(CreatePieChartDialogFragment.NUM_ROWS);
         final int numOfCols = bundle.getInt(CreateLineChartDialogFragment.NUM_COLS);
         final String xAxisUnit = lineChart.getxAxisUnit();
@@ -91,8 +93,8 @@ public class LineChartActivity extends AppCompatActivity {
                     //save data to file
                     project.setModifiedTime(Calendar.getInstance().getTime().toString());
                     lineChart.setModifiedTime(Calendar.getInstance().getTime().toString());
-                    ProjectFileManager.saveChart(project, lineChart, location);
-                    ProjectFileManager.saveProject(project);
+                    ProjectFileManager.saveChart(projectLocation, lineChart, location);
+                    ProjectFileManager.saveProject(projectLocation);
                 } else
                     Snackbar.make((View) mChartView, "Invalid data", Snackbar.LENGTH_SHORT).show();
             }

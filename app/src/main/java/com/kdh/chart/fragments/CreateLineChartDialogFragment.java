@@ -19,9 +19,10 @@ import com.kdh.chart.ProjectFileManager;
 import com.kdh.chart.R;
 import com.kdh.chart.activities.LineChartActivity;
 import com.kdh.chart.datatypes.ChartLocation;
-import com.kdh.chart.datatypes.ChartTypes;
+import com.kdh.chart.datatypes.ChartTypeEnum;
 import com.kdh.chart.datatypes.LineChart;
 import com.kdh.chart.datatypes.Project;
+import com.kdh.chart.datatypes.ProjectLocation;
 
 import java.util.Calendar;
 
@@ -36,7 +37,7 @@ public class CreateLineChartDialogFragment extends DialogFragment {
     public static final String NUM_COLS = "number_of_cols";
     public static final String CHART = "chart";
     public static final String BUNDLE = "bundle";
-    public static final String PROJECT = "project";
+    public static final String PROJECT_LOCATION = "project";
     public static final String LOCATION = "location";
 
 
@@ -44,9 +45,9 @@ public class CreateLineChartDialogFragment extends DialogFragment {
     public CreateLineChartDialogFragment() { }
 
 
-    public static CreateLineChartDialogFragment newInstance(Project project) {
+    public static CreateLineChartDialogFragment newInstance(ProjectLocation location) {
         Bundle args = new Bundle();
-        args.putSerializable(PROJECT, project);
+        args.putSerializable(PROJECT_LOCATION, location);
         CreateLineChartDialogFragment fragment = new CreateLineChartDialogFragment();
         fragment.setArguments(args);
         return fragment;
@@ -69,7 +70,7 @@ public class CreateLineChartDialogFragment extends DialogFragment {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         //init
-                        final Project project = (Project) getArguments().getSerializable(PROJECT);
+                        final ProjectLocation projectLocation = (ProjectLocation) getArguments().getSerializable(PROJECT_LOCATION);
                         final LineChart chart = new LineChart(
                                 chartNameEdt.getText().toString(),
                                 "This is a LineChart",
@@ -79,20 +80,21 @@ public class CreateLineChartDialogFragment extends DialogFragment {
                         );
                         final ChartLocation chartLocation = new ChartLocation(
                                 chart.getChartName().replace(' ', '_') + ".json",
-                                ChartTypes.LINE
+                                ChartTypeEnum.LINE
                         );
+                        final Project project = projectLocation.getProject();
                         //modify
                         project.addChart(chartLocation);
                         project.setModifiedTime(Calendar.getInstance().getTime().toString());
                         //save data
-                        ProjectFileManager.saveProject(project);
-                        ProjectFileManager.saveChart(project, chart, chartLocation);
+                        ProjectFileManager.saveProject(projectLocation);
+                        ProjectFileManager.saveChart(projectLocation, chart, chartLocation);
                         //pass data
                         Intent intent = new Intent(getActivity(), LineChartActivity.class);
                         Bundle bundle = new Bundle();
                         bundle.putInt(NUM_ROWS, Integer.parseInt("0" + chartRowsEdt.getText().toString()));
                         bundle.putInt(NUM_COLS, Integer.parseInt("0" + chartColsEdt.getText().toString()));
-                        bundle.putSerializable(PROJECT, project);
+                        bundle.putSerializable(PROJECT_LOCATION, projectLocation);
                         bundle.putSerializable(CHART, chart);
                         bundle.putSerializable(LOCATION, chartLocation);
                         intent.putExtra(BUNDLE, bundle);
