@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Random;
 
-public class PieChart extends View implements ChartView<SimpleInputRow> {
+public class PieChartView extends View implements ChartView<SimpleInputRow> {
 
     //public enum AnimType {NO_ANIMATION, TOGETHER, SEQUENTIALLY}
 
@@ -48,7 +48,7 @@ public class PieChart extends View implements ChartView<SimpleInputRow> {
     private float cy;
     private int radius;
 
-    public PieChart(Context context, AttributeSet attributeSet) {
+    public PieChartView(Context context, AttributeSet attributeSet) {
         super(context, attributeSet);
         items = new ArrayList<Item>();
         initPaint();
@@ -118,7 +118,7 @@ public class PieChart extends View implements ChartView<SimpleInputRow> {
         Collections.reverse(items);
         invalidate();
     }*/
-    @Override
+    //@Override
     public void updateData(List<SimpleInputRow> list) {
         animSet.cancel();
         items.clear();

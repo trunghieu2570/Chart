@@ -3,53 +3,84 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.CreateChartDialogFragment">
-
-    <LinearLayout
+    tools:context=".fragments.CreatePieChartDialogFragment">
+    <ScrollView
         android:layout_width="match_parent"
-        android:orientation="vertical"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
-        android:paddingLeft="24dp"
-        android:paddingRight="24dp"
         android:layout_height="match_parent">
-
-        <com.google.android.material.textfield.TextInputLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_marginVertical="10dp"
-            android:layout_height="wrap_content">
-            <EditText
-                android:id="@+id/edt_chart_name"
-                android:layout_width="match_parent"
-                android:maxLength="30"
-                android:hint="Enter chart name"
-                android:layout_height="wrap_content"/>
-        </com.google.android.material.textfield.TextInputLayout>
+            android:orientation="vertical"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:paddingLeft="24dp"
+            android:paddingRight="24dp"
+            android:layout_height="match_parent">
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_marginVertical="10dp"
-            android:layout_height="wrap_content">
-            <EditText
-                android:id="@+id/edt_rows"
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
-                android:hint="Enter number of subject"
-                android:text="3"
-                android:layout_height="wrap_content" />
-        </com.google.android.material.textfield.TextInputLayout>
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_marginVertical="10dp"
-            android:layout_height="wrap_content">
-            <EditText
-                android:id="@+id/edt_cols"
+                android:layout_marginVertical="10dp"
+                android:layout_height="wrap_content">
+                <EditText
+                    android:id="@+id/edt_chart_name"
+                    android:layout_width="match_parent"
+                    android:maxLength="30"
+                    android:hint="Enter chart name"
+                    android:text="Untitled chart"
+                    android:layout_height="wrap_content"/>
+            </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
-                android:hint="Enter number of durations"
-                android:text="3"
-                android:layout_height="wrap_content" />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:layout_marginVertical="10dp"
+                android:layout_height="wrap_content">
+                <EditText
+                    android:id="@+id/edt_x_axis_unit"
+                    android:layout_width="match_parent"
+                    android:hint="Enter X-axis unit"
+                    android:text="Years"
+                    android:layout_height="wrap_content" />
+            </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_marginVertical="10dp"
+                android:layout_height="wrap_content">
+                <EditText
+                    android:id="@+id/edt_y_axis_unit"
+                    android:layout_width="match_parent"
+                    android:hint="Enter Y-axis unit"
+                    android:text="USD"
+                    android:layout_height="wrap_content" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_marginVertical="10dp"
+                android:layout_height="wrap_content">
+                <EditText
+                    android:id="@+id/edt_rows"
+                    android:layout_width="match_parent"
+                    android:hint="Enter number of objects"
+                    android:inputType="number"
+                    android:text="3"
+                    android:layout_height="wrap_content" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_marginVertical="10dp"
+                android:layout_height="wrap_content">
+                <EditText
+                    android:id="@+id/edt_cols"
+                    android:layout_width="match_parent"
+                    android:hint="Enter number of durations"
+                    android:inputType="number"
+                    android:text="3"
+                    android:layout_height="wrap_content" />
+            </com.google.android.material.textfield.TextInputLayout>
 
 
-    </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+
 
 </FrameLayout>

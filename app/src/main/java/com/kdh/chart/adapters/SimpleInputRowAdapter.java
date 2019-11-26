@@ -19,9 +19,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 
 import com.kdh.chart.R;
-import com.kdh.chart.activities.ShowChartActivity;
+import com.kdh.chart.activities.PieChartActivity;
 import com.kdh.chart.datatypes.SimpleInputRow;
-import com.kdh.chart.fragments.EditRowDialogFragment;
+import com.kdh.chart.fragments.EditSimpleInputRowDialogFragment;
 import com.thebluealliance.spectrum.SpectrumDialog;
 
 import java.util.ArrayList;
@@ -82,16 +82,16 @@ public class SimpleInputRowAdapter extends ArrayAdapter<SimpleInputRow> {
                 label.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        FragmentManager manager = ((ShowChartActivity)getContext()).getSupportFragmentManager();
-                        EditRowDialogFragment fragment = EditRowDialogFragment.newInstance(position, row.getLabel(), row.getDescription());
-                        fragment.setOnClickPositiveButtonListener(new EditRowDialogFragment.OnClickPositiveButtonListener() {
+                        FragmentManager manager = ((PieChartActivity)getContext()).getSupportFragmentManager();
+                        EditSimpleInputRowDialogFragment fragment = EditSimpleInputRowDialogFragment.newInstance(position, row.getLabel(), row.getDescription());
+                        fragment.setOnClickPositiveButtonListener(new EditSimpleInputRowDialogFragment.OnClickPositiveButtonListener() {
                             @Override
                             public void onClick() {
                                 label.setText(row.getLabel());
                                 notifyDataSetChanged();
                             }
                         });
-                        fragment.setOnClickNeutralButtonListener(new EditRowDialogFragment.OnClickNeutralButtonListener() {
+                        fragment.setOnClickNeutralButtonListener(new EditSimpleInputRowDialogFragment.OnClickNeutralButtonListener() {
                             @Override
                             public void onClick() {
                                 notifyDataSetChanged();

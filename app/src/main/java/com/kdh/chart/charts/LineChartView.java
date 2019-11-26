@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Random;
 
 
-public class LineChart extends View implements ChartView<AdvancedInputRow> {
+public class LineChartView extends View implements ChartView<AdvancedInputRow> {
 
     private Paint chartPaint = null;
     private Paint textPaint = null;
@@ -46,7 +46,7 @@ public class LineChart extends View implements ChartView<AdvancedInputRow> {
     private ArrayList<Animator> animators;
     private AnimatorSet animSet;
 
-    @Override
+/*    @Override
     public void updateData(List<AdvancedInputRow> objects) {
         //count
         int columns = objects.get(0).getValues().size();
@@ -72,6 +72,37 @@ public class LineChart extends View implements ChartView<AdvancedInputRow> {
                 fieldNames,
                 "Km",
                 "Years",
+                dataChart,
+                colorArr
+        );
+        isReady = true;
+    }*/
+
+    public void updateData(List<AdvancedInputRow> objects, String chartName, String xAxisUnit, String yAxisUnit) {
+        //count
+        int columns = objects.get(0).getValues().size();
+        //
+        String[] timeLines = objects.get(0).getValues().toArray(new String[columns]);
+        String timeLineStr = convertArrayToStringMethod(timeLines);
+        String[] fieldNameArr = new String[objects.size() - 1];
+        String[] dataChartArr = new String[objects.size() - 1];
+        int[] colorArr = new int[objects.size()];
+        for (int i = 1; i < objects.size(); i++) {
+            fieldNameArr[i-1] = objects.get(i).getLabel();
+            String[] strs = objects.get(i).getValues().toArray(new String[columns]);
+            String str = convertArrayToStringMethod(strs);
+            dataChartArr[i-1] = str;
+            colorArr[i-1] = objects.get(i).getColor();
+        }
+        String fieldNames = convertArrayToStringMethod(fieldNameArr);
+        String dataChart = convertArrayToStringMethod(dataChartArr);
+
+        setUpData(
+                chartName,
+                timeLineStr,
+                fieldNames,
+                yAxisUnit,
+                xAxisUnit,
                 dataChart,
                 colorArr
         );
@@ -123,7 +154,7 @@ public class LineChart extends View implements ChartView<AdvancedInputRow> {
 
     }
 
-    public LineChart(Context context, AttributeSet attributeSet) {
+    public LineChartView(Context context, AttributeSet attributeSet) {
         super(context, attributeSet);
         lines = new ArrayList<Line>();
         animLines = new ArrayList<ShortLine>();

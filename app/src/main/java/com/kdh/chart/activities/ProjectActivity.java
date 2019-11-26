@@ -19,8 +19,9 @@ import com.kdh.chart.R;
 import com.kdh.chart.adapters.ChartListViewAdapter;
 import com.kdh.chart.datatypes.Chart;
 import com.kdh.chart.datatypes.ChartTypeItem;
-import com.kdh.chart.fragments.CreateChartDialogFragment;
+import com.kdh.chart.datatypes.Project;
 import com.kdh.chart.fragments.CreateLineChartDialogFragment;
+import com.kdh.chart.fragments.CreatePieChartDialogFragment;
 import com.kdh.chart.fragments.CreateProjectDialogFragment;
 
 import java.util.ArrayList;
@@ -32,6 +33,7 @@ import java.util.Map;
 public class ProjectActivity extends AppCompatActivity {
 
     private BottomSheetDialog bottomSheetDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,15 +42,16 @@ public class ProjectActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         //actionBar.setDisplayHomeAsUpEnabled(true);
-        Bundle projectBundle = getIntent().getBundleExtra(CreateProjectDialogFragment.BUNDLE);
-        String projectName = projectBundle.getString(CreateProjectDialogFragment.PROJECT_NAME);
+        final Bundle bundle = getIntent().getBundleExtra(CreateProjectDialogFragment.BUNDLE);
+        final Project project = (Project) bundle.getSerializable(CreateProjectDialogFragment.PROJECT);
+        final String projectName = project.getName();
         setTitle(projectName);
 
         ExtendedFloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showBottonSheetDialog();
+                showBottonSheetDialog(project);
             }
         });
 
@@ -60,8 +63,7 @@ public class ProjectActivity extends AppCompatActivity {
             charts.add(new Chart(
                     "Chart " + i,
                     "This is a fake chart",
-                    Calendar.getInstance().getTime().toString(),
-                    Chart.ChartType.PIE
+                    Calendar.getInstance().getTime().toString()
             ));
         }
         //map project list
@@ -89,8 +91,7 @@ public class ProjectActivity extends AppCompatActivity {
     }
 
 
-
-    private void showBottonSheetDialog() {
+    private void showBottonSheetDialog(final Project project) {
         View dlview = getLayoutInflater().inflate(R.layout.fragment_main_bottom_sheet, null);
         //choose chart
 
@@ -115,20 +116,17 @@ public class ProjectActivity extends AppCompatActivity {
         chooseChartListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Chart chart;
-
                 switch (position) {
                     case 0:
-                        chart = new Chart(Chart.ChartType.PIE);
-                        final CreateChartDialogFragment fragment = CreateChartDialogFragment.newInstance(chart);
+                        final CreatePieChartDialogFragment fragment = CreatePieChartDialogFragment.newInstance(project);
                         fragment.show(getSupportFragmentManager(), "create_chart");
                         cancelBottonSheetDialog();
                         break;
                     case 1:
-                        chart = new Chart(Chart.ChartType.LINE);
-                        final CreateLineChartDialogFragment fragment2 = CreateLineChartDialogFragment.newInstance(chart);
+                        final CreateLineChartDialogFragment fragment2 = CreateLineChartDialogFragment.newInstance(project);
                         fragment2.show(getSupportFragmentManager(), "create_chart");
                         cancelBottonSheetDialog();
+                        break;
                 }
             }
         });

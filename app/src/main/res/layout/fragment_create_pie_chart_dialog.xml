@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.CreateChartDialogFragment">
+    tools:context=".fragments.CreatePieChartDialogFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -23,6 +23,7 @@
                 android:layout_width="match_parent"
                 android:maxLength="30"
                 android:hint="Enter chart name"
+                android:text="Untitled chart"
                 android:layout_height="wrap_content"/>
         </com.google.android.material.textfield.TextInputLayout>
 

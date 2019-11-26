@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="JsonSchemaMappingsProjectConfiguration">
+    <state>
+      <map>
+        <entry key="JSON schema v4">
+          <value>
+            <SchemaInfo>
+              <option name="name" value="JSON schema v4" />
+              <option name="relativePathToSchema" value="http://json-schema.org/draft-04/schema" />
+              <option name="applicationDefined" value="true" />
+              <option name="patterns">
+                <list>
+                  <Item>
+                    <option name="path" value="file://$USER_HOME$/Documents/AndroidStudio/DeviceExplorer/asus-asus_x00td-J6AXB765C799JS7/sdcard/mydir/project_01.json" />
+                  </Item>
+                </list>
+              </option>
+            </SchemaInfo>
+          </value>
+        </entry>
+        <entry key="JSON schema v6">
+          <value>
+            <SchemaInfo>
+              <option name="name" value="JSON schema v6" />
+              <option name="relativePathToSchema" value="http://json-schema.org/draft-06/schema" />
+              <option name="schemaVersion" value="JSON schema version 6" />
+              <option name="applicationDefined" value="true" />
+              <option name="patterns">
+                <list>
+                  <Item>
+                    <option name="path" value="file://$USER_HOME$/Documents/AndroidStudio/DeviceExplorer/asus-asus_x00td-J6AXB765C799JS7/sdcard/mydir/project_01.json" />
+                  </Item>
+                </list>
+              </option>
+            </SchemaInfo>
+          </value>
+        </entry>
+        <entry key="azure-iot-edge-deployment-template-2.0">
+          <value>
+            <SchemaInfo>
+              <option name="name" value="azure-iot-edge-deployment-template-2.0" />
+              <option name="relativePathToSchema" value="http://json.schemastore.org/azure-iot-edge-deployment-template-2.0" />
+              <option name="applicationDefined" value="true" />
+              <option name="patterns">
+                <list>
+                  <Item>
+                    <option name="path" value="file://$USER_HOME$/Documents/AndroidStudio/DeviceExplorer/asus-asus_x00td-J6AXB765C799JS7/sdcard/mydir/project_01.json" />
+                  </Item>
+                </list>
+              </option>
+            </SchemaInfo>
+          </value>
+        </entry>
+        <entry key="jx">
+          <value>
+            <SchemaInfo>
+              <option name="name" value="jx" />
+              <option name="relativePathToSchema" value="https://jenkins-x.io/schemas/jx-schema.json" />
+              <option name="applicationDefined" value="true" />
+              <option name="patterns">
+                <list>
+                  <Item>
+                    <option name="path" value="file://$USER_HOME$/Documents/AndroidStudio/DeviceExplorer/asus-asus_x00td-J6AXB765C799JS7/sdcard/mydir/project_01.json" />
+                  </Item>
+                </list>
+              </option>
+            </SchemaInfo>
+          </value>
+        </entry>
+      </map>
+    </state>
+  </component>
+</project>

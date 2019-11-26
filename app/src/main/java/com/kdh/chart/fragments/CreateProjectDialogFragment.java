@@ -1,12 +1,10 @@
 package com.kdh.chart.fragments;
 
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -16,17 +14,19 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.kdh.chart.ProjectFileManager;
 import com.kdh.chart.R;
 import com.kdh.chart.activities.ProjectActivity;
-import com.kdh.chart.datatypes.ChartTypeItem;
+import com.kdh.chart.datatypes.Project;
+
+import java.util.Calendar;
 
 public class CreateProjectDialogFragment extends DialogFragment {
 
-    private ChartTypeItem mChartTypeItem;
-    private Activity mActivity;
 
     public static final String PROJECT_NAME = "prjname";
     public static final String BUNDLE = "bundle";
+    public static final String PROJECT = "project";
 
     private EditText projectNameEdt;
     private EditText chartFieldsEdt;
@@ -36,10 +36,11 @@ public class CreateProjectDialogFragment extends DialogFragment {
         // Required empty public constructor
     }
 
-    public CreateProjectDialogFragment(Activity activity, ChartTypeItem chartTypeItem) {
-        this.mChartTypeItem = chartTypeItem;
-        this.mActivity = activity;
-
+    public static CreateProjectDialogFragment newInstance() {
+        Bundle args = new Bundle();
+        CreateProjectDialogFragment fragment = new CreateProjectDialogFragment();
+        fragment.setArguments(args);
+        return fragment;
     }
 
     @NonNull
@@ -56,10 +57,14 @@ public class CreateProjectDialogFragment extends DialogFragment {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         projectNameEdt = view.findViewById(R.id.edt_project_name);
-                        Intent intent = new Intent(mActivity, ProjectActivity.class);
+                        final Project project = new Project(projectNameEdt.getText().toString(), Calendar.getInstance().getTime().toString());
+
+                        ProjectFileManager.saveProject(project);
+
+                        Intent intent = new Intent(getActivity(), ProjectActivity.class);
                         Bundle bundle = new Bundle();
-                        bundle.putString(PROJECT_NAME, projectNameEdt.getText().toString());
-                        Log.d("DEBUG", "Project_name:" + projectNameEdt.getText().toString());
+                        bundle.putSerializable(PROJECT, project);
+                        //bundle.putString(PROJECT_NAME, projectNameEdt.getText().toString());
                         intent.putExtra(BUNDLE, bundle);
                         startActivity(intent);
                         getDialog().dismiss();
@@ -73,4 +78,5 @@ public class CreateProjectDialogFragment extends DialogFragment {
                 })
                 .create();
     }
+
 }

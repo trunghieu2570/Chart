@@ -15,7 +15,7 @@ import androidx.fragment.app.Fragment;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.kdh.chart.R;
-import com.kdh.chart.activities.ShowChartActivity;
+import com.kdh.chart.activities.PieChartActivity;
 import com.kdh.chart.datatypes.SimpleInputRow;
 
 
@@ -54,7 +54,7 @@ public class AddSimpleInputRowDialogFragment extends DialogFragment {
                                 "",
                                 descriptionEdt.getText().toString());
 
-                        ((ShowChartActivity) getActivity()).getSimpleInputRows().add(row);
+                        ((PieChartActivity) getActivity()).getInputRows().add(row);
                         getDialog().dismiss();
                     }
                 })

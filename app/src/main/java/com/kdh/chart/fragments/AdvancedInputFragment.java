@@ -3,7 +3,6 @@ package com.kdh.chart.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -60,9 +59,6 @@ public class AdvancedInputFragment extends BottomSheetDialogFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setStyle(DialogFragment.STYLE_NORMAL, R.style.DialogStyle);
-        //rows
-        Log.d("DEBUG", "create sheet");
-
         if (rowsList == null)
             rowsList = new ArrayList<>();
 

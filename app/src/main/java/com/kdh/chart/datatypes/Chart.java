@@ -4,37 +4,15 @@ import java.io.Serializable;
 
 public class Chart implements Serializable {
 
-    public enum ChartType {
-        PIE,
-        COLUMN,
-        LINE,
-        DONUT,
-        GROUPED,
-    }
-
     private String mChartName;
     private String mModifiedTime;
-    private ChartType mType;
     private String mDescription;
 
 
-    public Chart(String chartName, String description, String modifiedTime, ChartType chartType) {
+    public Chart(String chartName, String description, String modifiedTime) {
         this.mChartName = chartName;
         this.mModifiedTime = modifiedTime;
-        this.mType = chartType;
         this.mDescription = description;
-    }
-
-    public Chart(ChartType chartType) {
-        this.mType = chartType;
-    }
-
-    public ChartType getType() {
-        return mType;
-    }
-
-    private void setType(ChartType mType) {
-        this.mType = mType;
     }
 
     public String getDescription() {

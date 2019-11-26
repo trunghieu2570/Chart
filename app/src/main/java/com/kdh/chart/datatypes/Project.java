@@ -1,32 +1,54 @@
 package com.kdh.chart.datatypes;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
-/**
- * Project luu tru thong tin cac bieu do
- */
 public class Project implements Serializable {
-    private String projectName;
-    private String modifiedTime;
 
-    public Project(String projectName, String modifiedTime) {
-        this.projectName = projectName;
+    private String name;
+    private String location;
+    private String modifiedTime;
+    private ArrayList<ChartLocation> charts;
+
+    public Project(String name, String modifiedTime) {
+        this.name = name;
         this.modifiedTime = modifiedTime;
+        charts = new ArrayList<>();
     }
 
-    public String getProjectName() {
-        return projectName;
+    public void setSaveLocation(String saveLocation) {
+        this.location = saveLocation;
+    }
+
+    public String getSaveLocation() {
+        return location;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public String getModifiedTime() {
         return modifiedTime;
     }
 
-    public void setProjectName(String projectName) {
-        this.projectName = projectName;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public void setModifiedTime(String modifiedTime) {
         this.modifiedTime = modifiedTime;
+    }
+
+    public ArrayList<ChartLocation> getCharts() {
+        return charts;
+    }
+
+    public void setCharts(ArrayList<ChartLocation> charts) {
+        this.charts = charts;
+    }
+
+    public void addChart(ChartLocation chart) {
+        this.charts.add(chart);
     }
 }

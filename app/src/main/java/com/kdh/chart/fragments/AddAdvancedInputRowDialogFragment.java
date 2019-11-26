@@ -15,7 +15,7 @@ import androidx.fragment.app.Fragment;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.kdh.chart.R;
-import com.kdh.chart.activities.ShowChartActivity;
+import com.kdh.chart.activities.LineChartActivity;
 import com.kdh.chart.datatypes.AdvancedInputRow;
 
 import java.util.ArrayList;
@@ -60,7 +60,7 @@ public class AddAdvancedInputRowDialogFragment extends DialogFragment {
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        final int rows = ((ShowChartActivity) getActivity()).getAdvancedInputRows().get(0).getValues().size();
+                        final int rows = ((LineChartActivity) getActivity()).getInputRows().get(0).getValues().size();
                         ArrayList<String> values = new ArrayList<>();
                         for (int j = 0; j < (rows == 0 ? numOfColumns : rows); j++)
                             values.add("");
@@ -70,7 +70,7 @@ public class AddAdvancedInputRowDialogFragment extends DialogFragment {
                                 values,
                                 descriptionEdt.getText().toString());
 
-                        ((ShowChartActivity) getActivity()).getAdvancedInputRows().add(row);
+                        ((LineChartActivity) getActivity()).getInputRows().add(row);
                         onPositiveButtonClickedListener.onClick();
                         getDialog().dismiss();
                     }

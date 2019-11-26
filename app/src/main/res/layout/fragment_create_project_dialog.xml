@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     tools:context=".fragments.CreateProjectDialogFragment">
 
-    <!-- TODO: Update blank fragment layout -->
+
     <LinearLayout
         android:layout_width="match_parent"
         android:orientation="vertical"
@@ -14,25 +14,13 @@
         android:paddingLeft="24dp"
         android:paddingRight="24dp"
         android:layout_height="match_parent">
-        <!--<TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Enter project name"/>-->
+
         <EditText
             android:id="@+id/edt_project_name"
+            android:text="Project"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
-        <!--<TextView
 
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Number of fields"/>
-        <EditText
-            android:id="@+id/edt_chart_fields"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="5"
-            android:inputType="number"/>-->
 
     </LinearLayout>
 

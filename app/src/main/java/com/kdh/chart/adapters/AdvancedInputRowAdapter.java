@@ -21,7 +21,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 
 import com.kdh.chart.R;
-import com.kdh.chart.activities.ShowChartActivity;
+import com.kdh.chart.activities.LineChartActivity;
 import com.kdh.chart.datatypes.AdvancedInputRow;
 import com.kdh.chart.fragments.EditAdvancedInputRowDialogFragment;
 import com.thebluealliance.spectrum.SpectrumDialog;
@@ -124,7 +124,7 @@ public class AdvancedInputRowAdapter extends ArrayAdapter<AdvancedInputRow> {
                     label.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            FragmentManager manager = ((ShowChartActivity) getContext()).getSupportFragmentManager();
+                            FragmentManager manager = ((LineChartActivity) getContext()).getSupportFragmentManager();
                             EditAdvancedInputRowDialogFragment fragment = EditAdvancedInputRowDialogFragment.newInstance(position, row.getLabel(), row.getDescription());
                             fragment.setOnClickPositiveButtonListener(new EditAdvancedInputRowDialogFragment.OnClickPositiveButtonListener() {
                                 @Override

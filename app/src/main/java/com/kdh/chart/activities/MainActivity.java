@@ -9,12 +9,12 @@ import android.widget.SimpleAdapter;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
 
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.kdh.chart.R;
-import com.kdh.chart.fragments.CreateProjectDialogFragment;
-import com.kdh.chart.datatypes.ChartTypeItem;
 import com.kdh.chart.datatypes.Project;
+import com.kdh.chart.fragments.CreateProjectDialogFragment;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -24,11 +24,8 @@ import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
-
-
-
     private void showCreateChartDialog() {
-        CreateProjectDialogFragment createProjectDialogFragment = new CreateProjectDialogFragment(this, new ChartTypeItem(0, "Pie"));
+        CreateProjectDialogFragment createProjectDialogFragment = CreateProjectDialogFragment.newInstance();
         createProjectDialogFragment.show(getSupportFragmentManager(), "create_dialog");
     }
 
@@ -39,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         //setup
         setSupportActionBar(toolbar);
-
+        ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
         //floating button
         ExtendedFloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -62,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
         List<Map<String, String>> data = new ArrayList<Map<String, String>>();
         for (Project project : projects) {
             Map<String, String> tmp = new HashMap<>(2);
-            tmp.put("Line1", project.getProjectName());
+            tmp.put("Line1", project.getName());
             tmp.put("Line2", project.getModifiedTime());
             data.add(tmp);
         }
