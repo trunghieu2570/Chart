@@ -4,6 +4,7 @@ package com.kdh.chart.fragments;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,12 +19,14 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.kdh.chart.ProjectFileManager;
 import com.kdh.chart.R;
 import com.kdh.chart.activities.LineChartActivity;
+import com.kdh.chart.datatypes.AdvancedInputRow;
 import com.kdh.chart.datatypes.ChartLocation;
 import com.kdh.chart.datatypes.ChartTypeEnum;
 import com.kdh.chart.datatypes.LineChart;
 import com.kdh.chart.datatypes.Project;
 import com.kdh.chart.datatypes.ProjectLocation;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 
 
@@ -32,8 +35,6 @@ import java.util.Calendar;
  */
 public class CreateLineChartDialogFragment extends DialogFragment {
 
-    public static final String CHART_NAME = "chart_name";
-    public static final String NUM_ROWS = "number_of_rows";
     public static final String NUM_COLS = "number_of_cols";
     public static final String CHART = "chart";
     public static final String BUNDLE = "bundle";
@@ -68,7 +69,7 @@ public class CreateLineChartDialogFragment extends DialogFragment {
                 .setView(view)
                 .setPositiveButton("Create", new DialogInterface.OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
+                    public void onClick(DialogInterface dialogInterface, int v) {
                         //init
                         final ProjectLocation projectLocation = (ProjectLocation) getArguments().getSerializable(PROJECT_LOCATION);
                         final LineChart chart = new LineChart(
@@ -78,6 +79,26 @@ public class CreateLineChartDialogFragment extends DialogFragment {
                                 xAxisUnitEdt.getText().toString(),
                                 yAxisUnitEdt.getText().toString()
                         );
+                        final ArrayList<AdvancedInputRow> inputRows = new ArrayList<>();
+                        final int numOfRows = Integer.parseInt("0" + chartRowsEdt.getText().toString());
+                        final int numOfCols = Integer.parseInt("0" + chartColsEdt.getText().toString());
+                        TypedArray colors = getResources().obtainTypedArray(R.array.mdcolor_500);
+                        int color = getResources().getColor(R.color.blue_500);
+                        //header
+                        ArrayList<String> values = new ArrayList<>();
+                        for (int j = 0; j < numOfCols; j++)
+                            values.add("C" + j);
+                        inputRows.add(new AdvancedInputRow("Data table", color, values, ""));
+                        //content
+                        for (int i = 0; i < numOfRows; i++) {
+                            color = getResources().getColor(R.color.blue_500);
+                            values = new ArrayList<>();
+                            for (int j = 0; j < numOfCols; j++)
+                                values.add("");
+                            inputRows.add(new AdvancedInputRow("R" + i, colors.getColor(i, color), values, "Description " + i));
+                        }
+                        colors.recycle();
+                        chart.setData(inputRows);
                         final ChartLocation chartLocation = new ChartLocation(
                                 chart.getChartName().replace(' ', '_') + ".json",
                                 ChartTypeEnum.LINE
@@ -92,8 +113,6 @@ public class CreateLineChartDialogFragment extends DialogFragment {
                         //pass data
                         Intent intent = new Intent(getActivity(), LineChartActivity.class);
                         Bundle bundle = new Bundle();
-                        bundle.putInt(NUM_ROWS, Integer.parseInt("0" + chartRowsEdt.getText().toString()));
-                        bundle.putInt(NUM_COLS, Integer.parseInt("0" + chartColsEdt.getText().toString()));
                         bundle.putSerializable(PROJECT_LOCATION, projectLocation);
                         bundle.putSerializable(CHART, chart);
                         bundle.putSerializable(LOCATION, chartLocation);

@@ -4,6 +4,7 @@ package com.kdh.chart.fragments;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,7 +24,9 @@ import com.kdh.chart.datatypes.ChartTypeEnum;
 import com.kdh.chart.datatypes.PieChart;
 import com.kdh.chart.datatypes.Project;
 import com.kdh.chart.datatypes.ProjectLocation;
+import com.kdh.chart.datatypes.SimpleInputRow;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 
 
@@ -62,7 +65,7 @@ public class CreatePieChartDialogFragment extends DialogFragment {
                 .setView(view)
                 .setPositiveButton("Create", new DialogInterface.OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
+                    public void onClick(DialogInterface dialogInterface, int v) {
                         //init
                         final ProjectLocation projectLocation = (ProjectLocation) getArguments().getSerializable(PROJECT_LOCATION);
                         final PieChart chart = new PieChart(
@@ -70,6 +73,17 @@ public class CreatePieChartDialogFragment extends DialogFragment {
                                 "This is a PieChart",
                                 Calendar.getInstance().getTime().toString()
                         );
+                        //create new empty data;
+                        final ArrayList<SimpleInputRow> inputRows = new ArrayList<>();
+                        TypedArray colors = getResources().obtainTypedArray(R.array.mdcolor_500);
+                        final int numOfRows = Integer.parseInt("0" + chartRowsEdt.getText().toString());
+                        for (int i = 0; i < numOfRows; i++) {
+                            int color = getResources().getColor(R.color.blue_500);
+                            inputRows.add(new SimpleInputRow("R " + i, colors.getColor(i, color), "", "Description " + i));
+                        }
+                        colors.recycle();
+                        chart.setData(inputRows);
+                        //
                         final ChartLocation chartLocation = new ChartLocation(
                                 chart.getChartName().replace(' ', '_') + ".json",
                                 ChartTypeEnum.PIE
@@ -87,7 +101,6 @@ public class CreatePieChartDialogFragment extends DialogFragment {
                         bundle.putSerializable(PROJECT_LOCATION, projectLocation);
                         bundle.putSerializable(CHART, chart);
                         bundle.putSerializable(LOCATION, chartLocation);
-                        bundle.putInt(NUM_ROWS, Integer.parseInt("0" + chartRowsEdt.getText().toString()));
                         intent.putExtra(BUNDLE, bundle);
                         startActivity(intent);
                         //end

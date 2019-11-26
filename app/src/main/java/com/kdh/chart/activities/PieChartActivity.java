@@ -1,6 +1,5 @@
 package com.kdh.chart.activities;
 
-import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -10,7 +9,6 @@ import android.widget.LinearLayout;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.fragment.app.DialogFragment;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.kdh.chart.ProjectFileManager;
@@ -27,13 +25,18 @@ import com.kdh.chart.fragments.SimpleInputFragment;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-public class PieChartActivity extends AppCompatActivity {
+public class PieChartActivity extends AppCompatActivity  implements SimpleInputFragment.OnUpdateDataListener {
 
     private PieChartView mChartView;
-    private DialogFragment mInputTable;
+    private SimpleInputFragment mInputTable;
     private ArrayList<SimpleInputRow> simpleInputRows;
-
     private LinearLayout layout;
+    private PieChart pieChart;
+    private ProjectLocation projectLocation;
+    private ChartLocation chartLocation;
+    private Project project;
+    private Bundle bundle;
+    private String chartName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,54 +46,38 @@ public class PieChartActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         //receive bundle
-        final Bundle bundle = getIntent().getBundleExtra(CreatePieChartDialogFragment.BUNDLE);
-        final ProjectLocation projectLocation = (ProjectLocation) bundle.getSerializable(CreatePieChartDialogFragment.PROJECT_LOCATION);
-        final PieChart pieChart = (PieChart) bundle.getSerializable(CreatePieChartDialogFragment.CHART);
-        final ChartLocation location = (ChartLocation) bundle.getSerializable(CreatePieChartDialogFragment.LOCATION);
-        final String chartName = pieChart.getChartName();
-        final Project project = projectLocation.getProject();
-        final int numOfRows = bundle.getInt(CreatePieChartDialogFragment.NUM_ROWS);
+        bundle = getIntent().getBundleExtra(CreatePieChartDialogFragment.BUNDLE);
+        projectLocation = (ProjectLocation) bundle.getSerializable(CreatePieChartDialogFragment.PROJECT_LOCATION);
+        pieChart = (PieChart) bundle.getSerializable(CreatePieChartDialogFragment.CHART);
+        chartLocation = (ChartLocation) bundle.getSerializable(CreatePieChartDialogFragment.LOCATION);
+        chartName = pieChart.getChartName();
+        project = projectLocation.getProject();
         //set title
         if (chartName != null)
             setTitle(chartName);
         actionBar.setDisplayHomeAsUpEnabled(true);
         //prepare input table
-
-        simpleInputRows = new ArrayList<>();
-        TypedArray colors = getResources().obtainTypedArray(R.array.mdcolor_500);
-        for (int i = 0; i < numOfRows; i++) {
-            int color = getResources().getColor(R.color.blue_500);
-            simpleInputRows.add(new SimpleInputRow("R " + i, colors.getColor(i, color), "", "Description " + i));
-        }
-        colors.recycle();
-        mInputTable = new SimpleInputFragment(simpleInputRows);
+        simpleInputRows = pieChart.getData();
+        mInputTable = SimpleInputFragment.newInstance(simpleInputRows);
         //create chart
         layout = findViewById(R.id.layout);
         layout.removeAllViews();
         mChartView = new PieChartView(this, null);
         layout.addView((View) mChartView);
         // on input table data changed
-        ((SimpleInputFragment) mInputTable).setOnUpdateDataListener(new SimpleInputFragment.OnUpdateDataListener() {
+/*        mInputTable.setOnUpdateDataListener(new SimpleInputFragment.OnUpdateDataListener() {
             @Override
             public void onUpdate(ArrayList<SimpleInputRow> lists) {
-                if (checkValue(simpleInputRows)){
-                    //update data
-                    pieChart.setData(simpleInputRows);
-                    mChartView.updateData(simpleInputRows);
-                    //save data to file
-                    project.setModifiedTime(Calendar.getInstance().getTime().toString());
-                    pieChart.setModifiedTime(Calendar.getInstance().getTime().toString());
-                    ProjectFileManager.saveChart(projectLocation, pieChart, location);
-                    ProjectFileManager.saveProject(projectLocation);
-                }
 
-                else
-                    Snackbar.make((View) mChartView, "Invalid data", Snackbar.LENGTH_SHORT).show();
             }
-        });
+        });*/
         //show input table
-        mInputTable.show(getSupportFragmentManager(), SimpleInputFragment.TAG);
+        if (simpleInputRows != null && checkValue(simpleInputRows))
+            mChartView.updateData(simpleInputRows);
+        else
+            mInputTable.show(getSupportFragmentManager(), SimpleInputFragment.TAG);
     }
+
 
     private boolean checkValue(ArrayList<SimpleInputRow> list) {
         float sum = 0;
@@ -131,4 +118,18 @@ public class PieChartActivity extends AppCompatActivity {
         return simpleInputRows;
     }
 
+    @Override
+    public void onUpdate(ArrayList<SimpleInputRow> lists) {
+        if (checkValue(simpleInputRows)) {
+            //update data
+            pieChart.setData(simpleInputRows);
+            mChartView.updateData(simpleInputRows);
+            //save data to file
+            project.setModifiedTime(Calendar.getInstance().getTime().toString());
+            pieChart.setModifiedTime(Calendar.getInstance().getTime().toString());
+            ProjectFileManager.saveChart(projectLocation, pieChart, chartLocation);
+            ProjectFileManager.saveProject(projectLocation);
+        } else
+            Snackbar.make(mChartView, "Invalid data", Snackbar.LENGTH_SHORT).show();
+    }
 }

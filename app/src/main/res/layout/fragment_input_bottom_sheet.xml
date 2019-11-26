@@ -50,7 +50,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:backgroundTint="@color/colorPrimaryDark"
-                        android:enabled="false"
+                        android:visibility="gone"
                         android:text="Add column"
                         android:textColor="@android:color/white" />
                 </LinearLayout>

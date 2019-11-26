@@ -1,6 +1,5 @@
 package com.kdh.chart.activities;
 
-import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -28,12 +27,20 @@ import com.kdh.chart.fragments.CreatePieChartDialogFragment;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-public class LineChartActivity extends AppCompatActivity {
+public class LineChartActivity extends AppCompatActivity implements AdvancedInputFragment.OnUpdateDataListener {
 
     private LineChartView mChartView;
     private DialogFragment mInputTable;
     private ArrayList<AdvancedInputRow> advancedInputRows;
     private LinearLayout layout;
+    private Bundle bundle;
+    private ProjectLocation projectLocation;
+    private LineChart lineChart;
+    private ChartLocation location;
+    private Project project;
+    private String chartName;
+    private String xAxisUnit;
+    private String yAxisUnit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,64 +50,32 @@ public class LineChartActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         //receive bundle
-        final Bundle bundle = getIntent().getBundleExtra(CreatePieChartDialogFragment.BUNDLE);
-        final ProjectLocation projectLocation = (ProjectLocation) bundle.getSerializable(CreatePieChartDialogFragment.PROJECT_LOCATION);
-        final LineChart lineChart = (LineChart) bundle.getSerializable(CreatePieChartDialogFragment.CHART);
-        final ChartLocation location = (ChartLocation) bundle.getSerializable(CreatePieChartDialogFragment.LOCATION);
-        final String chartName = lineChart.getChartName();
-        final Project project = projectLocation.getProject();
-        final int numOfRows = bundle.getInt(CreatePieChartDialogFragment.NUM_ROWS);
-        final int numOfCols = bundle.getInt(CreateLineChartDialogFragment.NUM_COLS);
-        final String xAxisUnit = lineChart.getxAxisUnit();
-        final String yAxisUnit = lineChart.getxAxisUnit();
+        bundle = getIntent().getBundleExtra(CreatePieChartDialogFragment.BUNDLE);
+        projectLocation = (ProjectLocation) bundle.getSerializable(CreateLineChartDialogFragment.PROJECT_LOCATION);
+        lineChart = (LineChart) bundle.getSerializable(CreateLineChartDialogFragment.CHART);
+        location = (ChartLocation) bundle.getSerializable(CreateLineChartDialogFragment.LOCATION);
+        chartName = lineChart.getChartName();
+        project = projectLocation.getProject();
+        xAxisUnit = lineChart.getxAxisUnit();
+        yAxisUnit = lineChart.getxAxisUnit();
         //set title
         if (chartName != null)
             setTitle(chartName);
         actionBar.setDisplayHomeAsUpEnabled(true);
         //prepare input table
 
-        advancedInputRows = new ArrayList<>();
-        TypedArray colors = getResources().obtainTypedArray(R.array.mdcolor_500);
-        int color = getResources().getColor(R.color.blue_500);
-        //header
-        ArrayList<String> values = new ArrayList<>();
-        for (int j = 0; j < numOfCols; j++)
-            values.add("C" + j);
-        advancedInputRows.add(new AdvancedInputRow("Data table", color, values, ""));
-        //content
-        for (int i = 0; i < numOfRows; i++) {
-            color = getResources().getColor(R.color.blue_500);
-            values = new ArrayList<>();
-            for (int j = 0; j < numOfCols; j++)
-                values.add("");
-            advancedInputRows.add(new AdvancedInputRow("R" + i, colors.getColor(i, color), values, "Description " + i));
-        }
-        colors.recycle();
-        mInputTable = new AdvancedInputFragment(advancedInputRows, numOfCols);
+        advancedInputRows = lineChart.getData();
+        mInputTable = AdvancedInputFragment.newInstance(advancedInputRows);
         //create chart
         layout = findViewById(R.id.layout);
         layout.removeAllViews();
         mChartView = new LineChartView(this, null);
         layout.addView((View) mChartView);
-        // on input table data changed
-        ((AdvancedInputFragment) mInputTable).setOnUpdateDataListener(new AdvancedInputFragment.OnUpdateDataListener() {
-            @Override
-            public void onUpdate(ArrayList<AdvancedInputRow> lists) {
-                if (checkValue(advancedInputRows)) {
-                    //update data
-                    lineChart.setData(advancedInputRows);
-                    mChartView.updateData(advancedInputRows, chartName, xAxisUnit, yAxisUnit);
-                    //save data to file
-                    project.setModifiedTime(Calendar.getInstance().getTime().toString());
-                    lineChart.setModifiedTime(Calendar.getInstance().getTime().toString());
-                    ProjectFileManager.saveChart(projectLocation, lineChart, location);
-                    ProjectFileManager.saveProject(projectLocation);
-                } else
-                    Snackbar.make((View) mChartView, "Invalid data", Snackbar.LENGTH_SHORT).show();
-            }
-        });
         //show input table
-        mInputTable.show(getSupportFragmentManager(), AdvancedInputFragment.TAG);
+        if (checkValue(advancedInputRows))
+            mChartView.updateData(advancedInputRows, chartName, xAxisUnit, yAxisUnit);
+        else
+            mInputTable.show(getSupportFragmentManager(), AdvancedInputFragment.TAG);
     }
 
     private boolean checkValue(ArrayList<AdvancedInputRow> list) {
@@ -139,5 +114,20 @@ public class LineChartActivity extends AppCompatActivity {
 
     public ArrayList<AdvancedInputRow> getInputRows() {
         return advancedInputRows;
+    }
+
+    @Override
+    public void onUpdate(ArrayList<AdvancedInputRow> lists) {
+        if (checkValue(advancedInputRows)) {
+            //update data
+            lineChart.setData(advancedInputRows);
+            mChartView.updateData(advancedInputRows, chartName, xAxisUnit, yAxisUnit);
+            //save data to file
+            project.setModifiedTime(Calendar.getInstance().getTime().toString());
+            lineChart.setModifiedTime(Calendar.getInstance().getTime().toString());
+            ProjectFileManager.saveChart(projectLocation, lineChart, location);
+            ProjectFileManager.saveProject(projectLocation);
+        } else
+            Snackbar.make((View) mChartView, "Invalid data", Snackbar.LENGTH_SHORT).show();
     }
 }

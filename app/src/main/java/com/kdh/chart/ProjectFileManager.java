@@ -2,11 +2,14 @@ package com.kdh.chart;
 
 import android.os.Environment;
 import android.util.Log;
+import android.util.Pair;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.kdh.chart.datatypes.Chart;
 import com.kdh.chart.datatypes.ChartLocation;
+import com.kdh.chart.datatypes.LineChart;
+import com.kdh.chart.datatypes.PieChart;
 import com.kdh.chart.datatypes.Project;
 import com.kdh.chart.datatypes.ProjectLocation;
 
@@ -82,6 +85,44 @@ public class ProjectFileManager {
                         io.printStackTrace();
                     }
 
+                }
+            }
+        }
+        return result;
+    }
+
+    public static ArrayList<Pair<ChartLocation, Chart>> loadCharts(final ProjectLocation projectLocation) {
+        final ArrayList<Pair<ChartLocation, Chart>> result = new ArrayList<>();
+        final Gson gson = new Gson();
+        Project project;
+        try {
+            final BufferedReader reader = new BufferedReader(new FileReader(projectLocation.getLocation()));
+            project = gson.fromJson(reader, Project.class);
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+            return null;
+        }
+        File projectFolder = new File(projectLocation.getLocation()).getParentFile();
+        for (ChartLocation chartLocation : project.getCharts()) {
+            final File chartFile = new File(projectFolder, chartLocation.getLocation());
+            if (chartFile.exists()) {
+                try {
+                    final BufferedReader reader = new BufferedReader(new FileReader(chartFile));
+                    switch (chartLocation.getType()) {
+                        case PIE:
+                            final PieChart pieChart = gson.fromJson(reader, PieChart.class);
+                            result.add(new Pair<ChartLocation, Chart>(chartLocation, pieChart));
+                            break;
+                        case LINE:
+                            final LineChart lineChart = gson.fromJson(reader, LineChart.class);
+                            result.add(new Pair<ChartLocation, Chart>(chartLocation, lineChart));
+                            break;
+                        default:
+                            break;
+                    }
+                    reader.close();
+                } catch (IOException ioe) {
+                    ioe.printStackTrace();
                 }
             }
         }

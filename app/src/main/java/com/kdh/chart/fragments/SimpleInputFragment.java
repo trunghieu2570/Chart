@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ListView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.DialogFragment;
@@ -28,24 +29,23 @@ import java.util.ArrayList;
  */
 public class SimpleInputFragment extends BottomSheetDialogFragment {
 
-
     public static final String TAG = "SimpleInputFragment";
+    public static final String LIST = "inputlist";
     private OnUpdateDataListener onUpdateDataListener;
     private ArrayList<SimpleInputRow> rowsList;
 
 
     public SimpleInputFragment() {
-        // Required empty public constructor
     }
 
-    public SimpleInputFragment(ArrayList<SimpleInputRow> rowsList) {
-        this.rowsList = rowsList;
-    }
+    public static SimpleInputFragment newInstance(ArrayList<SimpleInputRow> rowsList) {
 
-    public void setOnUpdateDataListener(OnUpdateDataListener onUpdateDataListener) {
-        this.onUpdateDataListener = onUpdateDataListener;
+        Bundle args = new Bundle();
+        args.putSerializable(LIST, rowsList);
+        SimpleInputFragment fragment = new SimpleInputFragment();
+        fragment.setArguments(args);
+        return fragment;
     }
-
     public ArrayList<SimpleInputRow> getRowsList() {
         return rowsList;
     }
@@ -54,9 +54,12 @@ public class SimpleInputFragment extends BottomSheetDialogFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setStyle(DialogFragment.STYLE_NORMAL, R.style.DialogStyle);
-        if (rowsList == null)
-            rowsList = new ArrayList<>();
+    }
 
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        this.onUpdateDataListener = (OnUpdateDataListener) getActivity();
     }
 
     @Override
@@ -65,6 +68,7 @@ public class SimpleInputFragment extends BottomSheetDialogFragment {
         View view = inflater.inflate(R.layout.fragment_input_bottom_sheet, container, false);
         final Toolbar toolbar = view.findViewById(R.id.toolbar);
         final Button addRowButton = view.findViewById(R.id.btn_add_row);
+        rowsList = (ArrayList<SimpleInputRow>) getArguments().getSerializable(LIST);
         addRowButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

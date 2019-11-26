@@ -36,10 +36,9 @@ public class AddAdvancedInputRowDialogFragment extends DialogFragment {
         // Required empty public constructor
     }
 
-    public static AddAdvancedInputRowDialogFragment newInstance(int numOfColumns) {
+    public static AddAdvancedInputRowDialogFragment newInstance() {
 
         Bundle args = new Bundle();
-        args.putInt("numcolumns", numOfColumns);
         AddAdvancedInputRowDialogFragment fragment = new AddAdvancedInputRowDialogFragment();
         fragment.setArguments(args);
         return fragment;
@@ -53,7 +52,6 @@ public class AddAdvancedInputRowDialogFragment extends DialogFragment {
         view = layoutInflater.inflate(R.layout.fragment_add_new_row_dialog, null, false);
         rowNameEdt = view.findViewById(R.id.edt_row_name);
         descriptionEdt = view.findViewById(R.id.edt_row_description);
-        final int numOfColumns = getArguments().getInt("numcolumns");
         return new MaterialAlertDialogBuilder(getActivity(), R.style.ThemeOverlay_MaterialComponents_MaterialAlertDialog)
                 .setTitle("Add new row")
                 .setView(view)
@@ -62,7 +60,7 @@ public class AddAdvancedInputRowDialogFragment extends DialogFragment {
                     public void onClick(DialogInterface dialogInterface, int i) {
                         final int rows = ((LineChartActivity) getActivity()).getInputRows().get(0).getValues().size();
                         ArrayList<String> values = new ArrayList<>();
-                        for (int j = 0; j < (rows == 0 ? numOfColumns : rows); j++)
+                        for (int j = 0; j < rows; j++)
                             values.add("");
                         AdvancedInputRow row = new AdvancedInputRow(
                                 rowNameEdt.getText().toString(),

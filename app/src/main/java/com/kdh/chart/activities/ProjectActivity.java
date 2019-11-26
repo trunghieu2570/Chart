@@ -1,6 +1,8 @@
 package com.kdh.chart.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Pair;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -15,9 +17,11 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
+import com.kdh.chart.ProjectFileManager;
 import com.kdh.chart.R;
 import com.kdh.chart.adapters.ChartListViewAdapter;
 import com.kdh.chart.datatypes.Chart;
+import com.kdh.chart.datatypes.ChartLocation;
 import com.kdh.chart.datatypes.Project;
 import com.kdh.chart.datatypes.ProjectLocation;
 import com.kdh.chart.fragments.CreateLineChartDialogFragment;
@@ -25,14 +29,20 @@ import com.kdh.chart.fragments.CreatePieChartDialogFragment;
 import com.kdh.chart.fragments.CreateProjectDialogFragment;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class ProjectActivity extends AppCompatActivity {
 
+    public static final String PROJECT_LOCATION = "project";
+    public static final String CHART = "chart";
+    public static final String LOCATION = "location";
+    public static final String BUNDLE = "bundle";
     private BottomSheetDialog bottomSheetDialog;
+    private ListView chartListView;
+    private ProjectLocation projectLocation;
+    private ArrayList<Pair<ChartLocation, Chart>> charts;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +53,7 @@ public class ProjectActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         //actionBar.setDisplayHomeAsUpEnabled(true);
         final Bundle bundle = getIntent().getBundleExtra(CreateProjectDialogFragment.BUNDLE);
-        final ProjectLocation projectLocation = (ProjectLocation) bundle.getSerializable(CreateProjectDialogFragment.PROJECT_LOCATION);
+        projectLocation = (ProjectLocation) bundle.getSerializable(CreateProjectDialogFragment.PROJECT_LOCATION);
         final Project project = projectLocation.getProject();
         final String projectName = project.getName();
         setTitle(projectName);
@@ -56,28 +66,40 @@ public class ProjectActivity extends AppCompatActivity {
             }
         });
 
-        final ListView chartListView = findViewById(R.id.listview_chart);
-        //project list
-        ArrayList<Chart> charts = new ArrayList<>();
-        //this loop will be removed soon
-        for (int i = 0; i < 4; i++) {
-            charts.add(new Chart(
-                    "Chart " + i,
-                    "This is a fake chart",
-                    Calendar.getInstance().getTime().toString()
-            ));
-        }
-        //map project list
-        List<Map<String, String>> data = new ArrayList<Map<String, String>>();
-        for (Chart chart : charts) {
-            Map<String, String> tmp = new HashMap<>(2);
-            tmp.put("Line1", chart.getChartName());
-            tmp.put("Line2", chart.getDescription());
-            data.add(tmp);
-        }
-        //gan list project vao listview
-        SimpleAdapter simpleAdapter = new SimpleAdapter(this, data, android.R.layout.simple_list_item_2, new String[]{"Line1", "Line2"}, new int[]{android.R.id.text1, android.R.id.text2});
-        chartListView.setAdapter(simpleAdapter);
+        chartListView = findViewById(R.id.listview_chart);
+        chartListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                final Bundle bundle = new Bundle();
+                final ChartLocation chartLocation = charts.get(i).first;
+                final Chart chart = charts.get(i).second;
+                switch (chartLocation.getType()) {
+                    case PIE:
+                        final Intent pieIntent = new Intent(ProjectActivity.this, PieChartActivity.class);
+                        bundle.putSerializable(PROJECT_LOCATION, projectLocation);
+                        bundle.putSerializable(CHART, chart);
+                        bundle.putSerializable(LOCATION, chartLocation);
+                        pieIntent.putExtra(BUNDLE, bundle);
+                        startActivity(pieIntent);
+                        break;
+                    case LINE:
+                        final Intent lineIntent = new Intent(ProjectActivity.this, LineChartActivity.class);
+                        bundle.putSerializable(PROJECT_LOCATION, projectLocation);
+                        bundle.putSerializable(CHART, chart);
+                        bundle.putSerializable(LOCATION, chartLocation);
+                        lineIntent.putExtra(BUNDLE, bundle);
+                        startActivity(lineIntent);
+                        break;
+                }
+            }
+        });
+        loadChartList();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        loadChartList();
     }
 
     @Override
@@ -89,6 +111,22 @@ public class ProjectActivity extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void loadChartList() {
+        //load chart list
+        charts = ProjectFileManager.loadCharts(projectLocation);
+        //map chart list
+        List<Map<String, String>> data = new ArrayList<Map<String, String>>();
+        for (Pair<ChartLocation, Chart> chartPair : charts) {
+            Map<String, String> tmp = new HashMap<>(2);
+            tmp.put("Line1", chartPair.second.getChartName());
+            tmp.put("Line2", chartPair.second.getDescription());
+            data.add(tmp);
+        }
+        //add to listview
+        SimpleAdapter simpleAdapter = new SimpleAdapter(this, data, android.R.layout.simple_list_item_2, new String[]{"Line1", "Line2"}, new int[]{android.R.id.text1, android.R.id.text2});
+        chartListView.setAdapter(simpleAdapter);
     }
 
 

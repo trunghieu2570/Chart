@@ -12,6 +12,7 @@ import android.widget.FrameLayout;
 import android.widget.HorizontalScrollView;
 import android.widget.ListView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.DialogFragment;
@@ -31,9 +32,9 @@ public class AdvancedInputFragment extends BottomSheetDialogFragment {
 
 
     public static final String TAG = "AdvancedInputFragment";
+    public static final String LIST = "inputlist";
     private OnUpdateDataListener onUpdateDataListener;
     private ArrayList<AdvancedInputRow> rowsList;
-    private int defaultNumOfCols;
     private ListView rowsListView;
     private AdvancedInputRowAdapter rowsAdapter;
 
@@ -42,13 +43,13 @@ public class AdvancedInputFragment extends BottomSheetDialogFragment {
         // Required empty public constructor
     }
 
-    public AdvancedInputFragment(ArrayList<AdvancedInputRow> rowsList, int defaultNumOfCols) {
-        this.rowsList = rowsList;
-        this.defaultNumOfCols = defaultNumOfCols;
-    }
+    public static AdvancedInputFragment newInstance(ArrayList<AdvancedInputRow> rowsList) {
 
-    public void setOnUpdateDataListener(OnUpdateDataListener onUpdateDataListener) {
-        this.onUpdateDataListener = onUpdateDataListener;
+        Bundle args = new Bundle();
+        args.putSerializable(LIST, rowsList);
+        AdvancedInputFragment fragment = new AdvancedInputFragment();
+        fragment.setArguments(args);
+        return fragment;
     }
 
     public ArrayList<AdvancedInputRow> getRowsList() {
@@ -59,9 +60,12 @@ public class AdvancedInputFragment extends BottomSheetDialogFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setStyle(DialogFragment.STYLE_NORMAL, R.style.DialogStyle);
-        if (rowsList == null)
-            rowsList = new ArrayList<>();
+    }
 
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        this.onUpdateDataListener = (AdvancedInputFragment.OnUpdateDataListener) getActivity();
     }
 
     @Override
@@ -71,10 +75,11 @@ public class AdvancedInputFragment extends BottomSheetDialogFragment {
         final Toolbar toolbar = mainView.findViewById(R.id.toolbar);
         final Button addRowButton = mainView.findViewById(R.id.btn_add_row);
         final Button addColumnButton = mainView.findViewById(R.id.btn_add_col);
+        rowsList = (ArrayList<AdvancedInputRow>) getArguments().getSerializable(LIST);
         addRowButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AddAdvancedInputRowDialogFragment fragment = AddAdvancedInputRowDialogFragment.newInstance(defaultNumOfCols);
+                AddAdvancedInputRowDialogFragment fragment = AddAdvancedInputRowDialogFragment.newInstance();
                 fragment.setOnPositiveButtonClickedListener(new AddAdvancedInputRowDialogFragment.OnPositiveButtonClickedListener() {
                     @Override
                     public void onClick() {
@@ -84,7 +89,7 @@ public class AdvancedInputFragment extends BottomSheetDialogFragment {
                 fragment.show(getFragmentManager(), "new row");
             }
         });
-        addColumnButton.setEnabled(true);
+        addColumnButton.setVisibility(View.VISIBLE);
         addColumnButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

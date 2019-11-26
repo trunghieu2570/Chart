@@ -25,7 +25,6 @@ import java.util.Calendar;
 public class CreateProjectDialogFragment extends DialogFragment {
 
 
-    public static final String PROJECT_NAME = "prjname";
     public static final String BUNDLE = "bundle";
     public static final String PROJECT_LOCATION = "project";
 

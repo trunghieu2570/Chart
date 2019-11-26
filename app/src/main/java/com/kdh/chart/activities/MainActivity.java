@@ -1,9 +1,11 @@
 package com.kdh.chart.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 
@@ -14,17 +16,20 @@ import androidx.core.app.ActivityCompat;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.kdh.chart.ProjectFileManager;
 import com.kdh.chart.R;
-import com.kdh.chart.datatypes.Project;
 import com.kdh.chart.datatypes.ProjectLocation;
 import com.kdh.chart.fragments.CreateProjectDialogFragment;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
+
+    public static final String BUNDLE = "bundle";
+    public static final String PROJECT_LOCATION = "project";
+    private ListView recentListView;
+    private ArrayList<ProjectLocation> projectLocations;
 
     private void showCreateChartDialog() {
         CreateProjectDialogFragment createProjectDialogFragment = CreateProjectDialogFragment.newInstance();
@@ -48,29 +53,40 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        recentListView = findViewById(R.id.listview_recent);
+        recentListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Intent intent = new Intent(MainActivity.this, ProjectActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable(PROJECT_LOCATION, projectLocations.get(i));
+                intent.putExtra(BUNDLE, bundle);
+                startActivity(intent);
+            }
+        });
+    }
 
-        final ListView recentListView = findViewById(R.id.listview_recent);
+    @Override
+    protected void onResume() {
+        super.onResume();
+        loadProject();
+    }
+
+    private void loadProject() {
         //project list
-        ArrayList<ProjectLocation> projectLocations = ProjectFileManager.loadProjects();
-        ArrayList<Project> projects = new ArrayList<>();
-        projects.add(new Project("Project 1", Calendar.getInstance().getTime().toString()));
-        projects.add(new Project("Project 2", Calendar.getInstance().getTime().toString()));
-        projects.add(new Project("Project 3", Calendar.getInstance().getTime().toString()));
-        projects.add(new Project("Project 4", Calendar.getInstance().getTime().toString()));
-        projects.add(new Project("Project 5", Calendar.getInstance().getTime().toString()));
+        projectLocations = ProjectFileManager.loadProjects();
+        if (projectLocations == null) return;
         //map project list
         List<Map<String, String>> data = new ArrayList<Map<String, String>>();
-        for (Project project : projects) {
+        for (ProjectLocation projectLocation : projectLocations) {
             Map<String, String> tmp = new HashMap<>(2);
-            tmp.put("Line1", project.getName());
-            tmp.put("Line2", project.getModifiedTime());
+            tmp.put("Line1", projectLocation.getProject().getName());
+            tmp.put("Line2", projectLocation.getProject().getModifiedTime());
             data.add(tmp);
         }
         //gan list project vao listview
         SimpleAdapter simpleAdapter = new SimpleAdapter(this, data, android.R.layout.simple_list_item_2, new String[]{"Line1", "Line2"}, new int[]{android.R.id.text1, android.R.id.text2});
         recentListView.setAdapter(simpleAdapter);
-
-
     }
 
     @Override
