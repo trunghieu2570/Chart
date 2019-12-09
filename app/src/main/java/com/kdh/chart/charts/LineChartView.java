@@ -107,6 +107,8 @@ public class LineChartView extends View implements ChartView<AdvancedInputRow> {
                 colorArr
         );
         isReady = true;
+        isOnDraw=false;
+        this.invalidate();
     }
 
     private static String convertArrayToStringMethod(String[] strArray) {
@@ -423,7 +425,7 @@ public class LineChartView extends View implements ChartView<AdvancedInputRow> {
         super.onDraw(canvas);
         if (isReady) {
             drawBackGround(canvas);
-            if (!hadLines)
+            //if (!hadLines)
                 setDataLines();
             if (ishaveData)
                 drawInitialChart(canvas);
