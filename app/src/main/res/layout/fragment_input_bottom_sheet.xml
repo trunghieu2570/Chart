@@ -41,7 +41,7 @@
                         android:backgroundTint="@color/colorPrimaryDark"
                         style="?android:attr/borderlessButtonStyle"
                         android:textColor="@android:color/white"
-                        android:text="Add row"/>
+                        android:text="@string/add_item"/>
 
                     <Button
                         android:id="@+id/btn_add_col"
@@ -51,7 +51,7 @@
                         android:layout_gravity="center_horizontal"
                         android:backgroundTint="@color/colorPrimaryDark"
                         android:visibility="gone"
-                        android:text="Add column"
+                        android:text="@string/add_serial"
                         android:textColor="@android:color/white" />
                 </LinearLayout>
 

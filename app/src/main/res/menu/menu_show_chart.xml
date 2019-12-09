@@ -2,8 +2,14 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
+        android:id="@+id/delete_chart"
+        android:orderInCategory="100"
+        android:title="@string/delete_chart"
+        app:showAsAction="collapseActionView" />
+    <item
         android:id="@+id/edit_chart"
         android:orderInCategory="100"
-        android:title="Edit"
+        android:title="@string/edit"
         app:showAsAction="always" />
+
 </menu>

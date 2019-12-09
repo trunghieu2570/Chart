@@ -119,7 +119,8 @@ public class PieChartView extends View implements ChartView<SimpleInputRow> {
         invalidate();
     }*/
     //@Override
-    public void updateData(List<SimpleInputRow> list) {
+    public void updateData(List<SimpleInputRow> fullList) {
+        final List<SimpleInputRow> list = fullList.subList(1,fullList.size());
         animSet.cancel();
         items.clear();
         animators.clear();

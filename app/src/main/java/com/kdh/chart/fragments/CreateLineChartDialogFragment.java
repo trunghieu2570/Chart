@@ -65,16 +65,16 @@ public class CreateLineChartDialogFragment extends DialogFragment {
         final EditText xAxisUnitEdt = view.findViewById(R.id.edt_x_axis_unit);
         final EditText yAxisUnitEdt = view.findViewById(R.id.edt_y_axis_unit);
         return new MaterialAlertDialogBuilder(getActivity(), R.style.ThemeOverlay_MaterialComponents_MaterialAlertDialog)
-                .setTitle("Create new chart")
+                .setTitle(R.string.create_chart)
                 .setView(view)
-                .setPositiveButton("Create", new DialogInterface.OnClickListener() {
+                .setPositiveButton(R.string.create, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int v) {
                         //init
                         final ProjectLocation projectLocation = (ProjectLocation) getArguments().getSerializable(PROJECT_LOCATION);
                         final LineChart chart = new LineChart(
                                 chartNameEdt.getText().toString(),
-                                "This is a LineChart",
+                                "Biểu đồ tuyến tính",
                                 Calendar.getInstance().getTime().toString(),
                                 xAxisUnitEdt.getText().toString(),
                                 yAxisUnitEdt.getText().toString()
@@ -88,7 +88,7 @@ public class CreateLineChartDialogFragment extends DialogFragment {
                         ArrayList<String> values = new ArrayList<>();
                         for (int j = 0; j < numOfCols; j++)
                             values.add("C" + j);
-                        inputRows.add(new AdvancedInputRow("Data table", color, values, ""));
+                        inputRows.add(new AdvancedInputRow(getString(R.string.data_table), color, values, ""));
                         //content
                         for (int i = 0; i < numOfRows; i++) {
                             color = getResources().getColor(R.color.blue_500);
@@ -122,7 +122,7 @@ public class CreateLineChartDialogFragment extends DialogFragment {
                         getDialog().dismiss();
                     }
                 })
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         getDialog().dismiss();

@@ -59,7 +59,7 @@ public class EditSimpleInputRowDialogFragment extends DialogFragment {
         rowNameEdt.setText(name);
         descriptionEdt.setText(description);
         return new MaterialAlertDialogBuilder(getActivity(), R.style.ThemeOverlay_MaterialComponents_MaterialAlertDialog)
-                .setTitle("Edit row")
+                .setTitle(R.string.edit_item)
                 .setView(view)
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
@@ -71,13 +71,13 @@ public class EditSimpleInputRowDialogFragment extends DialogFragment {
                         getDialog().dismiss();
                     }
                 })
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         getDialog().dismiss();
                     }
                 })
-                .setNeutralButton("Delete", new DialogInterface.OnClickListener() {
+                .setNeutralButton(R.string.delete, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         ((PieChartActivity) getContext()).getInputRows().remove(item);

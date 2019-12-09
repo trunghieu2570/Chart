@@ -27,6 +27,7 @@ public class AddSimpleInputRowDialogFragment extends DialogFragment {
     private View view;
     private EditText rowNameEdt;
     private EditText descriptionEdt;
+    private OnPositiveButtonClickedListener onPositiveButtonClickedListener;
 
 
     public AddSimpleInputRowDialogFragment() {
@@ -43,7 +44,7 @@ public class AddSimpleInputRowDialogFragment extends DialogFragment {
         descriptionEdt = view.findViewById(R.id.edt_row_description);
 
         return new MaterialAlertDialogBuilder(getActivity(), R.style.ThemeOverlay_MaterialComponents_MaterialAlertDialog)
-                .setTitle("Add new row")
+                .setTitle(R.string.add_item)
                 .setView(view)
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
@@ -55,15 +56,24 @@ public class AddSimpleInputRowDialogFragment extends DialogFragment {
                                 descriptionEdt.getText().toString());
 
                         ((PieChartActivity) getActivity()).getInputRows().add(row);
+                        onPositiveButtonClickedListener.onClick();
                         getDialog().dismiss();
                     }
                 })
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         getDialog().dismiss();
                     }
                 })
                 .create();
+    }
+
+    public void setOnPositiveButtonClickedListener(OnPositiveButtonClickedListener onPositiveButtonClickedListener) {
+        this.onPositiveButtonClickedListener = onPositiveButtonClickedListener;
+    }
+
+    public interface OnPositiveButtonClickedListener {
+        void onClick();
     }
 }

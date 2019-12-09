@@ -114,7 +114,7 @@ public class AdvancedInputFragment extends BottomSheetDialogFragment {
                 return false;
             }
         });
-        toolbar.setNavigationIcon(R.drawable.ic_keyboard_arrow_up_white_24dp);
+        //toolbar.setNavigationIcon(R.drawable.ic_keyboard_arrow_up_white_24dp);
         drawSingleTableData(mainView);
         return mainView;
     }

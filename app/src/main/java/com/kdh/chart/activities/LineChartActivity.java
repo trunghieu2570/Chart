@@ -1,6 +1,7 @@
 package com.kdh.chart.activities;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -36,7 +37,7 @@ public class LineChartActivity extends AppCompatActivity implements AdvancedInpu
     private Bundle bundle;
     private ProjectLocation projectLocation;
     private LineChart lineChart;
-    private ChartLocation location;
+    private ChartLocation chartLocation;
     private Project project;
     private String chartName;
     private String xAxisUnit;
@@ -53,7 +54,7 @@ public class LineChartActivity extends AppCompatActivity implements AdvancedInpu
         bundle = getIntent().getBundleExtra(CreatePieChartDialogFragment.BUNDLE);
         projectLocation = (ProjectLocation) bundle.getSerializable(CreateLineChartDialogFragment.PROJECT_LOCATION);
         lineChart = (LineChart) bundle.getSerializable(CreateLineChartDialogFragment.CHART);
-        location = (ChartLocation) bundle.getSerializable(CreateLineChartDialogFragment.LOCATION);
+        chartLocation = (ChartLocation) bundle.getSerializable(CreateLineChartDialogFragment.LOCATION);
         chartName = lineChart.getChartName();
         project = projectLocation.getProject();
         xAxisUnit = lineChart.getxAxisUnit();
@@ -72,8 +73,9 @@ public class LineChartActivity extends AppCompatActivity implements AdvancedInpu
         mChartView = new LineChartView(this, null);
         layout.addView((View) mChartView);
         //show input table
-        if (checkValue(advancedInputRows))
+        if (checkValue(advancedInputRows)) {
             mChartView.updateData(advancedInputRows, chartName, xAxisUnit, yAxisUnit);
+        }
         else
             mInputTable.show(getSupportFragmentManager(), AdvancedInputFragment.TAG);
     }
@@ -101,6 +103,9 @@ public class LineChartActivity extends AppCompatActivity implements AdvancedInpu
             case R.id.edit_chart:
                 showBottomSheetDialog();
                 return true;
+            case R.id.delete_chart:
+                deleteChart();
+                return true;
             case android.R.id.home:
                 finish();
                 return true;
@@ -125,9 +130,21 @@ public class LineChartActivity extends AppCompatActivity implements AdvancedInpu
             //save data to file
             project.setModifiedTime(Calendar.getInstance().getTime().toString());
             lineChart.setModifiedTime(Calendar.getInstance().getTime().toString());
-            ProjectFileManager.saveChart(projectLocation, lineChart, location);
+            ProjectFileManager.saveChart(projectLocation, lineChart, chartLocation);
             ProjectFileManager.saveProject(projectLocation);
         } else
             Snackbar.make((View) mChartView, "Invalid data", Snackbar.LENGTH_SHORT).show();
+    }
+
+    private void deleteChart() {
+        final ArrayList<ChartLocation> cList = projectLocation.getProject().getCharts();
+        for(int i = 0; i < cList.size(); i++) {
+            if (cList.get(i).getLocation().equals(chartLocation.getLocation())) {
+                projectLocation.getProject().getCharts().remove(i);
+                ProjectFileManager.saveProject(projectLocation);
+                Log.d("Delete", "Delete successfully");
+            }
+        }
+        finish();
     }
 }

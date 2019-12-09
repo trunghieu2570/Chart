@@ -46,6 +46,7 @@ public class SimpleInputFragment extends BottomSheetDialogFragment {
         fragment.setArguments(args);
         return fragment;
     }
+
     public ArrayList<SimpleInputRow> getRowsList() {
         return rowsList;
     }
@@ -65,14 +66,20 @@ public class SimpleInputFragment extends BottomSheetDialogFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_input_bottom_sheet, container, false);
-        final Toolbar toolbar = view.findViewById(R.id.toolbar);
-        final Button addRowButton = view.findViewById(R.id.btn_add_row);
+        final View mainView = inflater.inflate(R.layout.fragment_input_bottom_sheet, container, false);
+        final Toolbar toolbar = mainView.findViewById(R.id.toolbar);
+        final Button addRowButton = mainView.findViewById(R.id.btn_add_row);
         rowsList = (ArrayList<SimpleInputRow>) getArguments().getSerializable(LIST);
         addRowButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 AddSimpleInputRowDialogFragment fragment = new AddSimpleInputRowDialogFragment();
+                fragment.setOnPositiveButtonClickedListener(new AddSimpleInputRowDialogFragment.OnPositiveButtonClickedListener() {
+                    @Override
+                    public void onClick() {
+                        drawSingleTableData(mainView);
+                    }
+                });
                 fragment.show(getFragmentManager(), "new row");
             }
         });
@@ -91,9 +98,9 @@ public class SimpleInputFragment extends BottomSheetDialogFragment {
                 return false;
             }
         });
-        toolbar.setNavigationIcon(R.drawable.ic_keyboard_arrow_up_white_24dp);
-        drawSingleTableData(view);
-        return view;
+        //toolbar.setNavigationIcon(R.drawable.ic_keyboard_arrow_up_white_24dp);
+        drawSingleTableData(mainView);
+        return mainView;
     }
 
 

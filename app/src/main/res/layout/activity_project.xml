@@ -29,7 +29,7 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
         android:theme="@style/Widget.Design.FloatingActionButton"
-        android:text="Add chart"
+        android:text="@string/add_chart"
         app:icon="@drawable/ic_add_24dp" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

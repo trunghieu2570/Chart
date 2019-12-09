@@ -53,7 +53,7 @@ public class AddAdvancedInputRowDialogFragment extends DialogFragment {
         rowNameEdt = view.findViewById(R.id.edt_row_name);
         descriptionEdt = view.findViewById(R.id.edt_row_description);
         return new MaterialAlertDialogBuilder(getActivity(), R.style.ThemeOverlay_MaterialComponents_MaterialAlertDialog)
-                .setTitle("Add new row")
+                .setTitle(R.string.add_item)
                 .setView(view)
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
@@ -73,7 +73,7 @@ public class AddAdvancedInputRowDialogFragment extends DialogFragment {
                         getDialog().dismiss();
                     }
                 })
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         getDialog().dismiss();

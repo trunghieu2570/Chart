@@ -19,6 +19,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.kdh.chart.ProjectFileManager;
 import com.kdh.chart.R;
 import com.kdh.chart.activities.PieChartActivity;
+import com.kdh.chart.datatypes.AdvancedInputRow;
 import com.kdh.chart.datatypes.ChartLocation;
 import com.kdh.chart.datatypes.ChartTypeEnum;
 import com.kdh.chart.datatypes.PieChart;
@@ -60,26 +61,30 @@ public class CreatePieChartDialogFragment extends DialogFragment {
         final View view = layoutInflater.inflate(R.layout.fragment_create_pie_chart_dialog, null, false);
         final EditText chartNameEdt = view.findViewById(R.id.edt_chart_name);
         final EditText chartRowsEdt = view.findViewById(R.id.edt_rows);
+        final EditText groupNameEdt = view.findViewById(R.id.edt_group_name);
+        final EditText valueGroupNameEdt = view.findViewById(R.id.edt_value_group_name);
         return new MaterialAlertDialogBuilder(getActivity(), R.style.ThemeOverlay_MaterialComponents_MaterialAlertDialog)
-                .setTitle("Create new chart")
+                .setTitle(R.string.create_chart)
                 .setView(view)
-                .setPositiveButton("Create", new DialogInterface.OnClickListener() {
+                .setPositiveButton(R.string.create, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int v) {
                         //init
                         final ProjectLocation projectLocation = (ProjectLocation) getArguments().getSerializable(PROJECT_LOCATION);
                         final PieChart chart = new PieChart(
                                 chartNameEdt.getText().toString(),
-                                "This is a PieChart",
+                                "Biểu đồ tròn",
                                 Calendar.getInstance().getTime().toString()
                         );
                         //create new empty data;
                         final ArrayList<SimpleInputRow> inputRows = new ArrayList<>();
                         TypedArray colors = getResources().obtainTypedArray(R.array.mdcolor_500);
+                        int color = getResources().getColor(R.color.blue_500);
+                        //header
+                        inputRows.add(new SimpleInputRow(groupNameEdt.getText().toString(), color, valueGroupNameEdt.getText().toString(), ""));
                         final int numOfRows = Integer.parseInt("0" + chartRowsEdt.getText().toString());
                         for (int i = 0; i < numOfRows; i++) {
-                            int color = getResources().getColor(R.color.blue_500);
-                            inputRows.add(new SimpleInputRow("R " + i, colors.getColor(i, color), "", "Description " + i));
+                            inputRows.add(new SimpleInputRow("Hạng mục " + i, colors.getColor(i, color), "", "Mô tả " + i));
                         }
                         colors.recycle();
                         chart.setData(inputRows);
@@ -107,7 +112,7 @@ public class CreatePieChartDialogFragment extends DialogFragment {
                         getDialog().dismiss();
                     }
                 })
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         getDialog().dismiss();

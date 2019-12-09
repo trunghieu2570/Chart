@@ -1,6 +1,7 @@
 package com.kdh.chart.activities;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -25,7 +26,7 @@ import com.kdh.chart.fragments.SimpleInputFragment;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-public class PieChartActivity extends AppCompatActivity  implements SimpleInputFragment.OnUpdateDataListener {
+public class PieChartActivity extends AppCompatActivity implements SimpleInputFragment.OnUpdateDataListener {
 
     private PieChartView mChartView;
     private SimpleInputFragment mInputTable;
@@ -81,7 +82,7 @@ public class PieChartActivity extends AppCompatActivity  implements SimpleInputF
 
     private boolean checkValue(ArrayList<SimpleInputRow> list) {
         float sum = 0;
-        for (SimpleInputRow row : list) {
+        for (SimpleInputRow row : list.subList(1, list.size())) {
             sum += Float.parseFloat(0 + row.getValue());
             if (row.getValue() == null || row.getValue().equals("")) {
                 return false;
@@ -102,6 +103,9 @@ public class PieChartActivity extends AppCompatActivity  implements SimpleInputF
         switch (id) {
             case R.id.edit_chart:
                 showBottomSheetDialog();
+                return true;
+            case R.id.delete_chart:
+                deleteChart();
                 return true;
             case android.R.id.home:
                 finish();
@@ -131,5 +135,17 @@ public class PieChartActivity extends AppCompatActivity  implements SimpleInputF
             ProjectFileManager.saveProject(projectLocation);
         } else
             Snackbar.make(mChartView, "Invalid data", Snackbar.LENGTH_SHORT).show();
+    }
+
+    private void deleteChart() {
+        final ArrayList<ChartLocation> cList = projectLocation.getProject().getCharts();
+        for(int i = 0; i < cList.size(); i++) {
+            if (cList.get(i).getLocation().equals(chartLocation.getLocation())) {
+                projectLocation.getProject().getCharts().remove(i);
+                ProjectFileManager.saveProject(projectLocation);
+                Log.d("Delete", "Delete successfully");
+            }
+        }
+        finish();
     }
 }

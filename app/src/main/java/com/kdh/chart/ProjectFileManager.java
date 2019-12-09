@@ -33,7 +33,7 @@ public class ProjectFileManager {
         return new File(projectDir, project.getName().replace(' ', '_') + ".chprj");
     }
 
-    public static void saveProject(final ProjectLocation location) {
+    public static void saveProject(ProjectLocation location) {
         File saveFile = new File(location.getLocation());
         saveFile.getParentFile().mkdirs();
         Gson gson = new Gson();

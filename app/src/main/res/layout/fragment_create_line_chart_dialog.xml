@@ -24,8 +24,8 @@
                     android:id="@+id/edt_chart_name"
                     android:layout_width="match_parent"
                     android:maxLength="30"
-                    android:hint="Enter chart name"
-                    android:text="Untitled chart"
+                    android:hint="@string/enter_chart_name"
+                    android:text="@string/line_chart"
                     android:layout_height="wrap_content"/>
             </com.google.android.material.textfield.TextInputLayout>
             <com.google.android.material.textfield.TextInputLayout
@@ -35,8 +35,8 @@
                 <EditText
                     android:id="@+id/edt_x_axis_unit"
                     android:layout_width="match_parent"
-                    android:hint="Enter X-axis unit"
-                    android:text="Years"
+                    android:hint="@string/enter_x_axis_unit"
+                    android:text="@string/default_x_axis_unit"
                     android:layout_height="wrap_content" />
             </com.google.android.material.textfield.TextInputLayout>
             <com.google.android.material.textfield.TextInputLayout
@@ -46,8 +46,8 @@
                 <EditText
                     android:id="@+id/edt_y_axis_unit"
                     android:layout_width="match_parent"
-                    android:hint="Enter Y-axis unit"
-                    android:text="USD"
+                    android:hint="@string/enter_y_axis_unit"
+                    android:text="@string/default_y_axis_unit"
                     android:layout_height="wrap_content" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -58,7 +58,7 @@
                 <EditText
                     android:id="@+id/edt_rows"
                     android:layout_width="match_parent"
-                    android:hint="Enter number of objects"
+                    android:hint="@string/enter_number_of_items"
                     android:inputType="number"
                     android:text="3"
                     android:layout_height="wrap_content" />
@@ -71,7 +71,7 @@
                 <EditText
                     android:id="@+id/edt_cols"
                     android:layout_width="match_parent"
-                    android:hint="Enter number of durations"
+                    android:hint="@string/enter_number_of_series"
                     android:inputType="number"
                     android:text="3"
                     android:layout_height="wrap_content" />
