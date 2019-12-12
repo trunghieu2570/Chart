@@ -53,7 +53,6 @@ public class EditAdvancedInputRowDialogFragment extends DialogFragment {
         rowNameEdt = view.findViewById(R.id.edt_row_name);
         final int item = getArguments().getInt("item");
         String name = getArguments().getCharSequence("name").toString();
-        String description = getArguments().getCharSequence("description").toString();
         rowNameEdt.setText(name);
         return new MaterialAlertDialogBuilder(getActivity(), R.style.ThemeOverlay_MaterialComponents_MaterialAlertDialog)
                 .setTitle(R.string.edit_item)

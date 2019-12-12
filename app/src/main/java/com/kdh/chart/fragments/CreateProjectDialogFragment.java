@@ -53,7 +53,7 @@ public class CreateProjectDialogFragment extends DialogFragment {
         return new MaterialAlertDialogBuilder(getActivity(), R.style.ThemeOverlay_MaterialComponents_MaterialAlertDialog)
                 .setTitle(R.string.enter_project_name)
                 .setView(view)
-                .setPositiveButton("Create", new DialogInterface.OnClickListener() {
+                .setPositiveButton(R.string.create, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         projectNameEdt = view.findViewById(R.id.edt_project_name);
@@ -76,7 +76,7 @@ public class CreateProjectDialogFragment extends DialogFragment {
                 .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        //TODO: do something else
+                        getDialog().dismiss();
                     }
                 })
                 .create();
