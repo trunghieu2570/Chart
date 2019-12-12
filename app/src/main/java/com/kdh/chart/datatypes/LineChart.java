@@ -9,8 +9,8 @@ public class LineChart extends Chart implements Serializable {
     private String xAxisUnit;
     private String yAxisUnit;
 
-    public LineChart(String chartName, String description, String modifiedTime, String xAxisUnit, String yAxisUnit) {
-        super(chartName, description, modifiedTime);
+    public LineChart(String chartName, String description, String xAxisUnit, String yAxisUnit) {
+        super(chartName, description);
         this.xAxisUnit = xAxisUnit;
         this.yAxisUnit = yAxisUnit;
     }

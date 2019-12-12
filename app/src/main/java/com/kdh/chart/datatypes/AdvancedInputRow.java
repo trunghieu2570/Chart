@@ -7,13 +7,11 @@ public class AdvancedInputRow implements Serializable {
     private String mLabel;
     private int mColor;
     private List<String> mValues;
-    private String mDescription;
 
-    public AdvancedInputRow(String label, int color, List<String> values, String description) {
+    public AdvancedInputRow(String label, int color, List<String> values) {
         this.mColor = color;
         this.mLabel = label;
         this.mValues = values;
-        this.mDescription = description;
     }
 
     public int getColor() {
@@ -24,9 +22,9 @@ public class AdvancedInputRow implements Serializable {
         return mValues;
     }
 
-    public void setValue(List<String> values) {
+/*    public void setValue(List<String> values) {
         this.mValues = values;
-    }
+    }*/
 
     public String getLabel() {
         return mLabel;
@@ -40,13 +38,4 @@ public class AdvancedInputRow implements Serializable {
         this.mLabel = label;
     }
 
-
-
-    public void setDescription(String description) {
-        this.mDescription = description;
-    }
-
-    public String getDescription() {
-        return mDescription;
-    }
 }

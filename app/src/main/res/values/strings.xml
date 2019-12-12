@@ -23,7 +23,7 @@
     <string name="default_x_axis_unit">Năm</string>
     <string name="enter_y_axis_unit">Nhập đơn vị trục tung</string>
     <string name="default_y_axis_unit">Đô la</string>
-    <string name="enter_number_of_series">Nhập số lượng các giai đoạn</string>
+    <string name="enter_number_of_series">Nhập số lượng các mốc</string>
     <string name="add_item">Thêm hạng mục</string>
     <string name="add_serie">Thêm giai đoạn</string>
     <string name="add_serial">Thêm giai đoạn</string>
@@ -39,4 +39,5 @@
     <string name="default_value_group_name">Tỉ lệ</string>
     <string name="edit">Chỉnh sửa</string>
     <string name="delete_chart">Xóa biểu đồ</string>
+    <string name="untitled_donut_chart">Untitled donut chart</string>
 </resources>

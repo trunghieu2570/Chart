@@ -8,6 +8,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.kdh.chart.datatypes.Chart;
 import com.kdh.chart.datatypes.ChartLocation;
+import com.kdh.chart.datatypes.DonutChart;
 import com.kdh.chart.datatypes.LineChart;
 import com.kdh.chart.datatypes.PieChart;
 import com.kdh.chart.datatypes.Project;
@@ -49,6 +50,22 @@ public class ProjectFileManager {
         } catch (IOException ex) {
             ex.printStackTrace();
         }
+    }
+
+    public static ProjectLocation loadProject(final ProjectLocation projectLocation) {
+        File saveFile = new File(projectLocation.getLocation());
+        saveFile.getParentFile().mkdirs();
+        Gson gson = new Gson();
+        Project result = null;
+        try {
+            final BufferedReader reader = new BufferedReader(new FileReader(projectLocation.getLocation()));
+            result = gson.fromJson(reader, Project.class);
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+        }
+        if (result == null) return null;
+        else
+            return new ProjectLocation(projectLocation.getLocation(), result);
     }
 
     public static ArrayList<ProjectLocation> loadProjects() {
@@ -112,6 +129,10 @@ public class ProjectFileManager {
                         case PIE:
                             final PieChart pieChart = gson.fromJson(reader, PieChart.class);
                             result.add(new Pair<ChartLocation, Chart>(chartLocation, pieChart));
+                            break;
+                        case DONUT:
+                            final DonutChart donutChart = gson.fromJson(reader, DonutChart.class);
+                            result.add(new Pair<ChartLocation, Chart>(chartLocation, donutChart));
                             break;
                         case LINE:
                             final LineChart lineChart = gson.fromJson(reader, LineChart.class);

@@ -26,7 +26,7 @@ public class AddSimpleInputRowDialogFragment extends DialogFragment {
 
     private View view;
     private EditText rowNameEdt;
-    private EditText descriptionEdt;
+    //private EditText descriptionEdt;
     private OnPositiveButtonClickedListener onPositiveButtonClickedListener;
 
 
@@ -41,7 +41,7 @@ public class AddSimpleInputRowDialogFragment extends DialogFragment {
         LayoutInflater layoutInflater = getActivity().getLayoutInflater();
         view = layoutInflater.inflate(R.layout.fragment_add_new_row_dialog, null, false);
         rowNameEdt = view.findViewById(R.id.edt_row_name);
-        descriptionEdt = view.findViewById(R.id.edt_row_description);
+        //descriptionEdt = view.findViewById(R.id.edt_row_description);
 
         return new MaterialAlertDialogBuilder(getActivity(), R.style.ThemeOverlay_MaterialComponents_MaterialAlertDialog)
                 .setTitle(R.string.add_item)
@@ -52,8 +52,7 @@ public class AddSimpleInputRowDialogFragment extends DialogFragment {
                         SimpleInputRow row = new SimpleInputRow(
                                 rowNameEdt.getText().toString(),
                                 R.color.blue_500,
-                                "",
-                                descriptionEdt.getText().toString());
+                                "");
 
                         ((PieChartActivity) getActivity()).getInputRows().add(row);
                         onPositiveButtonClickedListener.onClick();

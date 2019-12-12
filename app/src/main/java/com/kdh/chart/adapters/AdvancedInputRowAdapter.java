@@ -78,7 +78,7 @@ public class AdvancedInputRowAdapter extends ArrayAdapter<AdvancedInputRow> {
                             editText.removeTextChangedListener(myTextWatcher);
                         editText.setText(row.getValues().get(i));
                         //add new
-                        editText.setTag(new AdvancedInputRowAdapter.MyTextWatcher(editText, mRows.get(position), i));
+                        editText.setTag(new AdvancedInputRowAdapter.MyTextWatcher(mRows.get(position), i));
                         editText.addTextChangedListener((AdvancedInputRowAdapter.MyTextWatcher) editText.getTag());
                         inputLayout.addView(editText);
                     }
@@ -124,8 +124,8 @@ public class AdvancedInputRowAdapter extends ArrayAdapter<AdvancedInputRow> {
                     label.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            FragmentManager manager = ((LineChartActivity) getContext()).getSupportFragmentManager();
-                            EditAdvancedInputRowDialogFragment fragment = EditAdvancedInputRowDialogFragment.newInstance(position, row.getLabel(), row.getDescription());
+                            FragmentManager manager = ((AppCompatActivity) getContext()).getSupportFragmentManager();
+                            EditAdvancedInputRowDialogFragment fragment = EditAdvancedInputRowDialogFragment.newInstance(position, row.getLabel());
                             fragment.setOnClickPositiveButtonListener(new EditAdvancedInputRowDialogFragment.OnClickPositiveButtonListener() {
                                 @Override
                                 public void onClick() {
@@ -159,7 +159,7 @@ public class AdvancedInputRowAdapter extends ArrayAdapter<AdvancedInputRow> {
                             editText.removeTextChangedListener(myTextWatcher);
                         editText.setText(row.getValues().get(i));
                         //add new
-                        editText.setTag(new AdvancedInputRowAdapter.MyTextWatcher(editText, mRows.get(position), i));
+                        editText.setTag(new AdvancedInputRowAdapter.MyTextWatcher(mRows.get(position), i));
                         editText.addTextChangedListener((AdvancedInputRowAdapter.MyTextWatcher) editText.getTag());
                         inputLayout.addView(editText);
                     }
@@ -171,13 +171,11 @@ public class AdvancedInputRowAdapter extends ArrayAdapter<AdvancedInputRow> {
         return convertView;
     }
     private class MyTextWatcher implements TextWatcher {
-
-        private EditText mEditText;
+        ;
         private AdvancedInputRow mInputRow;
         private int id;
 
-        private MyTextWatcher(EditText editText, AdvancedInputRow inputRow, int id) {
-            this.mEditText = editText;
+        private MyTextWatcher(AdvancedInputRow inputRow, int id) {
             this.mInputRow = inputRow;
             this.id = id;
         }

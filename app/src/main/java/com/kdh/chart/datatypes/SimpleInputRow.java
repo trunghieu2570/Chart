@@ -6,13 +6,11 @@ public class SimpleInputRow implements Serializable {
     private String mLabel;
     private int mColor;
     private String mValue;
-    private String mDescription;
 
-    public SimpleInputRow(String label, int color, String value, String description) {
+    public SimpleInputRow(String label, int color, String value) {
         this.mColor = color;
         this.mLabel = label;
         this.mValue = value;
-        this.mDescription = description;
     }
 
     public int getColor() {
@@ -39,11 +37,4 @@ public class SimpleInputRow implements Serializable {
         this.mValue = value;
     }
 
-    public void setDescription(String description) {
-        this.mDescription = description;
-    }
-
-    public String getDescription() {
-        return mDescription;
-    }
 }

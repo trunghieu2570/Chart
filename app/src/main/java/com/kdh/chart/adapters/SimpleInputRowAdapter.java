@@ -1,5 +1,6 @@
 package com.kdh.chart.adapters;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
@@ -21,7 +22,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 
 import com.kdh.chart.R;
-import com.kdh.chart.activities.PieChartActivity;
 import com.kdh.chart.datatypes.SimpleInputRow;
 import com.kdh.chart.fragments.EditSimpleInputRowDialogFragment;
 import com.thebluealliance.spectrum.SpectrumDialog;
@@ -114,8 +114,8 @@ public class SimpleInputRowAdapter extends ArrayAdapter<SimpleInputRow> {
                     label.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            FragmentManager manager = ((PieChartActivity) getContext()).getSupportFragmentManager();
-                            EditSimpleInputRowDialogFragment fragment = EditSimpleInputRowDialogFragment.newInstance(position, row.getLabel(), row.getDescription());
+                            FragmentManager manager = ((AppCompatActivity) getContext()).getSupportFragmentManager();
+                            EditSimpleInputRowDialogFragment fragment = EditSimpleInputRowDialogFragment.newInstance(position, row.getLabel());
                             fragment.setOnClickPositiveButtonListener(new EditSimpleInputRowDialogFragment.OnClickPositiveButtonListener() {
                                 @Override
                                 public void onClick() {

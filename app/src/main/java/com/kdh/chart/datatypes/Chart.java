@@ -5,13 +5,11 @@ import java.io.Serializable;
 public class Chart implements Serializable {
 
     private String mChartName;
-    private String mModifiedTime;
     private String mDescription;
 
 
-    public Chart(String chartName, String description, String modifiedTime) {
+    Chart(String chartName, String description) {
         this.mChartName = chartName;
-        this.mModifiedTime = modifiedTime;
         this.mDescription = description;
     }
 
@@ -27,15 +25,10 @@ public class Chart implements Serializable {
         return mChartName;
     }
 
-    public String getModifiedTime() {
-        return mModifiedTime;
-    }
+
 
     public void setChartName(String mChartName) {
         this.mChartName = mChartName;
     }
 
-    public void setModifiedTime(String mModifiedTime) {
-        this.mModifiedTime = mModifiedTime;
-    }
 }

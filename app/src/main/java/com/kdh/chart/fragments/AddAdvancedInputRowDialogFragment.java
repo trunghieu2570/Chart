@@ -28,7 +28,6 @@ public class AddAdvancedInputRowDialogFragment extends DialogFragment {
 
     private View view;
     private EditText rowNameEdt;
-    private EditText descriptionEdt;
     private OnPositiveButtonClickedListener onPositiveButtonClickedListener;
 
 
@@ -51,7 +50,6 @@ public class AddAdvancedInputRowDialogFragment extends DialogFragment {
         LayoutInflater layoutInflater = getActivity().getLayoutInflater();
         view = layoutInflater.inflate(R.layout.fragment_add_new_row_dialog, null, false);
         rowNameEdt = view.findViewById(R.id.edt_row_name);
-        descriptionEdt = view.findViewById(R.id.edt_row_description);
         return new MaterialAlertDialogBuilder(getActivity(), R.style.ThemeOverlay_MaterialComponents_MaterialAlertDialog)
                 .setTitle(R.string.add_item)
                 .setView(view)
@@ -65,8 +63,7 @@ public class AddAdvancedInputRowDialogFragment extends DialogFragment {
                         AdvancedInputRow row = new AdvancedInputRow(
                                 rowNameEdt.getText().toString(),
                                 R.color.blue_500,
-                                values,
-                                descriptionEdt.getText().toString());
+                                values);
 
                         ((LineChartActivity) getActivity()).getInputRows().add(row);
                         onPositiveButtonClickedListener.onClick();

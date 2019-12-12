@@ -31,6 +31,8 @@
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity android:name=".activities.LineChartActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".activities.DonutChartActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
 </manifest>

@@ -19,35 +19,32 @@ import java.util.ArrayList;
 public class ChartListViewAdapter extends ArrayAdapter<ProjectActivity.ChartTypeItem> {
 
     private Context context;
-    private int resouce;
+    private int resource;
     private ArrayList<ProjectActivity.ChartTypeItem> arrTypeChart;
+
     public ChartListViewAdapter(@NonNull Context context, int resource, @NonNull ArrayList<ProjectActivity.ChartTypeItem> objects) {
         super(context, resource, objects);
-        this.context=context;
-        this.resouce=resource;
-        this.arrTypeChart=objects;
+        this.context = context;
+        this.resource = resource;
+        this.arrTypeChart = objects;
     }
 
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        if(convertView == null) {
-            convertView = LayoutInflater.from(context).inflate(this.resouce, parent, false);
+        if (convertView == null) {
+            convertView = LayoutInflater.from(context).inflate(this.resource, parent, false);
         }
-        ProjectActivity.ChartTypeItem typeChart=arrTypeChart.get(position);
-        if(typeChart != null) {
+        ProjectActivity.ChartTypeItem typeChart = arrTypeChart.get(position);
+        if (typeChart != null) {
             ImageView imageView = convertView.findViewById(R.id.img);
             TextView chartName = convertView.findViewById(R.id.btnName);
-            if(imageView != null)
-                imageView.setImageResource(typeChart.getimageResouce());
-            if(chartName != null)
+            if (imageView != null)
+                imageView.setImageResource(typeChart.getImageResource());
+            if (chartName != null)
                 chartName.setText(typeChart.getNameChart());
         }
         return convertView;
     }
 
-    private class ChartTypeView {
-        private ImageView imageView;
-        private TextView chartName;
-    }
 }

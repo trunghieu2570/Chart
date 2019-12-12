@@ -28,6 +28,7 @@ import com.kdh.chart.datatypes.ProjectLocation;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.UUID;
 
 
 /**
@@ -40,8 +41,6 @@ public class CreateLineChartDialogFragment extends DialogFragment {
     public static final String BUNDLE = "bundle";
     public static final String PROJECT_LOCATION = "project";
     public static final String LOCATION = "location";
-
-
 
     public CreateLineChartDialogFragment() { }
 
@@ -75,7 +74,6 @@ public class CreateLineChartDialogFragment extends DialogFragment {
                         final LineChart chart = new LineChart(
                                 chartNameEdt.getText().toString(),
                                 "Biểu đồ tuyến tính",
-                                Calendar.getInstance().getTime().toString(),
                                 xAxisUnitEdt.getText().toString(),
                                 yAxisUnitEdt.getText().toString()
                         );
@@ -88,19 +86,19 @@ public class CreateLineChartDialogFragment extends DialogFragment {
                         ArrayList<String> values = new ArrayList<>();
                         for (int j = 0; j < numOfCols; j++)
                             values.add("C" + j);
-                        inputRows.add(new AdvancedInputRow(getString(R.string.data_table), color, values, ""));
+                        inputRows.add(new AdvancedInputRow(getString(R.string.data_table), color, values));
                         //content
                         for (int i = 0; i < numOfRows; i++) {
                             color = getResources().getColor(R.color.blue_500);
                             values = new ArrayList<>();
                             for (int j = 0; j < numOfCols; j++)
                                 values.add("");
-                            inputRows.add(new AdvancedInputRow("R" + i, colors.getColor(i, color), values, "Description " + i));
+                            inputRows.add(new AdvancedInputRow("Item" + i, colors.getColor(i, color), values));
                         }
                         colors.recycle();
                         chart.setData(inputRows);
                         final ChartLocation chartLocation = new ChartLocation(
-                                chart.getChartName().replace(' ', '_') + ".json",
+                                UUID.randomUUID().toString() + ".json",
                                 ChartTypeEnum.LINE
                         );
                         final Project project = projectLocation.getProject();

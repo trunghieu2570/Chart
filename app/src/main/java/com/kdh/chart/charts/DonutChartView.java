@@ -19,9 +19,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
-public class PieChartView extends View implements ChartView<SimpleInputRow> {
-
-    //public enum AnimType {NO_ANIMATION, TOGETHER, SEQUENTIALLY}
+public class DonutChartView extends View {
 
     public class Item {
 
@@ -34,20 +32,20 @@ public class PieChartView extends View implements ChartView<SimpleInputRow> {
             this.startAngle = startAngle;
             this.color = color;
         }
-
     }
 
-    private Paint piePaint = null;
+    private Paint donutPaint = null;
     private Paint textPaint = null;
     private ArrayList<Item> items;
     ArrayList<Animator> animators;
     AnimatorSet animSet;
-    private RectF bound;
+    private RectF mainBound;
     private float cx;
     private float cy;
-    private int radius;
+    private int mainRadius;
 
-    public PieChartView(Context context, AttributeSet attributeSet) {
+
+    public DonutChartView(Context context, AttributeSet attributeSet) {
         super(context, attributeSet);
         items = new ArrayList<>();
         initPaint();
@@ -55,11 +53,11 @@ public class PieChartView extends View implements ChartView<SimpleInputRow> {
     }
 
     private void initPaint() {
-        //piePaint
-        piePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        piePaint.setColor(Color.RED);
-        piePaint.setStyle(Paint.Style.FILL);
-        piePaint.setStrokeWidth(5);
+        //donutPaint
+        donutPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        donutPaint.setColor(Color.RED);
+        donutPaint.setStyle(Paint.Style.FILL);
+        donutPaint.setStrokeWidth(5);
         //textPaint
         textPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         textPaint.setColor(Color.WHITE);
@@ -77,66 +75,23 @@ public class PieChartView extends View implements ChartView<SimpleInputRow> {
     }
 
 
-
-
-/*    public void updateAngle(int[] values, AnimType animType) {
-        switch (animType) {
-            case TOGETHER:
-                updateData(values);
-                break;
-            case SEQUENTIALLY:
-                updateAngleSequentially(values);
-                break;
-            default:
-                updateAngleNoAnimation(values);
-                break;
-        }
-    }*/
-
-/*    public void updateAngleNoAnimation(int[] values) {
-        animSet.cancel();
-        items.clear();
-        int sum = 0;
-        float currentAngle = 0;
-        int color = 0;
-        for (int value : values) {
-            sum += value;
-        }
-        float u = 360f / sum;
-        float p = 100f / sum;
-        Random rnd = new Random();
-        for (int value : values) {
-            color = getRandomColor();
-            final Item item = new Item(currentAngle, color);
-            currentAngle += value * u;
-            item.sweepAngle = currentAngle;
-            item.percent = value * p;
-            items.add(item);
-
-        }
-        Collections.reverse(items);
-        invalidate();
-    }*/
-    //@Override
-    public void updateData(List<SimpleInputRow> fullList) {
-        final List<SimpleInputRow> list = fullList.subList(1,fullList.size());
+    public void updateData(ArrayList<SimpleInputRow> inputRows) {
+        List<SimpleInputRow> list = inputRows.subList(1, inputRows.size());
         animSet.cancel();
         items.clear();
         animators.clear();
-        float sum = 0;
+        int sum = 0;
         float currentAngle = 0;
         int color;
         for (SimpleInputRow row : list) {
             sum += Float.parseFloat(0 + row.getValue());
         }
         float u = 360f / sum;
-        float p = 100f / sum;
-        for (SimpleInputRow row : list) {
+        float p = 100f / sum;for (SimpleInputRow row : list) {
             color = row.getColor();
-            float value = Float.parseFloat(0 + row.getValue());
             final Item item = new Item(currentAngle, color);
-            item.percent = value * p;
-            currentAngle += value * u;
+            item.percent = Float.parseFloat(0 + row.getValue()) * p;
+            currentAngle += Float.parseFloat(0 + row.getValue()) * u;
             //add animator
             ValueAnimator anim = ValueAnimator.ofFloat(0, currentAngle);
             anim.setDuration(1000);
@@ -204,9 +159,9 @@ public class PieChartView extends View implements ChartView<SimpleInputRow> {
         super.onSizeChanged(w, h, oldw, oldh);
         cx = (getX() + w) / 2;
         cy = (getY() + h) / 2;
-        radius = w < h ? w / 2 : h / 2;
-        radius -= 50;
-        bound = new RectF(cx - radius, cy - radius, cx + radius, cy + radius);
+        mainRadius = w < h ? w / 2 : h / 2;
+        mainRadius -= 150;
+        mainBound = new RectF(cx - mainRadius, cy - mainRadius, cx + mainRadius, cy + mainRadius);
 
     }
 
@@ -214,15 +169,16 @@ public class PieChartView extends View implements ChartView<SimpleInputRow> {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         for (Item item : items) {
-            piePaint.setColor(item.color);
-            piePaint.setStyle(Paint.Style.FILL);
-            canvas.drawArc(bound, -90, item.sweepAngle, true, piePaint);
-            piePaint.setColor(Color.WHITE);
-            piePaint.setStyle(Paint.Style.STROKE);
-            canvas.drawArc(bound, -90, item.sweepAngle, true, piePaint);
+            donutPaint.setColor(item.color);
+            donutPaint.setStyle(Paint.Style.STROKE);
+            donutPaint.setStrokeCap(Paint.Cap.BUTT);
+            donutPaint.setStrokeWidth(200);
+            canvas.drawArc(mainBound, -90, item.sweepAngle, false, donutPaint);
+            //donutPaint.setColor(Color.WHITE);
+            //donutPaint.setStyle(Paint.Style.STROKE);
+            //canvas.drawArc(mainBound, -90, item.sweepAngle, true, donutPaint);
             float medianAngle = (item.startAngle - 90 + ((item.sweepAngle - item.startAngle) / 2f)) * (float) Math.PI / 180f;
-            canvas.drawText(String.format(Locale.ENGLISH, "%.1f", item.percent) + "%", (float) (cx + (radius / 1.5f * Math.cos(medianAngle))), (float) (cy + (radius / 1.5f * Math.sin(medianAngle))), textPaint);
-
+            canvas.drawText(String.format(Locale.ENGLISH, "%.1f", item.percent) + "%", (float) (cx + (mainRadius / 1f * Math.cos(medianAngle))), (float) (cy + (mainRadius / 1f * Math.sin(medianAngle))), textPaint);
         }
     }
 
@@ -268,4 +224,5 @@ public class PieChartView extends View implements ChartView<SimpleInputRow> {
         //MUST CALL THIS
         setMeasuredDimension(width, height);
     }
+
 }

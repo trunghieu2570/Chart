@@ -16,7 +16,6 @@ import com.kdh.chart.datatypes.AdvancedInputRow;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 
 public class LineChartView extends View implements ChartView<AdvancedInputRow> {
@@ -31,7 +30,7 @@ public class LineChartView extends View implements ChartView<AdvancedInputRow> {
     private String timeName;
     private String dataChart;
     private int[] fieldColors;
-    private boolean ishaveData;
+    private boolean hasData;
     private boolean isReady;
 
     float rootX;
@@ -41,8 +40,8 @@ public class LineChartView extends View implements ChartView<AdvancedInputRow> {
     boolean hadLines = false;
     boolean isOnDraw = false;
     int maxValueVertical;
-    private ArrayList<Line> lines = null;
-    private ArrayList<ShortLine> animLines = null;
+    private ArrayList<Line> lines;
+    private ArrayList<ShortLine> animLines;
     private ArrayList<Animator> animators;
     private AnimatorSet animSet;
 
@@ -88,11 +87,11 @@ public class LineChartView extends View implements ChartView<AdvancedInputRow> {
         String[] dataChartArr = new String[objects.size() - 1];
         int[] colorArr = new int[objects.size()];
         for (int i = 1; i < objects.size(); i++) {
-            fieldNameArr[i-1] = objects.get(i).getLabel();
+            fieldNameArr[i - 1] = objects.get(i).getLabel();
             String[] strs = objects.get(i).getValues().toArray(new String[columns]);
             String str = convertArrayToStringMethod(strs);
-            dataChartArr[i-1] = str;
-            colorArr[i-1] = objects.get(i).getColor();
+            dataChartArr[i - 1] = str;
+            colorArr[i - 1] = objects.get(i).getColor();
         }
         String fieldNames = convertArrayToStringMethod(fieldNameArr);
         String dataChart = convertArrayToStringMethod(dataChartArr);
@@ -107,7 +106,7 @@ public class LineChartView extends View implements ChartView<AdvancedInputRow> {
                 colorArr
         );
         isReady = true;
-        isOnDraw=false;
+        isOnDraw = false;
         this.invalidate();
     }
 
@@ -127,13 +126,11 @@ public class LineChartView extends View implements ChartView<AdvancedInputRow> {
         private float[] Xs;
         private float[] Ys;
         private int color;
-        private int ID;
 
-        Line(float[] Xs, float[] Ys, int color, int ID) {
+        Line(float[] Xs, float[] Ys, int color) {
             this.Xs = Xs;
             this.Ys = Ys;
             this.color = color;
-            this.ID = ID;
         }
 
     }
@@ -144,8 +141,8 @@ public class LineChartView extends View implements ChartView<AdvancedInputRow> {
         private float x2;
         private float y2;
         private int color;
-        private int type;//=1: đường, =2: điểm
-        private float radious;
+        private int type; //=1: đường, =2: điểm
+        private float radius;
 
         ShortLine(float x1, float y1, int color, int type) {
             this.x1 = x1;
@@ -158,15 +155,15 @@ public class LineChartView extends View implements ChartView<AdvancedInputRow> {
 
     public LineChartView(Context context, AttributeSet attributeSet) {
         super(context, attributeSet);
-        lines = new ArrayList<Line>();
-        animLines = new ArrayList<ShortLine>();
+        lines = new ArrayList<>();
+        animLines = new ArrayList<>();
         initPaint();
         initAnimator();
-        ishaveData = false;
+        hasData = false;
     }
 
     private void initAnimator() {
-        animators = new ArrayList<Animator>();
+        animators = new ArrayList<>();
         animSet = new AnimatorSet();
     }
 
@@ -186,8 +183,8 @@ public class LineChartView extends View implements ChartView<AdvancedInputRow> {
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
 
-        int desiredHeight = 600;
-        int desiredWidth = desiredHeight * 3 + 200;
+        int desiredHeight = 800;
+        int desiredWidth = desiredHeight * 2;
 
 
         int widthMode = MeasureSpec.getMode(widthMeasureSpec);
@@ -314,7 +311,7 @@ public class LineChartView extends View implements ChartView<AdvancedInputRow> {
         this.dataChart = dataChart;
         this.fieldColors = colors;
         maxValueVertical = getMaxValue(dataChart);
-        ishaveData = true;
+        hasData = true;
 
 
     }
@@ -341,16 +338,11 @@ public class LineChartView extends View implements ChartView<AdvancedInputRow> {
                 ys[j] = rootY - ys[j];
                 count++;
             }
-            Line line = new Line(xs, ys, color, i);
+            Line line = new Line(xs, ys, color);
             lines.add(line);
         }
     }
 
-    private int getRandomColor() {
-        Random rnd = new Random();
-        int color = Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
-        return color;
-    }
 
     private void drawLine() {
         Log.d("khoa", "drawline");
@@ -358,10 +350,6 @@ public class LineChartView extends View implements ChartView<AdvancedInputRow> {
         animSet.cancel();
         animLines.clear();
         animators.clear();
-        int color = 0;
-
-        Random rnd = new Random();
-
         for (Line line : lines) {//mỗi đối tượng của biểu đồ
             //add animator
             for (int i = 1; i < line.Xs.length; i++) {
@@ -373,7 +361,7 @@ public class LineChartView extends View implements ChartView<AdvancedInputRow> {
                 anim1.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                     @Override
                     public void onAnimationUpdate(ValueAnimator animation) {
-                        shortLine1.radious = (float) animation.getAnimatedValue();
+                        shortLine1.radius = (float) animation.getAnimatedValue();
                         invalidate();
                     }
                 });
@@ -406,7 +394,7 @@ public class LineChartView extends View implements ChartView<AdvancedInputRow> {
             anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                 @Override
                 public void onAnimationUpdate(ValueAnimator animation) {
-                    shortLine.radious = (float) animation.getAnimatedValue();
+                    shortLine.radius = (float) animation.getAnimatedValue();
                     invalidate();
                 }
             });
@@ -426,8 +414,8 @@ public class LineChartView extends View implements ChartView<AdvancedInputRow> {
         if (isReady) {
             drawBackGround(canvas);
             //if (!hadLines)
-                setDataLines();
-            if (ishaveData)
+            setDataLines();
+            if (hasData)
                 drawInitialChart(canvas);
             if (!isOnDraw) drawLine();
 
@@ -437,7 +425,7 @@ public class LineChartView extends View implements ChartView<AdvancedInputRow> {
                 if (shortLine.type == 1) {
                     canvas.drawLine(shortLine.x1, shortLine.y1, shortLine.x2, shortLine.y2, chartPaint);
                 } else {
-                    canvas.drawCircle(shortLine.x1, shortLine.y1, shortLine.radious, chartPaint);
+                    canvas.drawCircle(shortLine.x1, shortLine.y1, shortLine.radius, chartPaint);
                 }
 
             }

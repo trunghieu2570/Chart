@@ -3,11 +3,11 @@ package com.kdh.chart.datatypes;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-public class PieChart extends Chart implements Serializable {
+public class DonutChart extends Chart implements Serializable {
 
     private ArrayList<SimpleInputRow> mData;
 
-    public PieChart(String chartName, String description) {
+    public DonutChart(String chartName, String description) {
         super(chartName, description);
     }
 

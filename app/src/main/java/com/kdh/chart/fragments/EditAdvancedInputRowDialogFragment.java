@@ -15,6 +15,7 @@ import androidx.fragment.app.Fragment;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.kdh.chart.R;
+import com.kdh.chart.activities.ChartActivityInterface;
 import com.kdh.chart.activities.LineChartActivity;
 import com.kdh.chart.datatypes.AdvancedInputRow;
 
@@ -26,7 +27,6 @@ public class EditAdvancedInputRowDialogFragment extends DialogFragment {
 
     private View view;
     private EditText rowNameEdt;
-    private EditText descriptionEdt;
     private OnClickPositiveButtonListener onClickPositiveButtonListener;
     private OnClickNeutralButtonListener onClickNeutralButtonListener;
 
@@ -35,11 +35,10 @@ public class EditAdvancedInputRowDialogFragment extends DialogFragment {
         // Required empty public constructor
     }
 
-    public static EditAdvancedInputRowDialogFragment newInstance(int item, String s1, String s2) {
+    public static EditAdvancedInputRowDialogFragment newInstance(int item, String s1) {
         Bundle args = new Bundle();
         args.putInt("item", item);
         args.putCharSequence("name", s1);
-        args.putCharSequence("description", s2);
         EditAdvancedInputRowDialogFragment fragment = new EditAdvancedInputRowDialogFragment();
         fragment.setArguments(args);
         return fragment;
@@ -52,21 +51,18 @@ public class EditAdvancedInputRowDialogFragment extends DialogFragment {
         LayoutInflater layoutInflater = getActivity().getLayoutInflater();
         view = layoutInflater.inflate(R.layout.fragment_add_new_row_dialog, null, false);
         rowNameEdt = view.findViewById(R.id.edt_row_name);
-        descriptionEdt = view.findViewById(R.id.edt_row_description);
         final int item = getArguments().getInt("item");
         String name = getArguments().getCharSequence("name").toString();
         String description = getArguments().getCharSequence("description").toString();
         rowNameEdt.setText(name);
-        descriptionEdt.setText(description);
         return new MaterialAlertDialogBuilder(getActivity(), R.style.ThemeOverlay_MaterialComponents_MaterialAlertDialog)
                 .setTitle(R.string.edit_item)
                 .setView(view)
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        AdvancedInputRow row = ((LineChartActivity) getContext()).getInputRows().get(item);
+                        AdvancedInputRow row = ((ChartActivityInterface<AdvancedInputRow>) getContext()).getInputRows().get(item);
                         row.setLabel(rowNameEdt.getText().toString());
-                        row.setDescription(descriptionEdt.getText().toString());
                         onClickPositiveButtonListener.onClick();
                         getDialog().dismiss();
                     }
@@ -80,7 +76,7 @@ public class EditAdvancedInputRowDialogFragment extends DialogFragment {
                 .setNeutralButton(R.string.delete, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        ((LineChartActivity) getContext()).getInputRows().remove(item);
+                        ((ChartActivityInterface<AdvancedInputRow>) getContext()).getInputRows().remove(item);
                         onClickNeutralButtonListener.onClick();
                         getDialog().dismiss();
                     }
