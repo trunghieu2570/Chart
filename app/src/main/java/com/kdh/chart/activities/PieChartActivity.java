@@ -1,5 +1,6 @@
 package com.kdh.chart.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -18,6 +19,7 @@ import com.kdh.chart.ProjectFileManager;
 import com.kdh.chart.R;
 import com.kdh.chart.charts.PieChartView;
 import com.kdh.chart.datatypes.ChartLocation;
+import com.kdh.chart.datatypes.ChartTypeEnum;
 import com.kdh.chart.datatypes.PieChart;
 import com.kdh.chart.datatypes.Project;
 import com.kdh.chart.datatypes.ProjectLocation;
@@ -27,6 +29,10 @@ import com.kdh.chart.fragments.SimpleInputFragment;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+
+import static com.kdh.chart.activities.ChartDescribeActivity.BUNDLE;
+import static com.kdh.chart.activities.ChartDescribeActivity.CHART;
+import static com.kdh.chart.activities.ChartDescribeActivity.CHART_TYPE;
 
 public class PieChartActivity extends AppCompatActivity implements ChartActivityInterface<SimpleInputRow>, SimpleInputFragment.OnUpdateDataListener {
 
@@ -38,6 +44,8 @@ public class PieChartActivity extends AppCompatActivity implements ChartActivity
     private ChartLocation chartLocation;
     private Project project;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,6 +53,7 @@ public class PieChartActivity extends AppCompatActivity implements ChartActivity
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayShowTitleEnabled(false);
         //receive bundle
         Bundle bundle = getIntent().getBundleExtra(CreatePieChartDialogFragment.BUNDLE);
         if (bundle != null) {
@@ -66,7 +75,7 @@ public class PieChartActivity extends AppCompatActivity implements ChartActivity
         final TextView chartTitle = new TextView(this);
         chartTitle.setText(pieChart.getChartName());
         chartTitle.setGravity(Gravity.CENTER);
-        chartTitle.setPadding(10,0,10,0);
+        chartTitle.setPadding(10, 0, 10, 0);
         layout.addView(mChartView);
         layout.addView(chartTitle);
         // on input table data changed
@@ -111,11 +120,24 @@ public class PieChartActivity extends AppCompatActivity implements ChartActivity
             case R.id.delete_chart:
                 deleteChart();
                 return true;
+            case R.id.describe_chart:
+                describeChart();
+                return true;
             case android.R.id.home:
                 finish();
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    //Nhận xét
+    private void describeChart() {
+        final Bundle chartBundle = new Bundle();
+        chartBundle.putSerializable(CHART, pieChart);
+        chartBundle.putSerializable(CHART_TYPE, ChartTypeEnum.PIE);
+        Intent describeIntent = new Intent(PieChartActivity.this, ChartDescribeActivity.class);
+        describeIntent.putExtra(BUNDLE, chartBundle);
+        startActivity(describeIntent);
     }
 
     private void showBottomSheetDialog() {
@@ -144,12 +166,12 @@ public class PieChartActivity extends AppCompatActivity implements ChartActivity
     private void deleteChart() {
         final ArrayList<ChartLocation> cList = projectLocation.getProject().getCharts();
         int target = -1;
-        for(int i = 0; i < cList.size(); i++) {
+        for (int i = 0; i < cList.size(); i++) {
             if (cList.get(i).getLocation().equals(chartLocation.getLocation())) {
                 target = i;
             }
         }
-        if(cList.remove(target) != null) {
+        if (cList.remove(target) != null) {
             ProjectFileManager.saveProject(projectLocation);
             Log.d("Delete", "Delete successfully" + cList.size());
             Toast.makeText(this, "Xóa biểu đồ thành công", Toast.LENGTH_SHORT).show();

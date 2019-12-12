@@ -40,4 +40,5 @@
     <string name="edit">Chỉnh sửa</string>
     <string name="delete_chart">Xóa biểu đồ</string>
     <string name="untitled_donut_chart">Untitled donut chart</string>
+    <string name="describe">Nhận xét</string>
 </resources>

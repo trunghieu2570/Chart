@@ -52,6 +52,7 @@ public class DonutChartActivity extends AppCompatActivity implements ChartActivi
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayShowTitleEnabled(false);
         //receive bundle
         Bundle bundle = getIntent().getBundleExtra(CreatePieChartDialogFragment.BUNDLE);
         if (bundle != null) {
