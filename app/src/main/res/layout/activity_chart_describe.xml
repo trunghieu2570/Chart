@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".activities.ChartDescribeActivity">
     <TextView
-        android:id="@+id/d_text"
+        android:id="@+id/ld_text"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         android:layout_width="wrap_content"

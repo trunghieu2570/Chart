@@ -23,7 +23,7 @@ public class ChartDescribeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chart_describe);
-        final TextView dText = findViewById(R.id.d_text);
+        final TextView dText = findViewById(R.id.ld_text);
         final Bundle bundle = getIntent().getBundleExtra(BUNDLE);
         if (bundle != null) {
             final ChartTypeEnum chartType = (ChartTypeEnum) bundle.getSerializable(CHART_TYPE);

@@ -3,17 +3,19 @@
     <string name="action_settings">Cài đặt</string>
     <string name="action_open">Mở một project</string>
     <string name="action_new">Tạo một project</string>
-    <string name="recent_projects">Các project đã tạo</string>
+    <string name="recent_projects">Các project đã tạo:</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="choose_chart_title">Chọn một loại biểu đồ</string>
+    <string name="choose_chart_title">Chọn loại biểu đồ cần vẽ</string>
     <string name="title_activity_project">ProjectActivity</string>
-    <string name="enter_chart_name">Nhập tên biểu đồ</string>
-    <string name="pie_chart">Untitled pie chart</string>
-    <string name="enter_number_of_items">Số lượng các hạng mục</string>
-    <string name="enter_items_group_name">Nhập tên nhóm hạng mục</string>
-    <string name="enter_value_group_name">Nhập tên nhóm giá trị</string>
+    <string name="statistic_title">Nhận xét biểu đồ</string>
+
+    <string name="enter_chart_name">Nhập tên biểu đồ:</string>
+    <string name="pie_chart">Biểu đồ tròn</string>
+    <string name="enter_number_of_items">Số lượng đối tượng:</string>
+    <string name="enter_items_group_name">Ý nghĩa các đối tượng:</string>
+    <string name="enter_value_group_name">Ý nghĩa các giá trị:</string>
     <string name="create_project">Tạo project</string>
     <string name="add_chart">Tạo biểu đồ</string>
     <string name="enter_item_name">Nhập tên hạng mục</string>
@@ -24,7 +26,7 @@
     <string name="enter_y_axis_unit">Nhập đơn vị trục tung</string>
     <string name="default_y_axis_unit">Đô la</string>
     <string name="enter_number_of_series">Nhập số lượng các mốc</string>
-    <string name="add_item">Thêm hạng mục</string>
+    <string name="add_item">Thêm đối tượng</string>
     <string name="add_serie">Thêm giai đoạn</string>
     <string name="add_serial">Thêm giai đoạn</string>
     <string name="apply">Áp dụng</string>
@@ -35,7 +37,7 @@
     <string name="enter_project_name">Nhập tên project</string>
     <string name="edit_item">Sửa hạng mục</string>
     <string name="delete">Delete</string>
-    <string name="default_group_name">Cơ cấu</string>
+    <string name="default_group_name">Quốc gia</string>
     <string name="default_value_group_name">Tỉ lệ</string>
     <string name="edit">Chỉnh sửa</string>
     <string name="delete_chart">Xóa biểu đồ</string>

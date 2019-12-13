@@ -135,7 +135,7 @@ public class PieChartActivity extends AppCompatActivity implements ChartActivity
         final Bundle chartBundle = new Bundle();
         chartBundle.putSerializable(CHART, pieChart);
         chartBundle.putSerializable(CHART_TYPE, ChartTypeEnum.PIE);
-        Intent describeIntent = new Intent(PieChartActivity.this, ChartDescribeActivity.class);
+        Intent describeIntent = new Intent(PieChartActivity.this, StatisticPieChart.class);
         describeIntent.putExtra(BUNDLE, chartBundle);
         startActivity(describeIntent);
     }

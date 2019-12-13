@@ -84,7 +84,7 @@ public class CreatePieChartDialogFragment extends DialogFragment {
                         inputRows.add(new SimpleInputRow(groupNameEdt.getText().toString(), color, valueGroupNameEdt.getText().toString()));
                         final int numOfRows = Integer.parseInt("0" + chartRowsEdt.getText().toString());
                         for (int i = 0; i < numOfRows; i++) {
-                            inputRows.add(new SimpleInputRow("Hạng mục " + i, colors.getColor(i, color), ""));
+                            inputRows.add(new SimpleInputRow(groupNameEdt.getText().toString()+" " + (i+1), colors.getColor(i, color), ""));
                         }
                         colors.recycle();
                         chart.setData(inputRows);

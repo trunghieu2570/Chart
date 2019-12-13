@@ -153,7 +153,7 @@ public class ProjectActivity extends AppCompatActivity {
         ArrayList<ChartTypeItem> arrayList = new ArrayList<>();
 
         ChartTypeItem typeChart1 = new ChartTypeItem(R.drawable.pie, "Tròn");
-        ChartTypeItem typeChart2 = new ChartTypeItem(R.drawable.line, "Tuyến tính");
+        ChartTypeItem typeChart2 = new ChartTypeItem(R.drawable.line, "Đường");
         ChartTypeItem typeChart3 = new ChartTypeItem(R.drawable.gr_chart, "Nhóm");
         ChartTypeItem typeChart4 = new ChartTypeItem(R.drawable.donut, "Donut");
         ChartTypeItem typeChart5 = new ChartTypeItem(R.drawable.column, "Cột");
