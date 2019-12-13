@@ -39,7 +39,6 @@ public class StatisticPieChart extends AppCompatActivity {
 
     public static final String BUNDLE = "bundle";
     public static final String CHART = "chart";
-    public static final String CHART_TYPE = "chart_type";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

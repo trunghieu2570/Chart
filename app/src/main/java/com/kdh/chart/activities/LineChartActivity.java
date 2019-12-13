@@ -1,5 +1,6 @@
 package com.kdh.chart.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -18,6 +19,7 @@ import com.kdh.chart.R;
 import com.kdh.chart.charts.LineChartView;
 import com.kdh.chart.datatypes.AdvancedInputRow;
 import com.kdh.chart.datatypes.ChartLocation;
+import com.kdh.chart.datatypes.ChartTypeEnum;
 import com.kdh.chart.datatypes.LineChart;
 import com.kdh.chart.datatypes.Project;
 import com.kdh.chart.datatypes.ProjectLocation;
@@ -27,6 +29,10 @@ import com.kdh.chart.fragments.CreatePieChartDialogFragment;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+
+import static com.kdh.chart.activities.ChartDescribeActivity.BUNDLE;
+import static com.kdh.chart.activities.ChartDescribeActivity.CHART;
+import static com.kdh.chart.activities.ChartDescribeActivity.CHART_TYPE;
 
 public class LineChartActivity extends AppCompatActivity implements ChartActivityInterface<AdvancedInputRow>, AdvancedInputFragment.OnUpdateDataListener {
 
@@ -104,11 +110,24 @@ public class LineChartActivity extends AppCompatActivity implements ChartActivit
             case R.id.delete_chart:
                 deleteChart();
                 return true;
+            case R.id.describe_chart:
+                describeChart();
+                return true;
             case android.R.id.home:
                 finish();
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    //Nhận xét
+    private void describeChart() {
+        final Bundle chartBundle = new Bundle();
+        chartBundle.putSerializable(CHART, lineChart);
+        chartBundle.putSerializable(CHART_TYPE, ChartTypeEnum.LINE);
+        Intent describeIntent = new Intent(LineChartActivity.this, StatisticLineChart.class);
+        describeIntent.putExtra(BUNDLE, chartBundle);
+        startActivity(describeIntent);
     }
 
     private void showBottomSheetDialog() {
