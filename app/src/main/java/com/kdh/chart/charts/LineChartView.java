@@ -225,7 +225,7 @@ public class LineChartView extends View implements ChartView<AdvancedInputRow> {
 
     private void drawInitialChart(Canvas canvas) {
         //draw name
-        String name = "Line Chart: " + chartName;
+        String name = "Biểu đồ đường: " + chartName;
         int nameSize = name.length() * 30;
         canvas.drawText(name, (rootX + chartWidth / 2) - nameSize / 2, getHeight() - 10, textPaint);
         //draw horizontal

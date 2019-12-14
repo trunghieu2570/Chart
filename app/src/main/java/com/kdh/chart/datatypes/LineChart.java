@@ -8,12 +8,18 @@ public class LineChart extends Chart implements Serializable {
     private ArrayList<AdvancedInputRow> mData;
     private String xAxisUnit;
     private String yAxisUnit;
+    private String yAxisUnitMeaning;
+    private String objectMeaning;
 
-    public LineChart(String chartName, String description, String xAxisUnit, String yAxisUnit) {
+    public LineChart(String chartName, String description, String xAxisUnit, String yAxisUnit,String yAxisUnitMeaning,String objectMeaning) {
         super(chartName, description);
         this.xAxisUnit = xAxisUnit;
         this.yAxisUnit = yAxisUnit;
+        this.yAxisUnitMeaning=yAxisUnitMeaning;
+        this.objectMeaning=objectMeaning;
     }
+
+    public String getObjectMeaning() {return this.objectMeaning;}
 
     public ArrayList<AdvancedInputRow> getData() {
         return mData;
@@ -38,4 +44,6 @@ public class LineChart extends Chart implements Serializable {
     public String getyAxisUnit() {
         return yAxisUnit;
     }
+
+    public String getyAxisUnitMeaning() {return yAxisUnitMeaning;}
 }

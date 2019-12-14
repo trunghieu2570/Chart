@@ -20,12 +20,18 @@
     <string name="add_chart">Tạo biểu đồ</string>
     <string name="enter_item_name">Nhập tên hạng mục</string>
     <string name="enter_description">Nhập mô tả cho hạng mục</string>
-    <string name="line_chart">Untitled line chart</string>
+    <string name="line_chart">Biểu đồ đường</string>
     <string name="enter_x_axis_unit">Nhập đơn vị trục hoành</string>
     <string name="default_x_axis_unit">Năm</string>
     <string name="enter_y_axis_unit">Nhập đơn vị trục tung</string>
-    <string name="default_y_axis_unit">Đô la</string>
-    <string name="enter_number_of_series">Nhập số lượng các mốc</string>
+    <string name="default_y_axis_unit">Tấn</string>
+    <string name="default_y_axis_unit_meaning">Sản lượng</string>
+
+    <string name="enter_number_of_series">Nhập số lượng các mốc thời gian</string>
+    <string name="enter_y_axis_unit_meaning">Nhập ý nghĩa đơn vị trục tung</string>
+    <string name="enter_object_meaning">Nhập ý nghĩa các đối tượng</string>
+    <string name="default_object_meaning">Nước</string>
+
     <string name="add_item">Thêm đối tượng</string>
     <string name="add_serie">Thêm giai đoạn</string>
     <string name="add_serial">Thêm giai đoạn</string>

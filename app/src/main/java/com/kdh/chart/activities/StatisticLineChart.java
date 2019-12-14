@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -99,15 +100,22 @@ public class StatisticLineChart extends AppCompatActivity {
 
         name=lineChart.getChartName();
         unitYName=lineChart.getyAxisUnit();
-        valueName="Sản lượng";//
+        valueName=lineChart.getyAxisUnitMeaning();//
 
         unitXName=lineChart.getxAxisUnit();
         //get timelines
         timeLines=convertListToArrayString(header.getValues());
-        duration=Float.parseFloat(timeLines[timeLines.length-1])-Float.parseFloat(timeLines[0]);
+        try {
+            duration=Float.parseFloat(timeLines[timeLines.length-1])-Float.parseFloat(timeLines[0]);
+        }
+        catch (Exception e)
+        {
+            duration=1;
+        }
 
 
-        fieldName="Nước";//
+
+        fieldName=lineChart.getObjectMeaning();//
         //get name of objects
         String[] temp=new String[inputRowsNoHeader.size()];
         for(int i=0;i< temp.length;i++)
@@ -122,7 +130,11 @@ public class StatisticLineChart extends AppCompatActivity {
             List<String> valueI=inputRowsNoHeader.get(i).getValues();
             String connect="";
             for(int j=0;j<valueI.size();j++)
+            {
                 connect+=valueI.get(j);
+                if(j<valueI.size()-1) connect+=" ";
+            }
+
             temp1[i]=connect;
         }
         values=temp1;   // new String[]{"1 1.5 2 3 3", "6 6 5 5 3.5","3 5 6 5.5 6","7 4 3 0.5 8"};
@@ -154,6 +166,7 @@ public class StatisticLineChart extends AppCompatActivity {
             str="+ Xu hướng: ";
             String str1=""; //nhận xét xu hướng liên tục
             String str2="";
+            Log.d("khoa",values[i]);
             if(data[data.length-1]>data[0])
             {
                 //tăng
@@ -164,6 +177,7 @@ public class StatisticLineChart extends AppCompatActivity {
                     int min=findMinLienTuc(data,true);
                     str1="*Giai đoạn tăng nhanh nhất: từ "+unitXName.toLowerCase()+" "+timeLines[max]+" đến "+unitXName.toLowerCase()+" "+timeLines[max+1]+", tăng "+df.format((data[max+1]/data[max]-1)*100)+"%";
                     str2="*Giai đoạn tăng chậm nhất: từ "+unitXName.toLowerCase()+" "+timeLines[min]+" đến "+unitXName.toLowerCase()+" "+timeLines[min+1]+", tăng "+df.format((data[min+1]/data[min]-1)*100)+"%";
+
                 }
                 else
                 {

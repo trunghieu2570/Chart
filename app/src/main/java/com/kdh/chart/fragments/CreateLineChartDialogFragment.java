@@ -63,6 +63,8 @@ public class CreateLineChartDialogFragment extends DialogFragment {
         final EditText chartColsEdt = view.findViewById(R.id.edt_cols);
         final EditText xAxisUnitEdt = view.findViewById(R.id.edt_x_axis_unit);
         final EditText yAxisUnitEdt = view.findViewById(R.id.edt_y_axis_unit);
+        final EditText yAxisUnitEdtMeaning=view.findViewById(R.id.edt_y_axis_unit_meaning);
+        final EditText objectMeaning=view.findViewById(R.id.edt_object_meaning);
         return new MaterialAlertDialogBuilder(getActivity(), R.style.ThemeOverlay_MaterialComponents_MaterialAlertDialog)
                 .setTitle(R.string.create_chart)
                 .setView(view)
@@ -75,7 +77,9 @@ public class CreateLineChartDialogFragment extends DialogFragment {
                                 chartNameEdt.getText().toString(),
                                 "Biểu đồ tuyến tính",
                                 xAxisUnitEdt.getText().toString(),
-                                yAxisUnitEdt.getText().toString()
+                                yAxisUnitEdt.getText().toString(),
+                                yAxisUnitEdtMeaning.getText().toString(),
+                                objectMeaning.getText().toString()
                         );
                         final ArrayList<AdvancedInputRow> inputRows = new ArrayList<>();
                         final int numOfRows = Integer.parseInt("0" + chartRowsEdt.getText().toString());

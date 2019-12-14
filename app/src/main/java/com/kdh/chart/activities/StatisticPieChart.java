@@ -169,6 +169,16 @@ public class StatisticPieChart extends AppCompatActivity {
         DecimalFormat df2 = new DecimalFormat("#.0");
         txt_Name.setText("Nhận xét "+chartName);
         txt_Max.setText("- "+fields[max]+" là "+fieldName.toLowerCase()+" có "+valueName.toLowerCase()+" cao nhất.");
+        if(second==min)
+        {
+            txt_Second.setHeight(0);
+            txt_MaxSecond.setHeight(0);
+        }
+//        else
+//        {
+//            txt_Second.setHeight(80);
+//            txt_MaxSecond.setHeight(80);
+//        }
         txt_Second.setText("- "+fields[second]+" là "+fieldName.toLowerCase()+" có "+valueName.toLowerCase()+" cao nhì.");
         txt_Min.setText("- "+fields[min]+" là "+fieldName.toLowerCase()+" có "+valueName.toLowerCase()+" thấp nhất.");
         txt_TuongQuan.setText("Tương quan về "+valueName.toLowerCase()+":");
@@ -216,7 +226,7 @@ public class StatisticPieChart extends AppCompatActivity {
     {
         int max=getMaxPosition(data);
         int pos=-1;
-        for(int i=1;i<data.length;i++)
+        for(int i=0;i<data.length;i++)
         {
             if(pos==-1)
             {
