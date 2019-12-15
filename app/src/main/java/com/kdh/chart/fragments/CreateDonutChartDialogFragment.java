@@ -18,12 +18,12 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.kdh.chart.ProjectFileManager;
 import com.kdh.chart.R;
 import com.kdh.chart.activities.DonutChartActivity;
+import com.kdh.chart.datatypes.AdvancedInputRow;
 import com.kdh.chart.datatypes.ChartLocation;
 import com.kdh.chart.datatypes.ChartTypeEnum;
 import com.kdh.chart.datatypes.DonutChart;
 import com.kdh.chart.datatypes.Project;
 import com.kdh.chart.datatypes.ProjectLocation;
-import com.kdh.chart.datatypes.SimpleInputRow;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -58,8 +58,10 @@ public class CreateDonutChartDialogFragment extends DialogFragment {
         final View view = layoutInflater.inflate(R.layout.fragment_create_donut_chart_dialog, null, false);
         final EditText chartNameEdt = view.findViewById(R.id.edt_chart_name);
         final EditText chartRowsEdt = view.findViewById(R.id.edt_rows);
+        final EditText chartColsEdt = view.findViewById(R.id.edt_cols);
         final EditText groupNameEdt = view.findViewById(R.id.edt_group_name);
         final EditText valueGroupNameEdt = view.findViewById(R.id.edt_value_group_name);
+        final EditText seriesMeaningEdt = view.findViewById(R.id.edt_series_meaning);
         return new MaterialAlertDialogBuilder(getActivity(), R.style.ThemeOverlay_MaterialComponents_MaterialAlertDialog)
                 .setTitle(R.string.create_chart)
                 .setView(view)
@@ -70,17 +72,27 @@ public class CreateDonutChartDialogFragment extends DialogFragment {
                         final ProjectLocation projectLocation = (ProjectLocation) getArguments().getSerializable(PROJECT_LOCATION);
                         final DonutChart chart = new DonutChart(
                                 chartNameEdt.getText().toString(),
-                                "Biểu đồ donut"
+                                "Biểu đồ donut",
+                                valueGroupNameEdt.getText().toString(),
+                                seriesMeaningEdt.getText().toString()
                         );
-                        //create new empty data;
-                        final ArrayList<SimpleInputRow> inputRows = new ArrayList<>();
+                        final ArrayList<AdvancedInputRow> inputRows = new ArrayList<>();
+                        final int numOfRows = Integer.parseInt("0" + chartRowsEdt.getText().toString());
+                        final int numOfCols = Integer.parseInt("0" + chartColsEdt.getText().toString());
                         TypedArray colors = getResources().obtainTypedArray(R.array.mdcolor_500);
                         int color = getResources().getColor(R.color.blue_500);
                         //header
-                        inputRows.add(new SimpleInputRow(groupNameEdt.getText().toString(), color, valueGroupNameEdt.getText().toString()));
-                        final int numOfRows = Integer.parseInt("0" + chartRowsEdt.getText().toString());
+                        ArrayList<String> values = new ArrayList<>();
+                        for (int j = 0; j < numOfCols; j++)
+                            values.add("201" + j);
+                        inputRows.add(new AdvancedInputRow(groupNameEdt.getText().toString(), color, values));
+                        //content
                         for (int i = 0; i < numOfRows; i++) {
-                            inputRows.add(new SimpleInputRow("Item " + i, colors.getColor(i, color), ""));
+                            color = getResources().getColor(R.color.blue_500);
+                            values = new ArrayList<>();
+                            for (int j = 0; j < numOfCols; j++)
+                                values.add("");
+                            inputRows.add(new AdvancedInputRow("Object " + i, colors.getColor(i, color), values));
                         }
                         colors.recycle();
                         chart.setData(inputRows);

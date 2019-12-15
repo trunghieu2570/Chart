@@ -16,8 +16,6 @@ import androidx.fragment.app.Fragment;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.kdh.chart.R;
 import com.kdh.chart.activities.ChartActivityInterface;
-import com.kdh.chart.activities.ChartDescribeActivity;
-import com.kdh.chart.activities.LineChartActivity;
 import com.kdh.chart.datatypes.AdvancedInputRow;
 
 import java.util.ArrayList;
@@ -67,7 +65,7 @@ public class AddAdvancedInputRowDialogFragment extends DialogFragment {
                                 R.color.blue_500,
                                 values);
 
-                        ((LineChartActivity) getActivity()).getInputRows().add(row);
+                        ((ChartActivityInterface<AdvancedInputRow>) getActivity()).getInputRows().add(row);
                         onPositiveButtonClickedListener.onClick();
                         getDialog().dismiss();
                     }

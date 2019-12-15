@@ -1,6 +1,5 @@
 package com.kdh.chart.adapters;
 
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
@@ -23,7 +22,6 @@ import androidx.fragment.app.FragmentManager;
 
 import com.kdh.chart.R;
 import com.kdh.chart.datatypes.SimpleInputRow;
-import com.kdh.chart.fragments.EditSimpleInputRowDialogFragment;
 import com.thebluealliance.spectrum.SpectrumDialog;
 
 import java.util.ArrayList;
@@ -51,14 +49,18 @@ public class SimpleInputRowAdapter extends ArrayAdapter<SimpleInputRow> {
             final SimpleInputRow row = mRows.get(position);
             if (row != null) {
                 final TextView colorLabel = convertView.findViewById(R.id.color);
-                final TextView label = convertView.findViewById(R.id.label);
+                final EditText label = convertView.findViewById(R.id.label);
                 final EditText editValue = convertView.findViewById(R.id.edit_value);
                 final LinearLayout layout = convertView.findViewById(R.id.data_row_layout);
                 if (colorLabel != null) {
                     layout.removeView(colorLabel);
                 }
                 if (label != null) {
+                    MyTextWatcher myTextWatcher = (MyTextWatcher) label.getTag();
+                    if (myTextWatcher != null)
+                        label.removeTextChangedListener(myTextWatcher);
                     label.setText(row.getLabel());
+                    label.setInputType(InputType.TYPE_NULL);
                     label.setBackgroundResource(R.drawable.table_header_shape);
                     label.setOnClickListener(null);
                 }
@@ -80,7 +82,7 @@ public class SimpleInputRowAdapter extends ArrayAdapter<SimpleInputRow> {
             final SimpleInputRow row = mRows.get(position);
             if (row != null) {
                 final TextView colorLabel = convertView.findViewById(R.id.color);
-                final TextView label = convertView.findViewById(R.id.label);
+                final EditText label = convertView.findViewById(R.id.label);
                 final EditText editValue = convertView.findViewById(R.id.edit_value);
                 if (colorLabel != null) {
                     final GradientDrawable gradientDrawable = new GradientDrawable();
@@ -110,8 +112,14 @@ public class SimpleInputRowAdapter extends ArrayAdapter<SimpleInputRow> {
                     });
                 }
                 if (label != null) {
+                    MyTextWatcher myTextWatcher = (MyTextWatcher) label.getTag();
+                    if (myTextWatcher != null)
+                        label.removeTextChangedListener(myTextWatcher);
                     label.setText(row.getLabel());
-                    label.setOnClickListener(new View.OnClickListener() {
+                    //add new
+                    label.setTag(new MyTextWatcher(mRows.get(position), -1));
+                    label.addTextChangedListener((MyTextWatcher) label.getTag());
+                    /*label.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
                             FragmentManager manager = ((AppCompatActivity) getContext()).getSupportFragmentManager();
@@ -131,7 +139,7 @@ public class SimpleInputRowAdapter extends ArrayAdapter<SimpleInputRow> {
                             });
                             fragment.show(manager, "edit row");
                         }
-                    });
+                    });*/
                 }
                 if (editValue != null) {
                     //remove old
@@ -154,6 +162,12 @@ public class SimpleInputRowAdapter extends ArrayAdapter<SimpleInputRow> {
     private class MyTextWatcher implements TextWatcher {
 
         private SimpleInputRow mInputRow;
+        private int id;
+
+        private MyTextWatcher(SimpleInputRow inputRow, int id) {
+            this.mInputRow = inputRow;
+            this.id = id;
+        }
 
         private MyTextWatcher(SimpleInputRow inputRow) {
             this.mInputRow = inputRow;
@@ -172,9 +186,14 @@ public class SimpleInputRowAdapter extends ArrayAdapter<SimpleInputRow> {
         @Override
         public void afterTextChanged(Editable editable) {
             String str = editable.toString();
-            String value = str.equals("") ? "0" : str;
-            Log.d("DEBUG", "Change to" + value);
-            mInputRow.setValue(value);
+            if (id >= 0) {
+                String value = str.equals("") ? "0" : str;
+                Log.d("DEBUG", "Change to" + value);
+                mInputRow.setValue(value);
+            } else {
+                String label = str.equals("") ? "Item" : str;
+                mInputRow.setLabel(label);
+            }
         }
     }
 }

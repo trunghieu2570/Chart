@@ -1,12 +1,16 @@
 package com.kdh.chart.fragments;
 
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.HorizontalScrollView;
@@ -60,12 +64,51 @@ public class AdvancedInputFragment extends BottomSheetDialogFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setStyle(DialogFragment.STYLE_NORMAL, R.style.DialogStyle);
+        rowsListView = new ListView(getContext());
+        registerForContextMenu(rowsListView);
+        rowsListView.setOnCreateContextMenuListener(this);
     }
 
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        this.onUpdateDataListener = (AdvancedInputFragment.OnUpdateDataListener) getActivity();
+        this.onUpdateDataListener = (OnUpdateDataListener) getActivity();
+    }
+
+    @Override
+    public void onCreateContextMenu(@NonNull ContextMenu menu, @NonNull View v, @Nullable ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        MenuInflater menuInflater = ((Activity) getContext()).getMenuInflater();
+        menuInflater.inflate(R.menu.menu_row_context, menu);
+        MenuItem.OnMenuItemClickListener listener = new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                onContextItemSelected(item);
+                return true;
+            }
+        };
+        for (int i = 0; i < menu.size(); i++)
+            menu.getItem(i).setOnMenuItemClickListener(listener);
+    }
+
+    @Override
+    public boolean onContextItemSelected(@NonNull MenuItem item) {
+        int itemId = item.getItemId();
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        switch (itemId) {
+            case R.id.menu_delete:
+                deleteRow(info.id);
+                return true;
+        }
+        return super.onContextItemSelected(item);
+
+    }
+
+    private void deleteRow(long id) {
+        if (id == 0) return;
+        rowsList.remove((int) id);
+        rowsAdapter.notifyDataSetChanged();
+        onUpdateDataListener.onUpdate(rowsList);
     }
 
     @Override
@@ -133,7 +176,7 @@ public class AdvancedInputFragment extends BottomSheetDialogFragment {
         HorizontalScrollView horizontalScrollView = new HorizontalScrollView(context);
         horizontalScrollView.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         //list
-        rowsListView = new ListView(context);
+
         rowsListView.setDivider(null);
         rowsListView.setDividerHeight(0);
         rowsListView.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));

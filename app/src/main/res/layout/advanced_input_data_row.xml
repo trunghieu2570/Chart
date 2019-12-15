@@ -11,8 +11,10 @@
         android:layout_height="match_parent"
         android:background="@drawable/table_header_shape"
         android:textAlignment="center" />
-    <TextView
+
+    <EditText
         android:id="@+id/label"
+        android:inputType="text"
         android:layout_width="300dp"
         android:layout_height="match_parent"
         android:background="@drawable/table_cell_shape"

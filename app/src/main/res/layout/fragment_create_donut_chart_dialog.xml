@@ -5,63 +5,100 @@
     android:layout_height="match_parent"
     tools:context=".fragments.CreateDonutChartDialogFragment">
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:orientation="vertical"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
-        android:paddingLeft="24dp"
-        android:paddingRight="24dp"
         android:layout_height="match_parent">
 
-        <com.google.android.material.textfield.TextInputLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_marginVertical="10dp"
-            android:layout_height="wrap_content">
-            <EditText
-                android:id="@+id/edt_chart_name"
-                android:layout_width="match_parent"
-                android:hint="@string/enter_chart_name"
-                android:text="@string/untitled_donut_chart"
-                android:layout_height="wrap_content"/>
-        </com.google.android.material.textfield.TextInputLayout>
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingLeft="24dp"
+            android:paddingTop="10dp"
+            android:paddingRight="24dp"
+            android:paddingBottom="10dp">
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_marginVertical="10dp"
-            android:layout_height="wrap_content">
-            <EditText
-                android:id="@+id/edt_rows"
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
-                android:hint="@string/enter_number_of_items"
-                android:inputType="number"
-                android:text="3"
-                android:layout_height="wrap_content" />
-        </com.google.android.material.textfield.TextInputLayout>
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_marginVertical="10dp"
-            android:layout_height="wrap_content">
-            <EditText
-                android:id="@+id/edt_group_name"
-                android:layout_width="match_parent"
-                android:hint="@string/enter_items_group_name"
-                android:text="@string/default_group_name"
-                android:layout_height="wrap_content" />
-        </com.google.android.material.textfield.TextInputLayout>
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_marginVertical="10dp"
-            android:layout_height="wrap_content">
-            <EditText
-                android:id="@+id/edt_value_group_name"
-                android:layout_width="match_parent"
-                android:hint="@string/enter_value_group_name"
-                android:text="@string/default_value_group_name"
-                android:layout_height="wrap_content" />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="10dp">
 
+                <EditText
+                    android:id="@+id/edt_chart_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/enter_chart_name"
+                    android:maxLength="30"
+                    android:text="@string/untitled_donut_chart" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-    </LinearLayout>
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="10dp">
+
+                <EditText
+                    android:id="@+id/edt_group_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/enter_items_group_name"
+                    android:text="@string/default_donut_items_meaning" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="10dp">
+
+                <EditText
+                    android:id="@+id/edt_value_group_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/enter_value_group_name"
+                    android:text="@string/default_value_group_name" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="10dp">
+
+                <EditText
+                    android:id="@+id/edt_series_meaning"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/enter_series_meaning"
+                    android:text="@string/default_donut_series_meaning" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="10dp">
+
+                <EditText
+                    android:id="@+id/edt_rows"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/enter_number_of_items"
+                    android:inputType="number"
+                    android:text="3" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="10dp">
+
+                <EditText
+                    android:id="@+id/edt_cols"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/enter_number_of_series"
+                    android:inputType="number"
+                    android:text="3" />
+            </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
+    </ScrollView>
 
 </FrameLayout>

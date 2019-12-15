@@ -7,6 +7,7 @@ import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,9 +22,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 
 import com.kdh.chart.R;
-import com.kdh.chart.activities.LineChartActivity;
 import com.kdh.chart.datatypes.AdvancedInputRow;
-import com.kdh.chart.fragments.EditAdvancedInputRowDialogFragment;
 import com.thebluealliance.spectrum.SpectrumDialog;
 
 import java.util.ArrayList;
@@ -43,6 +42,14 @@ public class AdvancedInputRowAdapter extends ArrayAdapter<AdvancedInputRow> {
         this.mResource = resource;
     }
 
+    private void deleteColumnByIndex(int index) {
+        if (mRows.get(0).getValues().size() == 1) return;
+        for (AdvancedInputRow row : mRows) {
+            row.getValues().remove(index);
+        }
+        notifyDataSetInvalidated();
+    }
+
     @NonNull
     @Override
     public View getView(final int position, @Nullable View convertView, @NonNull final ViewGroup parent) {
@@ -53,14 +60,18 @@ public class AdvancedInputRowAdapter extends ArrayAdapter<AdvancedInputRow> {
             final AdvancedInputRow row = mRows.get(position);
             if (row != null) {
                 final TextView colorLabel = convertView.findViewById(R.id.color);
-                final TextView label = convertView.findViewById(R.id.label);
+                final EditText label = convertView.findViewById(R.id.label);
                 final LinearLayout inputLayout = convertView.findViewById(R.id.input_layout);
                 final LinearLayout layout = convertView.findViewById(R.id.data_row_layout);
                 if (colorLabel != null) {
                     layout.removeView(colorLabel);
                 }
                 if (label != null) {
+                    AdvancedInputRowAdapter.MyTextWatcher myTextWatcher = (AdvancedInputRowAdapter.MyTextWatcher) label.getTag();
+                    if (myTextWatcher != null)
+                        label.removeTextChangedListener(myTextWatcher);
                     label.setText(row.getLabel());
+                    label.setInputType(InputType.TYPE_NULL);
                     label.setLayoutParams(new LinearLayout.LayoutParams(mContext.getResources().getDimensionPixelSize(R.dimen.table_header_width), ViewGroup.LayoutParams.MATCH_PARENT));
                     label.setBackgroundResource(R.drawable.table_header_shape);
                     label.setOnClickListener(null);
@@ -77,8 +88,22 @@ public class AdvancedInputRowAdapter extends ArrayAdapter<AdvancedInputRow> {
                         if (myTextWatcher != null)
                             editText.removeTextChangedListener(myTextWatcher);
                         editText.setText(row.getValues().get(i));
+                        final int index = i;
+                        editText.setOnKeyListener(new View.OnKeyListener() {
+                            @Override
+                            public boolean onKey(View view, int a, KeyEvent keyEvent) {
+                                if (editText.getText().toString().equals("")
+                                        && keyEvent.getKeyCode() == KeyEvent.KEYCODE_DEL
+                                        && keyEvent.getAction() == KeyEvent.ACTION_DOWN) {
+                                    deleteColumnByIndex(index);
+                                    return true;
+                                }
+                                return false;
+                            }
+                        });
                         //add new
-                        editText.setTag(new AdvancedInputRowAdapter.MyTextWatcher(mRows.get(position), i));
+                        final MyTextWatcher textWatcher = new AdvancedInputRowAdapter.MyTextWatcher(mRows.get(position), i);
+                        editText.setTag(textWatcher);
                         editText.addTextChangedListener((AdvancedInputRowAdapter.MyTextWatcher) editText.getTag());
                         inputLayout.addView(editText);
                     }
@@ -90,7 +115,7 @@ public class AdvancedInputRowAdapter extends ArrayAdapter<AdvancedInputRow> {
             if (row != null) {
 
                 final TextView colorLabel = convertView.findViewById(R.id.color);
-                final TextView label = convertView.findViewById(R.id.label);
+                final EditText label = convertView.findViewById(R.id.label);
                 final LinearLayout inputLayout = convertView.findViewById(R.id.input_layout);
                 if (colorLabel != null) {
                     final GradientDrawable gradientDrawable = new GradientDrawable();
@@ -120,10 +145,16 @@ public class AdvancedInputRowAdapter extends ArrayAdapter<AdvancedInputRow> {
                     });
                 }
                 if (label != null) {
+                    AdvancedInputRowAdapter.MyTextWatcher myTextWatcher = (AdvancedInputRowAdapter.MyTextWatcher) label.getTag();
+                    if (myTextWatcher != null)
+                        label.removeTextChangedListener(myTextWatcher);
                     label.setText(row.getLabel());
-                    label.setOnClickListener(new View.OnClickListener() {
+                    //add new
+                    label.setTag(new AdvancedInputRowAdapter.MyTextWatcher(mRows.get(position), -1));
+                    label.addTextChangedListener((AdvancedInputRowAdapter.MyTextWatcher) label.getTag());
+                    /*label.setOnLongClickListener(new View.OnLongClickListener() {
                         @Override
-                        public void onClick(View view) {
+                        public boolean onLongClick(View view) {
                             FragmentManager manager = ((AppCompatActivity) getContext()).getSupportFragmentManager();
                             EditAdvancedInputRowDialogFragment fragment = EditAdvancedInputRowDialogFragment.newInstance(position, row.getLabel());
                             fragment.setOnClickPositiveButtonListener(new EditAdvancedInputRowDialogFragment.OnClickPositiveButtonListener() {
@@ -140,8 +171,9 @@ public class AdvancedInputRowAdapter extends ArrayAdapter<AdvancedInputRow> {
                                 }
                             });
                             fragment.show(manager, "edit row");
+                            return true;
                         }
-                    });
+                    });*/
                 }
                 if (inputLayout != null) {
                     inputLayout.removeAllViews();
@@ -170,8 +202,8 @@ public class AdvancedInputRowAdapter extends ArrayAdapter<AdvancedInputRow> {
 
         return convertView;
     }
+
     private class MyTextWatcher implements TextWatcher {
-        ;
         private AdvancedInputRow mInputRow;
         private int id;
 
@@ -182,7 +214,6 @@ public class AdvancedInputRowAdapter extends ArrayAdapter<AdvancedInputRow> {
 
         @Override
         public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
         }
 
         @Override
@@ -193,9 +224,18 @@ public class AdvancedInputRowAdapter extends ArrayAdapter<AdvancedInputRow> {
         @Override
         public void afterTextChanged(Editable editable) {
             String str = editable.toString();
-            String value = str.equals("") ? "0" : str;
-            Log.d("DEBUG", "Change to" + value);
-            mInputRow.getValues().set(id, value);
+            if (id >= 0) {
+                String value = str.equals("") ? "0" : str;
+                Log.d("DEBUG", "Change to" + value);
+                mInputRow.getValues().set(id, value);
+            } else {
+                String label = str.equals("") ? "Item" : str;
+                mInputRow.setLabel(label);
+            }
+
         }
+
     }
+
+
 }

@@ -113,11 +113,18 @@ public class LineChartView extends View implements ChartView<AdvancedInputRow> {
     private static String convertArrayToStringMethod(String[] strArray) {
         StringBuilder stringBuilder = new StringBuilder();
         for (int i = 0; i < strArray.length; i++) {
-            stringBuilder.append(strArray[i]);
-            if (i < strArray.length - 1)
-                stringBuilder.append(',');
+            if (strArray[i] != null && !strArray[i].equals("")) {
+                stringBuilder.append(strArray[i]);
+                if (i < strArray.length - 1)
+                    stringBuilder.append(',');
+            }
         }
         return stringBuilder.toString();
+    }
+
+    @Override
+    public void updateData(List<AdvancedInputRow> objects) {
+
     }
 
 
