@@ -14,10 +14,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activities.StatisticLineChart"></activity>
+        <activity
+            android:name=".activities.StatisticLineChart"
+            android:label="@string/statistic_title"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activities.StatisticPieChart"
-            android:label="@string/statistic_title" />
+            android:label="@string/statistic_title"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".activities.ChartDescribeActivity" />
         <activity
             android:name=".activities.ProjectActivity"

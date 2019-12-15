@@ -1,9 +1,12 @@
 package com.kdh.chart.activities;
 
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.widget.TextView;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.kdh.chart.R;
 import com.kdh.chart.datatypes.PieChart;
@@ -42,6 +45,12 @@ public class StatisticPieChart extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_statistic_pie_chart);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setHomeAsUpIndicator(R.drawable.ic_close_white_24dp);
+        setTitle(R.string.statistic_title);
 
         getID();
         getInputData();
@@ -161,8 +170,8 @@ public class StatisticPieChart extends AppCompatActivity {
         float chenhLech = (values[max] / values[min] - 1) * 100;
         DecimalFormat df1 = new DecimalFormat("#.00");
         DecimalFormat df2 = new DecimalFormat("#.0");
-        txt_Name.setText("Nhận xét " + chartName);
-        txt_Max.setText("- " + fields[max] + " là " + fieldName.toLowerCase() + " có " + valueName.toLowerCase() + " cao nhất.");
+        txt_Name.setText(String.format("Nhận xét %s", chartName));
+        txt_Max.setText(String.format("- %s là %s có %s cao nhất.", fields[max], fieldName.toLowerCase(), valueName.toLowerCase()));
         if (second == min) {
             txt_Second.setHeight(0);
             txt_MaxSecond.setHeight(0);
@@ -172,13 +181,13 @@ public class StatisticPieChart extends AppCompatActivity {
 //            txt_Second.setHeight(80);
 //            txt_MaxSecond.setHeight(80);
 //        }
-        txt_Second.setText("- " + fields[second] + " là " + fieldName.toLowerCase() + " có " + valueName.toLowerCase() + " cao nhì.");
-        txt_Min.setText("- " + fields[min] + " là " + fieldName.toLowerCase() + " có " + valueName.toLowerCase() + " thấp nhất.");
-        txt_TuongQuan.setText("Tương quan về " + valueName.toLowerCase() + ":");
-        txt_MaxSecond.setText("- " + valueName + " " + fieldName.toLowerCase() + " thứ nhất gấp " + df1.format(values[max] / values[second]) + " lần " + fieldName.toLowerCase() + " thứ nhì.");
-        txt_MaxMin.setText("- " + valueName + " " + fieldName.toLowerCase() + " cao nhất gấp " + df1.format(values[max] / values[min]) + " lần " + fieldName.toLowerCase() + " thấp nhất.");
-        txt_MaxAverage.setText("- " + valueName + " " + fieldName.toLowerCase() + " cao nhất gấp " + df1.format(values[max] / average) + " lần so với " + valueName.toLowerCase() + " trung bình chung.");
-        txt_Nhanxet.setText("Chênh lệch " + valueName.toLowerCase() + " giữa " + fieldName.toLowerCase() + " cao nhất và thấp nhất là: " + df2.format(chenhLech) + "%");
+        txt_Second.setText(String.format("- %s là %s có %s cao nhì.", fields[second], fieldName.toLowerCase(), valueName.toLowerCase()));
+        txt_Min.setText(String.format("- %s là %s có %s thấp nhất.", fields[min], fieldName.toLowerCase(), valueName.toLowerCase()));
+        txt_TuongQuan.setText(String.format("Tương quan về %s:", valueName.toLowerCase()));
+        txt_MaxSecond.setText(String.format("- %s %s thứ nhất gấp %s lần %s thứ nhì.", valueName, fieldName.toLowerCase(), df1.format(values[max] / values[second]), fieldName.toLowerCase()));
+        txt_MaxMin.setText(String.format("- %s %s cao nhất gấp %s lần %s thấp nhất.", valueName, fieldName.toLowerCase(), df1.format(values[max] / values[min]), fieldName.toLowerCase()));
+        txt_MaxAverage.setText(String.format("- %s %s cao nhất gấp %s lần so với %s trung bình chung.", valueName, fieldName.toLowerCase(), df1.format(values[max] / average), valueName.toLowerCase()));
+        txt_Nhanxet.setText(String.format("Chênh lệch %s giữa %s cao nhất và thấp nhất là: %s%%", valueName.toLowerCase(), fieldName.toLowerCase(), df2.format(chenhLech)));
         String KetLuan = "";
         if (chenhLech >= 50)
             KetLuan = "=>" + valueName + " không đồng đều giữa các " + fieldName + ".";
@@ -225,5 +234,16 @@ public class StatisticPieChart extends AppCompatActivity {
 
 
         return pos;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch (id) {
+            case android.R.id.home:
+                finish();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

@@ -52,4 +52,5 @@
     <string name="enter_series_meaning">Nhập ý nghĩa của mốc thời gian:</string>
     <string name="default_donut_items_meaning">Cơ cấu</string>
     <string name="default_donut_series_meaning">Năm</string>
+    <string name="statistic">Nhận xét biểu đồ</string>
 </resources>
