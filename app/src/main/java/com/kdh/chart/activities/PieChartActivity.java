@@ -1,11 +1,16 @@
 package com.kdh.chart.activities;
 
+import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -14,6 +19,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import com.google.android.material.chip.Chip;
 import com.google.android.material.snackbar.Snackbar;
 import com.kdh.chart.ProjectFileManager;
 import com.kdh.chart.R;
@@ -44,17 +50,19 @@ public class PieChartActivity extends AppCompatActivity implements ChartActivity
     private ProjectLocation projectLocation;
     private ChartLocation chartLocation;
     private Project project;
-
+    private Vibrator vibrator;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_chart);
+        vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayShowTitleEnabled(false);
+        final Chip mChip = findViewById(R.id.chip);
         //receive bundle
         Bundle bundle = getIntent().getBundleExtra(CreatePieChartDialogFragment.BUNDLE);
         if (bundle != null) {
@@ -73,6 +81,26 @@ public class PieChartActivity extends AppCompatActivity implements ChartActivity
         LinearLayout layout = findViewById(R.id.layout);
         layout.removeAllViews();
         mChartView = new PieChartView(this, null);
+        mChartView.setOnPieItemSelectedListener(new PieChartView.OnPieItemSelectedListener() {
+            @Override
+            public void onSelected(int itemId) {
+                vibrate();
+                final ArrayList<SimpleInputRow> rows = pieChart.getData();
+                Log.d("Debug", String.format("item %d", itemId));
+                final String objectName = rows.get(itemId + 1).getLabel();
+                final String value = rows.get(itemId + 1).getValue();
+                //final String valueGroupName = rows.get(0).getValue();
+                //final String groupName = rows.get(0).getLabel();
+                mChip.setVisibility(View.VISIBLE);
+                mChip.setText(String.format("Giá trị của %s là %s", objectName, value));
+            }
+
+            @Override
+            public void onUnselected() {
+                vibrate();
+                mChip.setVisibility(View.GONE);
+            }
+        });
         final TextView chartTitle = new TextView(this);
         chartTitle.setText(pieChart.getChartName());
         chartTitle.setGravity(Gravity.CENTER);
@@ -95,15 +123,23 @@ public class PieChartActivity extends AppCompatActivity implements ChartActivity
 
 
     private boolean checkValue(ArrayList<SimpleInputRow> list) {
-        float sum = 0;
         for (SimpleInputRow row : list.subList(1, list.size())) {
-            sum += Float.parseFloat(0 + row.getValue());
             if (row.getValue() == null || row.getValue().equals("")) {
                 return false;
             }
         }
-        return sum != 0;
+        return true;
     }
+
+    private void vibrate() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            vibrator.vibrate(VibrationEffect.createOneShot(50, VibrationEffect.DEFAULT_AMPLITUDE));
+        } else {
+            //deprecated in API 26
+            vibrator.vibrate(50);
+        }
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

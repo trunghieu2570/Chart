@@ -6,10 +6,15 @@ import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
 import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
+import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 
 import com.kdh.chart.datatypes.SimpleInputRow;
@@ -20,38 +25,28 @@ import java.util.List;
 import java.util.Locale;
 
 public class PieChartView extends View implements ChartView<SimpleInputRow> {
-
-    //public enum AnimType {NO_ANIMATION, TOGETHER, SEQUENTIALLY}
-
-    public class Item {
-
-        private float startAngle;
-        private float sweepAngle = 0;
-        private int color;
-        private float percent;
-
-        Item(float startAngle, int color) {
-            this.startAngle = startAngle;
-            this.color = color;
-        }
-
-    }
-
+    private static final PorterDuffColorFilter FILTER = new PorterDuffColorFilter(Color.argb(50, 0, 0, 0), PorterDuff.Mode.SRC_OVER);
+    ArrayList<Animator> animators;
+    AnimatorSet animSet;
     private Paint piePaint = null;
     private Paint textPaint = null;
     private ArrayList<Item> items;
-    ArrayList<Animator> animators;
-    AnimatorSet animSet;
     private RectF bound;
     private float cx;
     private float cy;
     private int radius;
-
+    private Matrix matrix;
+    private OnPieItemSelectedListener onPieItemSelectedListener;
     public PieChartView(Context context, AttributeSet attributeSet) {
         super(context, attributeSet);
         items = new ArrayList<>();
         initPaint();
         initAnimator();
+        matrix = new Matrix();
+    }
+
+    public void setOnPieItemSelectedListener(OnPieItemSelectedListener onPieItemSelectedListener) {
+        this.onPieItemSelectedListener = onPieItemSelectedListener;
     }
 
     private void initPaint() {
@@ -75,23 +70,6 @@ public class PieChartView extends View implements ChartView<SimpleInputRow> {
         animSet = new AnimatorSet();
 
     }
-
-
-
-
-/*    public void updateAngle(int[] values, AnimType animType) {
-        switch (animType) {
-            case TOGETHER:
-                updateData(values);
-                break;
-            case SEQUENTIALLY:
-                updateAngleSequentially(values);
-                break;
-            default:
-                updateAngleNoAnimation(values);
-                break;
-        }
-    }*/
 
 /*    public void updateAngleNoAnimation(int[] values) {
         animSet.cancel();
@@ -159,6 +137,33 @@ public class PieChartView extends View implements ChartView<SimpleInputRow> {
         animSet.start();
     }
 
+
+
+
+/*    public void updateAngle(int[] values, AnimType animType) {
+        switch (animType) {
+            case TOGETHER:
+                updateData(values);
+                break;
+            case SEQUENTIALLY:
+                updateAngleSequentially(values);
+                break;
+            default:
+                updateAngleNoAnimation(values);
+                break;
+        }
+    }*/
+
+    @Override
+    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+        super.onSizeChanged(w, h, oldw, oldh);
+        cx = (getX() + w) / 2;
+        cy = (getY() + h) / 2;
+        radius = w < h ? w / 2 : h / 2;
+        radius -= 50;
+        bound = new RectF(cx - radius, cy - radius, cx + radius, cy + radius);
+    }
+
     /*public void updateAngleSequentially(int[] values) {
         animSet.cancel();
         items.clear();
@@ -200,14 +205,34 @@ public class PieChartView extends View implements ChartView<SimpleInputRow> {
     }*/
 
     @Override
-    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-        super.onSizeChanged(w, h, oldw, oldh);
-        cx = (getX() + w) / 2;
-        cy = (getY() + h) / 2;
-        radius = w < h ? w / 2 : h / 2;
-        radius -= 50;
-        bound = new RectF(cx - radius, cy - radius, cx + radius, cy + radius);
+    public boolean onTouchEvent(MotionEvent event) {
+        float base_x = event.getX();
+        float base_y = event.getY();
+        int width = getWidth();
+        int height = getHeight();
+        float center_x = width / 2f;
+        float center_y = height / 2f;
+        float[] pts = {center_x, center_y};
+        matrix.mapPoints(pts);
+        float x = base_x - pts[0];
+        float y = base_y - pts[1];
+        float r = (float) Math.hypot(x, y);
+        float angle = (float) (180 - (180 * Math.atan2(base_x - center_x, base_y - center_y) / Math.PI));
+        Log.d("Debug", "arg = " + angle);
+        for (Item item : items) {
+            if (item.startAngle < angle && item.sweepAngle > angle) {
+                item.click = !item.click;
+                if (item.click)
+                    onPieItemSelectedListener.onSelected(items.size() - items.indexOf(item) - 1);
+                else
+                    onPieItemSelectedListener.onUnselected();
 
+            } else {
+                item.click = false;
+            }
+        }
+        invalidate();
+        return super.onTouchEvent(event);
     }
 
     @Override
@@ -217,6 +242,15 @@ public class PieChartView extends View implements ChartView<SimpleInputRow> {
             piePaint.setColor(item.color);
             piePaint.setStyle(Paint.Style.FILL);
             canvas.drawArc(bound, -90, item.sweepAngle, true, piePaint);
+
+
+            if (item.click) {
+                piePaint.setColorFilter(FILTER);
+                canvas.drawArc(bound, -90 + item.startAngle, item.sweepAngle - item.startAngle, true, piePaint);
+                piePaint.setColorFilter(null);
+            }
+
+
             piePaint.setColor(Color.WHITE);
             piePaint.setStyle(Paint.Style.STROKE);
             canvas.drawArc(bound, -90, item.sweepAngle, true, piePaint);
@@ -268,4 +302,26 @@ public class PieChartView extends View implements ChartView<SimpleInputRow> {
         //MUST CALL THIS
         setMeasuredDimension(width, height);
     }
+
+    public interface OnPieItemSelectedListener {
+        void onSelected(int itemId);
+
+        void onUnselected();
+    }
+
+    public class Item {
+
+        private float startAngle;
+        private float sweepAngle = 0;
+        private int color;
+        private float percent;
+        private boolean click = false;
+
+        Item(float startAngle, int color) {
+            this.startAngle = startAngle;
+            this.color = color;
+        }
+
+    }
+
 }
