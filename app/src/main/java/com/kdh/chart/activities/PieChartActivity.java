@@ -27,6 +27,7 @@ import com.kdh.chart.datatypes.SimpleInputRow;
 import com.kdh.chart.fragments.CreatePieChartDialogFragment;
 import com.kdh.chart.fragments.SimpleInputFragment;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -156,7 +157,8 @@ public class PieChartActivity extends AppCompatActivity implements ChartActivity
             pieChart.setData(simpleInputRows);
             mChartView.updateData(simpleInputRows);
             //save data to file
-            project.setModifiedTime(Calendar.getInstance().getTime().toString());
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", getResources().getConfiguration().locale);
+            project.setModifiedTime(dateFormat.format(Calendar.getInstance().getTime()));
             ProjectFileManager.saveChart(projectLocation, pieChart, chartLocation);
             ProjectFileManager.saveProject(projectLocation);
         } else

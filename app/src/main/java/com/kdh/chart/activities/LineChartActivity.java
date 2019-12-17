@@ -27,6 +27,7 @@ import com.kdh.chart.fragments.AdvancedInputFragment;
 import com.kdh.chart.fragments.CreateLineChartDialogFragment;
 import com.kdh.chart.fragments.CreatePieChartDialogFragment;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -146,7 +147,8 @@ public class LineChartActivity extends AppCompatActivity implements ChartActivit
             lineChart.setData(advancedInputRows);
             mChartView.updateData(advancedInputRows, chartName, xAxisUnit, yAxisUnit);
             //save data to file
-            project.setModifiedTime(Calendar.getInstance().getTime().toString());
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", getResources().getConfiguration().locale);
+            project.setModifiedTime(dateFormat.format(Calendar.getInstance().getTime()));
             ProjectFileManager.saveChart(projectLocation, lineChart, chartLocation);
             ProjectFileManager.saveProject(projectLocation);
         } else

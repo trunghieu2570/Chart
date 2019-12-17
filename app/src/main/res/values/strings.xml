@@ -53,4 +53,8 @@
     <string name="default_donut_items_meaning">Cơ cấu</string>
     <string name="default_donut_series_meaning">Năm</string>
     <string name="statistic">Nhận xét biểu đồ</string>
+    <string name="delete_project">Xóa project</string>
+    <string name="create_project_dialog_title">Tạo project mới</string>
+    <string name="projects_list_view_empty">Chưa có project nào.</string>
+    <string name="charts_list_view_empty">Chưa có biểu đồ nào</string>
 </resources>

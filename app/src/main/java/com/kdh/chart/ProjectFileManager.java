@@ -27,6 +27,17 @@ public class ProjectFileManager {
 
     public static final String DEFAULT_FOLDER = "ChartProjects";
 
+    public static void deleteRecursive(File fileOrDirectory) {
+
+        if (fileOrDirectory.isDirectory()) {
+            for (File child : fileOrDirectory.listFiles()) {
+                deleteRecursive(child);
+            }
+        }
+        fileOrDirectory.delete();
+    }
+
+
     public static File makeDefaultProjectPath(Project project) {
         File sdcard = Environment.getExternalStorageDirectory();
         File mainDir = new File(sdcard, DEFAULT_FOLDER);
@@ -52,6 +63,16 @@ public class ProjectFileManager {
         }
     }
 
+    public static void deleteProject(ProjectLocation location) {
+        File file = new File(location.getLocation());
+        if (!(file).exists()) return;
+        try {
+            deleteRecursive(file);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
     public static ProjectLocation loadProject(final ProjectLocation projectLocation) {
         File saveFile = new File(projectLocation.getLocation());
         saveFile.getParentFile().mkdirs();
@@ -60,6 +81,7 @@ public class ProjectFileManager {
         try {
             final BufferedReader reader = new BufferedReader(new FileReader(projectLocation.getLocation()));
             result = gson.fromJson(reader, Project.class);
+            reader.close();
         } catch (IOException ioe) {
             ioe.printStackTrace();
         }

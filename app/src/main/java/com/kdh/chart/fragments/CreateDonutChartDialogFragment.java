@@ -25,6 +25,7 @@ import com.kdh.chart.datatypes.DonutChart;
 import com.kdh.chart.datatypes.Project;
 import com.kdh.chart.datatypes.ProjectLocation;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.UUID;
@@ -104,7 +105,8 @@ public class CreateDonutChartDialogFragment extends DialogFragment {
                         final Project project = projectLocation.getProject();
                         //modify
                         project.addChart(chartLocation);
-                        project.setModifiedTime(Calendar.getInstance().getTime().toString());
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", getResources().getConfiguration().locale);
+                        project.setModifiedTime(dateFormat.format(Calendar.getInstance().getTime()));
                         //save data
                         ProjectFileManager.saveProject(projectLocation);
                         ProjectFileManager.saveChart(projectLocation, chart, chartLocation);

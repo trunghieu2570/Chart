@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".fragments.ProjectActivityFragment"
     tools:showIn="@layout/activity_project">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -15,11 +16,25 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <ListView
-            android:id="@+id/listview_chart"
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-        </ListView>
+
+            <TextView
+                android:id="@+id/project_empty"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:gravity="center"
+                android:text="@string/charts_list_view_empty"
+                android:textSize="16sp" />
+
+            <ListView
+                android:id="@+id/listview_chart"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"></ListView>
+        </RelativeLayout>
+
 
     </LinearLayout>
 

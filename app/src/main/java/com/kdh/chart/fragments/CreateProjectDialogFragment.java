@@ -20,6 +20,7 @@ import com.kdh.chart.activities.ProjectActivity;
 import com.kdh.chart.datatypes.Project;
 import com.kdh.chart.datatypes.ProjectLocation;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 public class CreateProjectDialogFragment extends DialogFragment {
@@ -50,14 +51,15 @@ public class CreateProjectDialogFragment extends DialogFragment {
         LayoutInflater layoutInflater = getActivity().getLayoutInflater();
         view = layoutInflater.inflate(R.layout.fragment_create_project_dialog, null, false);
         projectNameEdt = view.findViewById(R.id.edt_project_name);
-        return new MaterialAlertDialogBuilder(getActivity(), R.style.ThemeOverlay_MaterialComponents_MaterialAlertDialog)
-                .setTitle(R.string.enter_project_name)
+        return new MaterialAlertDialogBuilder(getActivity())
+                .setTitle(R.string.create_project_dialog_title)
                 .setView(view)
                 .setPositiveButton(R.string.create, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         projectNameEdt = view.findViewById(R.id.edt_project_name);
-                        final Project project = new Project(projectNameEdt.getText().toString(), Calendar.getInstance().getTime().toString());
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", getResources().getConfiguration().locale);
+                        final Project project = new Project(projectNameEdt.getText().toString(), dateFormat.format(Calendar.getInstance().getTime()));
                         final ProjectLocation projectLocation = new ProjectLocation(
                                 ProjectFileManager.makeDefaultProjectPath(project).toString(),
                                 project

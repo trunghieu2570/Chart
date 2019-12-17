@@ -10,6 +10,7 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -34,6 +35,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
+
 public class ProjectActivity extends AppCompatActivity {
 
     public static final String PROJECT_LOCATION = "project";
@@ -43,6 +47,7 @@ public class ProjectActivity extends AppCompatActivity {
     private BottomSheetDialog bottomSheetDialog;
     private ListView chartListView;
     private ProjectLocation projectLocation;
+    private TextView emptyView;
     private ArrayList<Pair<ChartLocation, Chart>> charts;
 
     @Override
@@ -52,6 +57,7 @@ public class ProjectActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         //actionBar.setDisplayHomeAsUpEnabled(true);
+        emptyView = findViewById(R.id.project_empty);
         final Bundle bundle = getIntent().getBundleExtra(CreateProjectDialogFragment.BUNDLE);
         if (bundle != null) {
             projectLocation = (ProjectLocation) bundle.getSerializable(CreateProjectDialogFragment.PROJECT_LOCATION);
@@ -128,10 +134,15 @@ public class ProjectActivity extends AppCompatActivity {
     }
 
     private void loadChartList() {
-
+        chartListView.setVisibility(GONE);
+        emptyView.setVisibility(VISIBLE);
         //load chart list
         projectLocation = ProjectFileManager.loadProject(projectLocation);
         charts = ProjectFileManager.loadCharts(projectLocation);
+        if (charts.size() > 0) {
+            chartListView.setVisibility(VISIBLE);
+            emptyView.setVisibility(GONE);
+        }
         //map chart list
         List<Map<String, String>> data = new ArrayList<>();
         for (Pair<ChartLocation, Chart> chartPair : charts) {
