@@ -25,7 +25,9 @@ import com.kdh.chart.datatypes.Chart;
 import com.kdh.chart.datatypes.ChartLocation;
 import com.kdh.chart.datatypes.Project;
 import com.kdh.chart.datatypes.ProjectLocation;
+import com.kdh.chart.fragments.CreateColumnBarChartDialogFragment;
 import com.kdh.chart.fragments.CreateDonutChartDialogFragment;
+import com.kdh.chart.fragments.CreateGroupBarChartDialogFragment;
 import com.kdh.chart.fragments.CreateLineChartDialogFragment;
 import com.kdh.chart.fragments.CreatePieChartDialogFragment;
 import com.kdh.chart.fragments.CreateProjectDialogFragment;
@@ -193,11 +195,20 @@ public class ProjectActivity extends AppCompatActivity {
                         fragment2.show(getSupportFragmentManager(), "create_chart");
                         cancelButtonSheetDialog();
                         break;
+                    case 2:
+                        final CreateGroupBarChartDialogFragment fragment5=CreateGroupBarChartDialogFragment.newInstance(projectLocation);
+                        fragment5.show(getSupportFragmentManager(),"create_chart");
+                        cancelButtonSheetDialog();
+                        break;
                     case 3:
                         final CreateDonutChartDialogFragment fragment3 = CreateDonutChartDialogFragment.newInstance(projectLocation);
                         fragment3.show(getSupportFragmentManager(), "create_chart");
                         cancelButtonSheetDialog();
                         break;
+                    case 4:
+                        final CreateColumnBarChartDialogFragment fragment6=CreateColumnBarChartDialogFragment.newInstance(projectLocation);
+                        fragment6.show(getSupportFragmentManager(),"creat_chart");
+                        cancelButtonSheetDialog();
                 }
             }
         });
