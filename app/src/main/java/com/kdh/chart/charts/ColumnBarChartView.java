@@ -79,6 +79,12 @@ public class ColumnBarChartView extends View implements ChartView<AdvancedInputR
     }
 
 
+    public int findBarwidth(){
+        int tem=2*soNhom-1;
+        int usageW=750-20;
+        barWidth=usageW/tem;
+        return barWidth;
+    }
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
@@ -95,6 +101,7 @@ public class ColumnBarChartView extends View implements ChartView<AdvancedInputR
 
         if (arrDrawData.size() > 0) {
             findMax();
+            findBarwidth();
             float d = (float) 500.0 / max;
             int key = origin.x;
 
@@ -109,9 +116,9 @@ public class ColumnBarChartView extends View implements ChartView<AdvancedInputR
                         if ((i < soBar))
                             rect.left = key + 20;
                         else
-                            rect.left = key + 20 + (i + 1) / soBar * 100;
+                            rect.left = key + 20 + (i/ soBar)*2 * barWidth;
                         rect.top = origin.y - arrDrawData.get(j) * d;
-                        rect.right = rect.left + 50;
+                        rect.right = rect.left + barWidth;
                         rect.bottom = origin.y;
                         p.setColor(cl[j % soBar]);
                         canvas.drawRect(rect, p);
@@ -153,12 +160,8 @@ public class ColumnBarChartView extends View implements ChartView<AdvancedInputR
         for (int i = 0; i < groupsName.length; i++) {
             mypaint.getTextBounds(groupsName[i], 0, groupsName[i].length(), bounds);
             int y = origin.y + 30;
-
             int x;
-
-            x = origin.x + 30 + i * 100;
-            System.out.println(" i la : " + i);
-
+            x=origin.x +30+ i*2 * barWidth;
             mypaint.setTypeface(Typeface.DEFAULT);
             canvas.drawText(groupsName[i], x, y, mypaint);
         }
@@ -189,7 +192,6 @@ public class ColumnBarChartView extends View implements ChartView<AdvancedInputR
                 }
             }
         }
-
     }
 
     public void update(String[] groupsName, int soNhom, int soBar) {
