@@ -113,6 +113,22 @@ public class ProjectActivity extends AppCompatActivity {
                         bundle.putSerializable(LOCATION, chartLocation);
                         donutIntent.putExtra(BUNDLE, bundle);
                         startActivity(donutIntent);
+                    case GROUPED:
+                        final Intent groupIntent = new Intent(ProjectActivity.this, GroupBarChartActivity.class);
+                        bundle.putSerializable(PROJECT_LOCATION, projectLocation);
+                        bundle.putSerializable(CHART, chart);
+                        bundle.putSerializable(LOCATION, chartLocation);
+                        groupIntent.putExtra(BUNDLE, bundle);
+                        startActivity(groupIntent);
+                        break;
+                    case COLUMN:
+                        final Intent columnIntent = new Intent(ProjectActivity.this, ColumnBarChartActivity.class);
+                        bundle.putSerializable(PROJECT_LOCATION, projectLocation);
+                        bundle.putSerializable(CHART, chart);
+                        bundle.putSerializable(LOCATION, chartLocation);
+                        columnIntent.putExtra(BUNDLE, bundle);
+                        startActivity(columnIntent);
+                        break;
                 }
             }
         });

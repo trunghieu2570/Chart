@@ -67,11 +67,17 @@ public class GroupBarChartView extends View implements ChartView<AdvancedInputRo
 
 
     public void findBarWidth() {
-        int khoang = 90 * (soNhom - 1);
-        System.out.println("aaaaaaaaaaa: xxxx " + soBar * soNhom + "   khoang: " + khoang);
-        int usageW = 600 - khoang;
-        barWidth = usageW / (soNhom * soBar);
+//        int khoang = 90 * (soNhom - 1);
+//        System.out.println("aaaaaaaaaaa: xxxx " + soBar * soNhom + "   khoang: " + khoang);
+//        int usageW = 600 - khoang;
+//        barWidth = usageW / (soNhom * soBar);
 
+        int x=soNhom-1+soNhom*soBar;
+
+        int khoang=700-20;
+        System.out.println("aaaaaaaaaaa: xxxx "+soBar*soNhom+"   khoang: "+khoang);
+        int usageW=khoang;
+        barWidth=usageW/x;
     }
 
     @Override
@@ -101,13 +107,13 @@ public class GroupBarChartView extends View implements ChartView<AdvancedInputRo
                 System.out.print("a " + arr.get(i) + "-");
                 RectF rect = new RectF();
                 if (i < soBar) {
-                    rect.left = key + (i + 1) * barWidth;
+                    rect.left = key + 20+i* barWidth;
                     rect.top = (float) (origin.y - arr.get(i) * d);
                     rect.right = rect.left + barWidth;
                     rect.bottom = origin.y;
                 }
                 if (i >= soBar) {
-                    rect.left = key + (i + 1) * barWidth + 90 * (i / soBar);
+                    rect.left = key + 20+i * barWidth + barWidth * (i / soBar);
                     rect.top = (float) (origin.y - arr.get(i) * d);
                     rect.right = rect.left + barWidth;
                     rect.bottom = origin.y;

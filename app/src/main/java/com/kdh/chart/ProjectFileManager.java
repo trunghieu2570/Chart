@@ -8,7 +8,9 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.kdh.chart.datatypes.Chart;
 import com.kdh.chart.datatypes.ChartLocation;
+import com.kdh.chart.datatypes.ColumnBarChart;
 import com.kdh.chart.datatypes.DonutChart;
+import com.kdh.chart.datatypes.GroupBarChart;
 import com.kdh.chart.datatypes.LineChart;
 import com.kdh.chart.datatypes.PieChart;
 import com.kdh.chart.datatypes.Project;
@@ -160,6 +162,13 @@ public class ProjectFileManager {
                             final LineChart lineChart = gson.fromJson(reader, LineChart.class);
                             result.add(new Pair<ChartLocation, Chart>(chartLocation, lineChart));
                             break;
+                        case GROUPED:
+                            final GroupBarChart groupChart=gson.fromJson(reader,GroupBarChart.class);
+                            result.add(new Pair<ChartLocation, Chart>(chartLocation,groupChart));
+                            break;
+                        case COLUMN:
+                            final ColumnBarChart columnChart=gson.fromJson(reader,ColumnBarChart.class);
+                            result.add(new Pair<ChartLocation, Chart>(chartLocation,columnChart));
                         default:
                             break;
                     }

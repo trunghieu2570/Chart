@@ -72,7 +72,7 @@ public class CreateGroupBarChartDialogFragment extends DialogFragment {
                         final ProjectLocation projectLocation = (ProjectLocation) getArguments().getSerializable(PROJECT_LOCATION);
                         final GroupBarChart chart = new GroupBarChart(
                                 chartNameEdt.getText().toString(),
-                                "Biểu đồ tuyến tính"
+                                "Biểu đồ group"
                         );
                         final ArrayList<AdvancedInputRow> inputRows = new ArrayList<>();
                         final int numOfRows = Integer.parseInt("0" + chartRowsEdt.getText().toString());
