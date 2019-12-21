@@ -67,16 +67,8 @@ public class GroupBarChartView extends View implements ChartView<AdvancedInputRo
 
 
     public void findBarWidth() {
-//        int khoang = 90 * (soNhom - 1);
-//        System.out.println("aaaaaaaaaaa: xxxx " + soBar * soNhom + "   khoang: " + khoang);
-//        int usageW = 600 - khoang;
-//        barWidth = usageW / (soNhom * soBar);
-
         int x=soNhom-1+soNhom*soBar;
-
-        int khoang=700-20;
-        System.out.println("aaaaaaaaaaa: xxxx "+soBar*soNhom+"   khoang: "+khoang);
-        int usageW=khoang;
+        int usageW=700-20;
         barWidth=usageW/x;
     }
 
@@ -97,14 +89,8 @@ public class GroupBarChartView extends View implements ChartView<AdvancedInputRo
         if (arr.size() > 0) {
             float d = (float) 500.0 / max;
             int key = origin.x;
-            System.out.println("Bat dau ve.");
-
             findBarWidth();
-            System.out.println("BarWidth là: " + barWidth);
-            //x*(soNhom*soBar)+(soNhom-1)*100=500
             for (int i = 0; i < arr.size(); i++) {
-                //System.out.println("phan tu thu " + i + " la: " + arr.get(i));
-                System.out.print("a " + arr.get(i) + "-");
                 RectF rect = new RectF();
                 if (i < soBar) {
                     rect.left = key + 20+i* barWidth;
@@ -186,21 +172,16 @@ public class GroupBarChartView extends View implements ChartView<AdvancedInputRo
     }
 
     public void showLabelXAxis(Canvas canvas) {
-        //System.out.println("xxxxx "+str.toString());
         Paint mypaint = new Paint();
         mypaint.setTextSize(20);
         Rect bounds = new Rect();
         for (int i = 0; i < str.size(); i++) {
             mypaint.getTextBounds(str.get(i), 0, str.get(i).length(), bounds);
             int y = origin.y + 30;
-
             int x;
-            if (i * soBar < soBar) {
-                x = origin.x + (i + 1) * barWidth;
-            } else {
-                x = origin.x + (i * soBar + 1) * barWidth + 90 * i;
-                System.out.println(" i la : " + i);
-            }
+            x=origin.x+30+(soBar+1)*i*barWidth;
+            mypaint.setTypeface(Typeface.DEFAULT);
+            canvas.drawText(str.get(i), x, y, mypaint);
             mypaint.setTypeface(Typeface.DEFAULT);
             canvas.drawText(str.get(i), x, y, mypaint);
         }
