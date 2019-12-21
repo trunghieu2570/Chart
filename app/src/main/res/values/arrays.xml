@@ -104,7 +104,7 @@
     </array>
     <array name="mdcolor_500">
         <item name="cyan_500" type="color">#00bcd4</item>
-        <item name="blue_500" type="color">#5677fc</item>
+        <item name="blue_500f" type="color">#5677fc</item>
         <item name="indigo_500" type="color">#3f51b5</item>
         <item name="deep_purple_500" type="color">#673ab7</item>
         <item name="purple_500" type="color">#9c27b0</item>
