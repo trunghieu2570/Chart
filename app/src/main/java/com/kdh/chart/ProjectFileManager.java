@@ -1,8 +1,18 @@
 package com.kdh.chart;
 
+import android.app.Activity;
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Environment;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.Pair;
+import android.view.View;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
@@ -24,6 +34,7 @@ import java.io.FileReader;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.UUID;
 
 public class ProjectFileManager {
 
@@ -198,5 +209,76 @@ public class ProjectFileManager {
         } catch (IOException ex) {
             ex.printStackTrace();
         }
+    }
+
+    public static File saveImage(Context context, View view1, View view2) {
+        File sdcard = Environment.getExternalStorageDirectory();
+        File mainDir = new File(sdcard, DEFAULT_FOLDER);
+        String filename = UUID.randomUUID().toString().replace('-', '_');
+        File sFile = new File(mainDir, filename.concat(".png"));
+        //Bitmap bmp = createBitmapFromView(context, view);
+        Bitmap bmp1 = getBitmapFromView(view1);
+        Bitmap bmp2 = getBitmapFromView(view2);
+        Bitmap bmp = merge2Bitmap(bmp1, bmp2);
+        try (FileOutputStream out = new FileOutputStream(sFile)) {
+            bmp.compress(Bitmap.CompressFormat.PNG, 100, out); // bmp is your Bitmap instance
+            // PNG is a lossless format, the compression factor (100) is ignored
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return sFile;
+    }
+
+    private static Bitmap merge2Bitmap(Bitmap bitmap1, Bitmap bitmap2) {
+        if (bitmap1 == null) return bitmap2;
+        if (bitmap2 == null) return bitmap1;
+        int maxWidth = bitmap2.getWidth() > bitmap1.getWidth() ? bitmap2.getWidth() : bitmap1.getWidth();
+        int maxHeight = bitmap1.getHeight() + bitmap2.getHeight();
+        Bitmap returnedBitmap = Bitmap.createBitmap(maxWidth, maxHeight, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(returnedBitmap);
+        canvas.drawColor(Color.WHITE);
+        if (bitmap1.getWidth() > bitmap2.getWidth()) {
+            int d = (bitmap1.getWidth() - bitmap2.getWidth()) / 2;
+            canvas.drawBitmap(bitmap1, 0f, 0f, null);
+            canvas.drawBitmap(bitmap2, d, bitmap1.getHeight(), null);
+        } else if (bitmap1.getWidth() < bitmap2.getWidth()) {
+            int d = (bitmap2.getWidth() - bitmap1.getWidth()) / 2;
+            canvas.drawBitmap(bitmap1, d, 0f, null);
+            canvas.drawBitmap(bitmap2, 0f, bitmap1.getHeight(), null);
+        } else {
+            canvas.drawBitmap(bitmap1, 0f, 0f, null);
+            canvas.drawBitmap(bitmap2, 0f, bitmap1.getHeight(), null);
+        }
+
+        return returnedBitmap;
+    }
+
+    private static Bitmap getBitmapFromView(View view) {
+        if (view == null) return null;
+        Bitmap returnedBitmap = Bitmap.createBitmap(view.getWidth(), view.getHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(returnedBitmap);
+        Drawable bgDrawable = view.getBackground();
+        if (bgDrawable != null)
+            bgDrawable.draw(canvas);
+        else
+            canvas.drawColor(Color.WHITE);
+        view.draw(canvas);
+        return returnedBitmap;
+    }
+
+    private static Bitmap createBitmapFromView(Context context, View view) {
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        ((Activity) context).getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        view.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT));
+
+        view.measure(displayMetrics.widthPixels, displayMetrics.heightPixels);
+        view.layout(0, 0, displayMetrics.widthPixels, displayMetrics.heightPixels);
+        view.buildDrawingCache();
+        Bitmap bitmap = Bitmap.createBitmap(view.getMeasuredWidth(), view.getMeasuredHeight(), Bitmap.Config.ARGB_8888);
+
+        Canvas canvas = new Canvas(bitmap);
+        view.draw(canvas);
+
+        return bitmap;
     }
 }

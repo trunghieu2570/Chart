@@ -57,4 +57,6 @@
     <string name="create_project_dialog_title">Tạo project mới</string>
     <string name="projects_list_view_empty">Chưa có project nào.</string>
     <string name="charts_list_view_empty">Chưa có biểu đồ nào</string>
+    <string name="share_chart_menu">Share</string>
+    <string name="save_as_picture">Lưu ảnh</string>
 </resources>

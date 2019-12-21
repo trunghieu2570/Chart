@@ -2,6 +2,7 @@ package com.kdh.chart.activities;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.VibrationEffect;
@@ -18,9 +19,11 @@ import android.widget.Toast;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.FileProvider;
 
 import com.google.android.material.chip.Chip;
 import com.google.android.material.snackbar.Snackbar;
+import com.kdh.chart.BuildConfig;
 import com.kdh.chart.ProjectFileManager;
 import com.kdh.chart.R;
 import com.kdh.chart.charts.PieChartView;
@@ -33,6 +36,7 @@ import com.kdh.chart.datatypes.SimpleInputRow;
 import com.kdh.chart.fragments.CreatePieChartDialogFragment;
 import com.kdh.chart.fragments.SimpleInputFragment;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -51,6 +55,7 @@ public class PieChartActivity extends AppCompatActivity implements ChartActivity
     private ChartLocation chartLocation;
     private Project project;
     private Vibrator vibrator;
+    private LinearLayout chartLayout;
 
 
     @Override
@@ -78,8 +83,8 @@ public class PieChartActivity extends AppCompatActivity implements ChartActivity
         simpleInputRows = pieChart.getData();
         mInputTable = SimpleInputFragment.newInstance(simpleInputRows);
         //create chart
-        LinearLayout layout = findViewById(R.id.layout);
-        layout.removeAllViews();
+        chartLayout = findViewById(R.id.layout);
+        chartLayout.removeAllViews();
         mChartView = new PieChartView(this, null);
         mChartView.setOnPieItemSelectedListener(new PieChartView.OnPieItemSelectedListener() {
             @Override
@@ -105,8 +110,8 @@ public class PieChartActivity extends AppCompatActivity implements ChartActivity
         chartTitle.setText(pieChart.getChartName());
         chartTitle.setGravity(Gravity.CENTER);
         chartTitle.setPadding(10, 0, 10, 0);
-        layout.addView(mChartView);
-        layout.addView(chartTitle);
+        chartLayout.addView(mChartView);
+        chartLayout.addView(chartTitle);
         // on input table data changed
 /*        mInputTable.setOnUpdateDataListener(new SimpleInputFragment.OnUpdateDataListener() {
             @Override
@@ -160,11 +165,52 @@ public class PieChartActivity extends AppCompatActivity implements ChartActivity
             case R.id.describe_chart:
                 describeChart();
                 return true;
+            case R.id.save_chart_as_picture:
+                saveChartAsPicture();
+                return true;
+            case R.id.share_chart:
+                shareChart();
+                return true;
             case android.R.id.home:
                 finish();
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void saveChartAsPicture() {
+        File file = ProjectFileManager.saveImage(this, chartLayout, mInputTable.rowsListView);
+
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            Intent intent = new Intent();
+            intent.setAction(Intent.ACTION_VIEW);
+            Uri photoUri = FileProvider.getUriForFile(this, BuildConfig.APPLICATION_ID + ".provider", file);
+            intent.setDataAndType(photoUri, "image/png");
+            intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            startActivity(intent);
+        } else {
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            Uri data = Uri.fromFile(file);
+            intent.setDataAndType(data, "image/png");
+            startActivity(intent);
+        }
+    }
+
+    private void shareChart() {
+        File file = ProjectFileManager.saveImage(this, chartLayout, mInputTable.rowsListView);
+        Uri uriToImage;
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            uriToImage = FileProvider.getUriForFile(this,
+                    BuildConfig.APPLICATION_ID + ".provider",
+                    file);
+        } else {
+            uriToImage = Uri.fromFile(file);
+        }
+        Intent shareIntent = new Intent();
+        shareIntent.setAction(Intent.ACTION_SEND);
+        shareIntent.putExtra(Intent.EXTRA_STREAM, uriToImage);
+        shareIntent.setType("image/png");
+        startActivity(Intent.createChooser(shareIntent, getResources().getText(R.string.share_chart_menu)));
     }
 
     //Nhận xét

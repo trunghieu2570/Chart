@@ -1,10 +1,8 @@
 package com.kdh.chart.activities;
 
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.fragment.app.DialogFragment;
-
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -12,35 +10,40 @@ import android.view.MenuItem;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.FileProvider;
+
 import com.google.android.material.snackbar.Snackbar;
+import com.kdh.chart.BuildConfig;
 import com.kdh.chart.ProjectFileManager;
 import com.kdh.chart.R;
 import com.kdh.chart.charts.ColumnBarChartView;
-import com.kdh.chart.charts.GroupBarChartView;
 import com.kdh.chart.datatypes.AdvancedInputRow;
 import com.kdh.chart.datatypes.ChartLocation;
 import com.kdh.chart.datatypes.ColumnBarChart;
-import com.kdh.chart.datatypes.GroupBarChart;
 import com.kdh.chart.datatypes.Project;
 import com.kdh.chart.datatypes.ProjectLocation;
 import com.kdh.chart.fragments.AdvancedInputFragment;
 import com.kdh.chart.fragments.CreateColumnBarChartDialogFragment;
-import com.kdh.chart.fragments.CreateGroupBarChartDialogFragment;
-import com.kdh.chart.fragments.CreatePieChartDialogFragment;
 
+import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 
 public class ColumnBarChartActivity extends AppCompatActivity implements ChartActivityInterface<AdvancedInputRow>, AdvancedInputFragment.OnUpdateDataListener {
 
     private ColumnBarChartView mChartView;
-    private DialogFragment mInputTable;
+    private AdvancedInputFragment mInputTable;
     private ArrayList<AdvancedInputRow> advancedInputRows;
     private ProjectLocation projectLocation;
     private ColumnBarChart barChart;
     private ChartLocation chartLocation;
     private Project project;
     private String chartName;
+    private LinearLayout chartLayout;
 
 
     @Override
@@ -68,10 +71,10 @@ public class ColumnBarChartActivity extends AppCompatActivity implements ChartAc
         advancedInputRows = barChart.getData();
         mInputTable = AdvancedInputFragment.newInstance(advancedInputRows);
         //create chart
-        LinearLayout layout = findViewById(R.id.layout);
-        layout.removeAllViews();
+        chartLayout = findViewById(R.id.layout);
+        chartLayout.removeAllViews();
         mChartView = new ColumnBarChartView(this, null);
-        layout.addView(mChartView);
+        chartLayout.addView(mChartView);
         //show input table
         if (checkValue(advancedInputRows)) {
             mChartView.updateData(advancedInputRows, chartName);
@@ -106,11 +109,52 @@ public class ColumnBarChartActivity extends AppCompatActivity implements ChartAc
             case R.id.delete_chart:
                 deleteChart();
                 return true;
+            case R.id.save_chart_as_picture:
+                saveChartAsPicture();
+                return true;
+            case R.id.share_chart:
+                shareChart();
+                return true;
             case android.R.id.home:
                 finish();
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void saveChartAsPicture() {
+        File file = ProjectFileManager.saveImage(this, chartLayout, mInputTable.rowsListView);
+
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            Intent intent = new Intent();
+            intent.setAction(Intent.ACTION_VIEW);
+            Uri photoUri = FileProvider.getUriForFile(this, BuildConfig.APPLICATION_ID + ".provider", file);
+            intent.setDataAndType(photoUri, "image/png");
+            intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            startActivity(intent);
+        } else {
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            Uri data = Uri.fromFile(file);
+            intent.setDataAndType(data, "image/png");
+            startActivity(intent);
+        }
+    }
+
+    private void shareChart() {
+        File file = ProjectFileManager.saveImage(this, chartLayout, mInputTable.rowsListView);
+        Uri uriToImage;
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            uriToImage = FileProvider.getUriForFile(this,
+                    BuildConfig.APPLICATION_ID + ".provider",
+                    file);
+        } else {
+            uriToImage = Uri.fromFile(file);
+        }
+        Intent shareIntent = new Intent();
+        shareIntent.setAction(Intent.ACTION_SEND);
+        shareIntent.putExtra(Intent.EXTRA_STREAM, uriToImage);
+        shareIntent.setType("image/png");
+        startActivity(Intent.createChooser(shareIntent, getResources().getText(R.string.share_chart_menu)));
     }
 
     private void showBottomSheetDialog() {
@@ -129,7 +173,8 @@ public class ColumnBarChartActivity extends AppCompatActivity implements ChartAc
             barChart.setData(advancedInputRows);
             mChartView.updateData(advancedInputRows, chartName);
             //save data to file
-            project.setModifiedTime(Calendar.getInstance().getTime().toString());
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", getResources().getConfiguration().locale);
+            project.setModifiedTime(dateFormat.format(Calendar.getInstance().getTime()));
             ProjectFileManager.saveChart(projectLocation, barChart, chartLocation);
             ProjectFileManager.saveProject(projectLocation);
         } else

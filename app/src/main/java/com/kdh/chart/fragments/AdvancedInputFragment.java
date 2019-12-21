@@ -39,7 +39,7 @@ public class AdvancedInputFragment extends BottomSheetDialogFragment {
     public static final String LIST = "inputlist";
     private OnUpdateDataListener onUpdateDataListener;
     private ArrayList<AdvancedInputRow> rowsList;
-    private ListView rowsListView;
+    public ListView rowsListView;
     private AdvancedInputRowAdapter rowsAdapter;
 
 

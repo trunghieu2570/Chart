@@ -37,7 +37,7 @@ public class SimpleInputFragment extends BottomSheetDialogFragment {
     public static final String LIST = "inputlist";
     private OnUpdateDataListener onUpdateDataListener;
     private ArrayList<SimpleInputRow> rowsList;
-    private ListView rowsListView;
+    public ListView rowsListView;
     private SimpleInputRowAdapter rowsAdapter;
 
 

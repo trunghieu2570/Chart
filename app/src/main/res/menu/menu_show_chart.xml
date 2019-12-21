@@ -7,6 +7,16 @@
         android:title="@string/delete_chart"
         app:showAsAction="collapseActionView" />
     <item
+        android:id="@+id/share_chart"
+        android:orderInCategory="100"
+        android:title="@string/share_chart_menu"
+        app:showAsAction="collapseActionView" />
+    <item
+        android:id="@+id/save_chart_as_picture"
+        android:orderInCategory="100"
+        android:title="@string/save_as_picture"
+        app:showAsAction="collapseActionView" />
+    <item
         android:id="@+id/describe_chart"
         android:orderInCategory="100"
         android:title="@string/describe"

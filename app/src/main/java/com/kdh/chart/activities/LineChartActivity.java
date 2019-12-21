@@ -1,6 +1,8 @@
 package com.kdh.chart.activities;
 
 import android.content.Intent;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -11,9 +13,10 @@ import android.widget.Toast;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.fragment.app.DialogFragment;
+import androidx.core.content.FileProvider;
 
 import com.google.android.material.snackbar.Snackbar;
+import com.kdh.chart.BuildConfig;
 import com.kdh.chart.ProjectFileManager;
 import com.kdh.chart.R;
 import com.kdh.chart.charts.LineChartView;
@@ -27,6 +30,7 @@ import com.kdh.chart.fragments.AdvancedInputFragment;
 import com.kdh.chart.fragments.CreateLineChartDialogFragment;
 import com.kdh.chart.fragments.CreatePieChartDialogFragment;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -38,7 +42,7 @@ import static com.kdh.chart.activities.ChartDescribeActivity.CHART_TYPE;
 public class LineChartActivity extends AppCompatActivity implements ChartActivityInterface<AdvancedInputRow>, AdvancedInputFragment.OnUpdateDataListener {
 
     private LineChartView mChartView;
-    private DialogFragment mInputTable;
+    private AdvancedInputFragment mInputTable;
     private ArrayList<AdvancedInputRow> advancedInputRows;
     private ProjectLocation projectLocation;
     private LineChart lineChart;
@@ -47,6 +51,7 @@ public class LineChartActivity extends AppCompatActivity implements ChartActivit
     private String chartName;
     private String xAxisUnit;
     private String yAxisUnit;
+    private LinearLayout chartLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,10 +79,10 @@ public class LineChartActivity extends AppCompatActivity implements ChartActivit
         advancedInputRows = lineChart.getData();
         mInputTable = AdvancedInputFragment.newInstance(advancedInputRows);
         //create chart
-        LinearLayout layout = findViewById(R.id.layout);
-        layout.removeAllViews();
+        chartLayout = findViewById(R.id.layout);
+        chartLayout.removeAllViews();
         mChartView = new LineChartView(this, null);
-        layout.addView(mChartView);
+        chartLayout.addView(mChartView);
         //show input table
         if (checkValue(advancedInputRows)) {
             mChartView.updateData(advancedInputRows, chartName, xAxisUnit, yAxisUnit);
@@ -111,6 +116,12 @@ public class LineChartActivity extends AppCompatActivity implements ChartActivit
             case R.id.delete_chart:
                 deleteChart();
                 return true;
+            case R.id.save_chart_as_picture:
+                saveChartAsPicture();
+                return true;
+            case R.id.share_chart:
+                shareChart();
+                return true;
             case R.id.describe_chart:
                 describeChart();
                 return true;
@@ -119,6 +130,40 @@ public class LineChartActivity extends AppCompatActivity implements ChartActivit
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void saveChartAsPicture() {
+        File file = ProjectFileManager.saveImage(this, chartLayout, mInputTable.rowsListView);
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            Intent intent = new Intent();
+            intent.setAction(Intent.ACTION_VIEW);
+            Uri photoUri = FileProvider.getUriForFile(this, BuildConfig.APPLICATION_ID + ".provider", file);
+            intent.setDataAndType(photoUri, "image/png");
+            intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            startActivity(intent);
+        } else {
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            Uri data = Uri.fromFile(file);
+            intent.setDataAndType(data, "image/png");
+            startActivity(intent);
+        }
+    }
+
+    private void shareChart() {
+        File file = ProjectFileManager.saveImage(this, chartLayout, mInputTable.rowsListView);
+        Uri uriToImage;
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            uriToImage = FileProvider.getUriForFile(this,
+                    BuildConfig.APPLICATION_ID + ".provider",
+                    file);
+        } else {
+            uriToImage = Uri.fromFile(file);
+        }
+        Intent shareIntent = new Intent();
+        shareIntent.setAction(Intent.ACTION_SEND);
+        shareIntent.putExtra(Intent.EXTRA_STREAM, uriToImage);
+        shareIntent.setType("image/png");
+        startActivity(Intent.createChooser(shareIntent, getResources().getText(R.string.share_chart_menu)));
     }
 
     //Nhận xét
