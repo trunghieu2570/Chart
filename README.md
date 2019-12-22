@@ -1,5 +1,8 @@
 # Chart
 
+
+
+[![Build Status](https://travis-ci.org/trunghieu2570/Chart.svg?branch=master)](https://travis-ci.org/trunghieu2570/Chart)
 [![CircleCI](https://circleci.com/gh/trunghieu2570/Chart.svg?style=svg)](https://circleci.com/gh/trunghieu2570/Chart)
 
 Phần mềm vẽ biểu đồ cho thiết bị Android
