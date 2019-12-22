@@ -43,6 +43,10 @@ Phần mềm này chủ yếu sử dụng [Canvas](https://developer.android.com
 
 1. Cài đặt ứng dụng bằng file apk.
 
+1. Nếu hiện hộp thoại `Bị chặn bởi Play Protect`, chọn `VẪN CÀI ĐẶT`
+
+1. Nếu hiện hộp thoại `Gửi ứng dụng để quét?`, chọn `KHÔNG GỬI`
+
 1. Chạy ứng dụng.
 
 ## Hướng dẫn sử dụng
