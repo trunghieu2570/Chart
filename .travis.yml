@@ -14,8 +14,8 @@ env:
     - EMULATOR_API=24
     - ANDROID_BUILD_TOOLS=29.0.2
     - ADB_INSTALL_TIMEOUT=5
-    - secure: T4hJ9q81qQwKB+aRSJdojCTCvX4QQA8UCbAfTT/QHfAcyMdBXwV3YGPO0RU7cAhXJ+NWcTSEJnHvwMsq82KMJx0PdppQlVKNGK2kBzKmH/vmKjJgW6zHeDeqajCR+VmciajT3PUOQDEfXkd/efI1dCgWFGFQ8WJZTgrtjhcGPpfYNSoDBt+E/90nLGKN+Gp6S31+LZhy/fshzbG8bN0aGz3GOaN+JwoseK37YX3gWlWIlEGp7Ah4aDdj1+S5Mi/hcyeVVBJQShuYeWukCRFplLKtYczTCCWxuNgzV+Px5YKYlsnfnChyaTqYBU7djoIbG1o7pVmgChLvyP4YK7CD0pin5Ege8XnwcyFM7SUSo+LXpf7C2wdAk3YdLAAxTzrc+AvcN9SLlVWycETIwC5ONsPIoGFjzOZ/gpgRsC5KG3gSgKCI474VNd3CoNLhIOEltp0tyTQ0fpPRxuIlyY3sPOWO/5EJwGxmRFcJ/Zrvg8B8UKQWHb35/ADMJTaxNnOlvgZT1Ijd+Z9P7B2g+1O7aS43JcrwZXHGWlY8oFofQ6cvOzQONx1/mcbvDP7NVxTDGlwBziUsNrQuHANOZITXSaz8SmwLnYjloshdgH7gkTZIbgWeLnGvyJP81sXfeeY8FUI6mrLzn7lXvmW/cGPEGJo4RyYoav+9E9TaRLfIUuU=
-    - secure: hC6HgoSfI3dG0ugLH8z7pgttl/ydcKLMriCMcD5CwG9ujntuJWaJOdQ1mGUc6NpcFA1ofqGULf+w6kxmACMwsnbjQGuMaIWRTRQZPzjZKg8yuC8dvTDF9B9+C9+YdUMXV0E0GfeE9tpyepg8o8XNIwIXv6HsLw8kaVGA72/KrwLKBi3DpS4G9DFVzJ5wrHBAJVm62n8i51uCzqqvb8qO3W//TLswG2ZVVXbCx9X8DaixEuLpkqfree+6SlLFo8STNIuMPqzUMh2bw7xqBngDu3FEC9bGyJdErO0gAVvpaHuazxeC+PQqgZRnzal1AhOKRvuBPBUROvmRazCaKFkeZxeOuBLeMb88hyw0Te4Vm3utKjpEoCOKHZZlzbMiBVZQs6WFzKaUkM0hWSxEDQ7jnIw/wIfWuvG6ug2CY2I0FYxSp8S4BMfxVEz6i/qPqe6rwg4/OZwD8B+WRflETsftZrpU6wgP1PQ2rL3O3+OVfKpOllalivv3u9JwzxvQRDp3UGaeaGIZveDvd5hGBMFXjDwEhM1lX5Rl64OJcjdJJgA551Clok9tkXONIwLsDcPRQKhR2W2eJCwQEKLAUTZOYXfiunuVgHyEgBZnaHuO8KaF+NGUhm+7plj8lPz3efhpHMDvHkXD/n/kk4nxgBYOPUgtdqDBwbnHMxS461DXXI4=
+    - secure: SWkAxJosfVDJuKGXa27NdwxHfes7I5xoj76+/i1gpvvDAsM5Ekhk4Gn6gNHBt34g4aGz7pMtjfu6wMiYJPxb+u6kV1KOOrK9fmlUe4sBcgfMXJ0rJ2ahdOfD7jRkF7SUp3zKw91Y82kXaVFmcQuCX4jDVYh9f3miRuqA1udO2e2u9Vh6DZeeJnsRHr56GxbLcM4tyDGIxDbwgAVe1YoDYy3WzZauJ3ogbLmbybQXNTcQrc7G8M4us0vkMg81wdaTRLTiePB461hQrCVRzsAag02fuViXh1KDIQtf8Wi+IJGok6VfKFLHJAEr0zipeehfDUFgQzm2BwsF5M+PyCrzx9PmuOezbWNb/acH+bH2hpMfoEMjtJrEZkMMCtGcfrXKdG3ucMDui0Cs2UenEnITojGfAfvU0dN6kfQUo+SyxTziWYHkIjNpz5/C714YueYV3/0BFhFlcL265avLny5dVa13uYvY8HZKXOIepg/kTwZMxFdCxj4Yp8aClP77/dkY7LXe/N7hHq8v2jKdOyfdz1UyqHvXYTWDSwV6cV4y/4IN2cNb18N/vSSCCSwnacMEh/rx3QcQRy8+nFP6TEKKzQ1ZPlW/COGlUp6Pxr8VwWV3kGA6UDweLhdwHHU/i+/t9x/oE465AcIK6HsYF9M1Yh+6qYer4veXKC93QLACMBg=
+    - secure: c7pUuD4vDpYM7Q5eOQ4S6ZxHv0kIWouLnADag7Q8sWaTJnqF1iNoCrQRamT9YRRrbCNMXzmdHcVOcvjs2nLqZTyTjRIUbGt1Po08PPo+dndKjLC4Co019DY7jXVVUJUaCJmS1PYlDopknQWxV6zG/ap3ytmCxKWh3Qa9pw2OdqCuk8uDtP4ebyC+yIdSidaxcwUY0EXzHBoglzII0mzwpmM4Nxb/Lb6VWxIHs+0NUhYIFnVj+DelaXcvFMD/Rc6UNGr2Ceo5Xy35QgKxNvBVroIWW98E0xn9rIK0kSFiJ2zLa9jXekJZU5ubJBXGKRNIBxxKGGybczKLwuH4Y+UpYnKcGE10+1mBWPDXtrO5VTnjqvgp1N2LhKZ5kuDEEuNtwFyeYsKe1HTYOdbPB2fokMdMXgRb33rsNZAjLwWhQB61ENCeHVJXik6rG+WoIUiX+LHbZfI/lUd6K5v8t8wugG0YdrJWwaK9gMg2dHw9h1gh1o1pLQZo/Sxln2uD3ZRCfqff+eG8XDPeOxWl0r/7IV9E5CHkJgmWVrnA+4P8gPOcfNWMaR9Lvs9L084UikB1VEATxJhFUtVtS4nopSjvH4Yn8DeTsNzA9vK0NsPNHit8r5SR04eGbfYrnxQQf7+xo0XE9iju24OkmxYHpK67y7tGrde57cTIsKxdF+Y/1wQ=
 android:
   components:
     - tools
@@ -33,24 +33,20 @@ android:
     - android-sdk-license-.+
     - google-gdk-license-.+
 before_install:
-  - openssl aes-256-cbc -K $encrypted_0de4f5174111_key -iv $encrypted_0de4f5174111_iv -in keystore.jks.enc -out keystore.jks -d
+  - openssl aes-256-cbc -K $encrypted_0de4f5174111_key -iv $encrypted_0de4f5174111_iv
+    -in keystore.jks.enc -out keystore.jks -d
   - mkdir "$ANDROID_HOME/licenses" || true
   - echo -e "\n8933bad161af4178b1185d1a37fbf41ea5269c55" > "$ANDROID_HOME/licenses/android-sdk-license"
   - echo -e "\n84831b9409646a918e30573bab4c9c91346d8abd" > "$ANDROID_HOME/licenses/android-sdk-preview-license"
   - chmod +x gradlew
   - "./gradlew dependencies || true"
-#before_script:
-#  - echo no | android create avd --force -n test -t android-24 --abi armeabi-v7a
-#  - emulator -avd test -no-skin -no-audio -no-window &
-#  - android-wait-for-emulator
-#  - adb shell input keyevent 82 &
 script:
-#  - "./gradlew clean build connectedCheck -PdisablePreDex --stacktrace"
   - "./gradlew clean build"
 before_deploy:
   - cp $TRAVIS_BUILD_DIR/keystore.jks $HOME
   - cd app/build/outputs/apk/
-  - jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore $HOME/keystore.jks -storepass $storepass -keypass $keypass app-release-unsigned.apk key0
+  - jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore $HOME/keystore.jks
+    -storepass $storepass -keypass $keypass app-release-unsigned.apk key0
   - jarsigner -verify app-release-unsigned.apk
   - "${ANDROID_HOME}/build-tools/29.0.2/zipalign -v 4 app-release-unsigned.apk Chart.apk"
 deploy:
@@ -62,4 +58,4 @@ deploy:
     tags: true
     jdk: oraclejdk8
   api_key:
-    secure: "wzvr57/vbse56E47pYZ3rUYHPrTz144bT/RVDxEVJlD4SJ0KTjNxQx6dXCryjQXvv3EcraFnnIgXExwhaIxgQJpu5ezHhCn1+RO3tx14JMsBKN3UICmFIH8VuCqztSYdj6KOZWhMfOi9KBI6TbIyEZRgh/nDa93m5Z/4eYeNMGw8b4tdLRxR8owORl4YOPVRpp8lu/7zZVjUCaOQlKhkCcqar1s7hecdqBEsePhr6Abp/teIWMazrFnrxZ+akCyCk8te3J24Ca84D3KJg89+8LhvnkvYQAp7PfL5uqWj9hdlYhoirVnp237qS6NjiWrWd/W6FojK9zXYxNfG/VCGHmcWNQMCY/m6QQZ1KsDiDxrFWZTiRGZCkeZhuvy0F7e9Om/lstnY19hhOPq+0MhBPZmfozOdRGFyk2dZmotOPwtyIh9JTAQOPEh3zZ55YNyIq/UX3NOod6y9fnSd3DNsLNeuOh1G3rtcbLdtCk8fBDpELO01ydzDXKGa8OcOf61GJHIQEbdoEw0st+lChk1hxNwafEaGT6wibvDaGXWOFTWjIQEyc2PjCRMofKjCx+hGbPSovC1vk2zDLogtfV8jEmf0kV9YgpjrP4eqWdgAF+62c6mxJfIatdOF2nZr/FFNsAyHdP5+ei20VfBbZR9awAywfHQtIyD5QoxcFVWX05U="
+    secure: "U0PjH4oDNozfDLSIqUgiWiirVe/noqtW9vei/QSmt678KgtEdQ61RYMLZ9W7VhobKeHrYVXDUFcZMxUvVV1/G7xlDEJTdoW+Q7LAb1Txbcf2op0DueDS9YXsScratEP/YxzWsCoE56yFw2k2l9470b/kX0xspD4578OScua42ZL2UEtS7Kmss8aFUOKh9pOsG/N1nW6oTC8sz+4X2dEZXTQ8QDUBEyT5HcXFpeH5WweC/xESyCVcAlY/YBdSi9rpwOxM6AbPLQCVln3u0Vas0r1TpAuR5CiV+buqjUaRFZ2xpC4UffXiVru2B1RPXm0J/gyv9jsi/6PxwTIhDqUcTaLOad1T1UDauNMBnP1GynAhoDrCq+g0AXdmTiSUMUdwei8TZK2VmEwWrJJhTrxuVVLBtyxO1g6oqmeozqehP1NulEXNsJgLzaO4dVTvTc26Y7Pfrk9raAS+a7rDu4E/NEbeA4J5fC/q4OFh7VHHZIdPeJVbuFrGp4G67co6fo7A77d3yBmEtiRrVvTwvi6GHYbtxFNE+nFJPkm2cji/Sz8iQZTjXuOfqa2EuhKTYarFxh9pws8MgwG6B/8mP6XqeKUXJurSYqvkstujdJu0baNn5AMjGB+K6h1SdRj0mCXyhYl2OpzV4io1egRWZIEd8/lGDUaTj/YE3Tq5QkCXMjc="
