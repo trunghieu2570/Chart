@@ -33,8 +33,7 @@ android:
     - android-sdk-license-.+
     - google-gdk-license-.+
 before_install:
-  - openssl aes-256-cbc -K $encrypted_0de4f5174111_key -iv $encrypted_0de4f5174111_iv
-    -in keystore.jks.enc -out keystore.jks -d
+  - openssl aes-256-cbc -K $encrypted_0de4f5174111_key -iv $encrypted_0de4f5174111_iv -in keystore.jks.enc -out keystore.jks -d
   - mkdir "$ANDROID_HOME/licenses" || true
   - echo -e "\n8933bad161af4178b1185d1a37fbf41ea5269c55" > "$ANDROID_HOME/licenses/android-sdk-license"
   - echo -e "\n84831b9409646a918e30573bab4c9c91346d8abd" > "$ANDROID_HOME/licenses/android-sdk-preview-license"
@@ -44,9 +43,8 @@ script:
   - "./gradlew clean build"
 before_deploy:
   - cp $TRAVIS_BUILD_DIR/keystore.jks $HOME
-  - cd app/build/outputs/apk/
-  - jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore $HOME/keystore.jks
-    -storepass $storepass -keypass $keypass app-release-unsigned.apk key0
+  - cd app/build/outputs/apk/release/
+  - jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore $HOME/keystore.jks -storepass $storepass -keypass $keypass app-release-unsigned.apk key0
   - jarsigner -verify app-release-unsigned.apk
   - "${ANDROID_HOME}/build-tools/29.0.2/zipalign -v 4 app-release-unsigned.apk Chart.apk"
 deploy:
@@ -58,4 +56,4 @@ deploy:
     tags: true
     jdk: oraclejdk8
   api_key:
-    secure: "U0PjH4oDNozfDLSIqUgiWiirVe/noqtW9vei/QSmt678KgtEdQ61RYMLZ9W7VhobKeHrYVXDUFcZMxUvVV1/G7xlDEJTdoW+Q7LAb1Txbcf2op0DueDS9YXsScratEP/YxzWsCoE56yFw2k2l9470b/kX0xspD4578OScua42ZL2UEtS7Kmss8aFUOKh9pOsG/N1nW6oTC8sz+4X2dEZXTQ8QDUBEyT5HcXFpeH5WweC/xESyCVcAlY/YBdSi9rpwOxM6AbPLQCVln3u0Vas0r1TpAuR5CiV+buqjUaRFZ2xpC4UffXiVru2B1RPXm0J/gyv9jsi/6PxwTIhDqUcTaLOad1T1UDauNMBnP1GynAhoDrCq+g0AXdmTiSUMUdwei8TZK2VmEwWrJJhTrxuVVLBtyxO1g6oqmeozqehP1NulEXNsJgLzaO4dVTvTc26Y7Pfrk9raAS+a7rDu4E/NEbeA4J5fC/q4OFh7VHHZIdPeJVbuFrGp4G67co6fo7A77d3yBmEtiRrVvTwvi6GHYbtxFNE+nFJPkm2cji/Sz8iQZTjXuOfqa2EuhKTYarFxh9pws8MgwG6B/8mP6XqeKUXJurSYqvkstujdJu0baNn5AMjGB+K6h1SdRj0mCXyhYl2OpzV4io1egRWZIEd8/lGDUaTj/YE3Tq5QkCXMjc="
+    secure: ELX4M4EDNde9WR8HVSz5iNK9gsyFrQpya+pNXRpfdfaxptpqrMUuZJINk7u2K+FBOsHWj14lV+u7jo4R1zEyH6go2lJ109tqz15lJh0xzCLukZkjX4kiSoWCsCb16PyR6+ZsnHd6DRH8x9eIUK9TsG2sGq+Z9drDLG/YhClPbPxSJu/pRSQ990GSdMEN5FAsS3xtVuno5dUYh0leRIi5LSm7BVkcL0lUyNOQ8lU1DT4LUhN5qnjXOG2p1RtrnCrrlsj/PSB3NMiA2sdFeE0Ib4b1G7Vf00beBtg94UcvvDoNRB2X3aZRKwLsAS5vUyLQrY8Km1BWHF2skeYSYnejsFCbX7nlnHt5LmKjiclfXwZ2TzkKoCYqtK+jEVjDAdXWSDGJVhb3IFYw7jDXKV3l8UxYSFJzmYnkHbVj9m9Orx/eSKrwimYLVSruBU7fh676YW4dCW9hv9pFipKv6k+AVVo6vb8xE+cKq3Q4ZrHJY8wVSebu1HYJ/iOhFVfRwXajk68yV+mlKvTRm3glGxRa54gNWa37Bx4Holalf9pWyr64swBGZMzGO0CzSLT3PHxTGkTeTy2FL7OcCH6wCl2eV/BAUZYZ8AZ5B/VOVN0rJWDwj70SHWLHpL02694jRblxa7uE1WqIB52VMf005sevZR9vso3P9loj/eYiMCAuVmo=
