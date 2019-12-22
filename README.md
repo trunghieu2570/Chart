@@ -37,6 +37,14 @@ Phần mềm này chủ yếu sử dụng [Canvas](https://developer.android.com
 
 ## Hướng dẫn cài đặt
 
+1. Tìm [**Phiên bản mới nhất**](https://github.com/trunghieu2570/Chart/releases/latest) trong mục [Releases](https://github.com/trunghieu2570/Chart/releases), sau đó tải xuống file có đuôi apk.
+
+1. Cấp quyền cho ứng dụng đã tải xuống file apk này (nếu được yêu cầu). *Ví dụ: tải xuống từ Chrome, hệ thống android sẽ yêu cầu quyền cài đặt ứng dụng từ Chrome.*
+
+1. Cài đặt ứng dụng bằng file apk.
+
+1. Chạy ứng dụng.
+
 ## Hướng dẫn sử dụng
 
 ## Thành viên trong nhóm
