@@ -55,8 +55,10 @@
     <string name="statistic">Nhận xét biểu đồ</string>
     <string name="delete_project">Xóa project</string>
     <string name="create_project_dialog_title">Tạo project mới</string>
-    <string name="projects_list_view_empty">Chưa có project nào.</string>
-    <string name="charts_list_view_empty">Chưa có biểu đồ nào</string>
+    <string name="projects_list_view_empty">CHƯA CÓ PROJECT NÀO</string>
+    <string name="charts_list_view_empty">CHƯA CÓ BIỂU ĐỒ NÀO</string>
     <string name="share_chart_menu">Share</string>
     <string name="save_as_picture">Lưu ảnh</string>
+    <string name="go_home">Về trang chủ</string>
+    <string name="chart_list">Danh sách biểu đồ</string>
 </resources>

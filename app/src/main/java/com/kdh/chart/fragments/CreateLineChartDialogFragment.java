@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.TypedArray;
 import android.os.Bundle;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -20,6 +21,7 @@ import com.kdh.chart.ProjectFileManager;
 import com.kdh.chart.R;
 import com.kdh.chart.activities.LineChartActivity;
 import com.kdh.chart.datatypes.AdvancedInputRow;
+import com.kdh.chart.datatypes.Chart;
 import com.kdh.chart.datatypes.ChartLocation;
 import com.kdh.chart.datatypes.ChartTypeEnum;
 import com.kdh.chart.datatypes.LineChart;
@@ -42,21 +44,37 @@ public class CreateLineChartDialogFragment extends DialogFragment {
     public static final String BUNDLE = "bundle";
     public static final String PROJECT_LOCATION = "project";
     public static final String LOCATION = "location";
-
-    public CreateLineChartDialogFragment() { }
-
+    public static final String NAME_LIST = "names_list";
+    private OnChartNameDuplicatedListener onChartNameDuplicatedListener;
 
     public static CreateLineChartDialogFragment newInstance(ProjectLocation location) {
+        ArrayList<Pair<ChartLocation, Chart>> charts = ProjectFileManager.loadCharts(location);
+        ArrayList<String> projectNames = new ArrayList<>();
+        if (charts != null) {
+            for (Pair<ChartLocation, Chart> pair : charts) {
+                projectNames.add(pair.second.getChartName());
+            }
+        }
         Bundle args = new Bundle();
         args.putSerializable(PROJECT_LOCATION, location);
+        args.putStringArrayList(NAME_LIST, projectNames);
         CreateLineChartDialogFragment fragment = new CreateLineChartDialogFragment();
         fragment.setArguments(args);
         return fragment;
     }
 
+    public void setOnChartNameDuplicatedListener(OnChartNameDuplicatedListener onChartNameDuplicatedListener) {
+        this.onChartNameDuplicatedListener = onChartNameDuplicatedListener;
+    }
+
+    public CreateLineChartDialogFragment() {
+    }
+
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
+        final ArrayList<String> namesList = getArguments().getStringArrayList(NAME_LIST);
+        final ProjectLocation projectLocation = (ProjectLocation) getArguments().getSerializable(PROJECT_LOCATION);
         LayoutInflater layoutInflater = getActivity().getLayoutInflater();
         final View view = layoutInflater.inflate(R.layout.fragment_create_line_chart_dialog, null, false);
         final EditText chartNameEdt = view.findViewById(R.id.edt_chart_name);
@@ -72,8 +90,12 @@ public class CreateLineChartDialogFragment extends DialogFragment {
                 .setPositiveButton(R.string.create, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int v) {
+                        if (namesList.contains(chartNameEdt.getText().toString())) {
+                            if (onChartNameDuplicatedListener != null)
+                                onChartNameDuplicatedListener.onDuplicated();
+                            return;
+                        }
                         //init
-                        final ProjectLocation projectLocation = (ProjectLocation) getArguments().getSerializable(PROJECT_LOCATION);
                         final LineChart chart = new LineChart(
                                 chartNameEdt.getText().toString(),
                                 "Biểu đồ tuyến tính",
@@ -133,5 +155,9 @@ public class CreateLineChartDialogFragment extends DialogFragment {
                     }
                 })
                 .create();
+    }
+
+    public interface OnChartNameDuplicatedListener {
+        void onDuplicated();
     }
 }

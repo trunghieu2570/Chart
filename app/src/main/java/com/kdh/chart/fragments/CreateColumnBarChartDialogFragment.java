@@ -1,36 +1,32 @@
 package com.kdh.chart.fragments;
 
 import android.app.Dialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.TypedArray;
-import android.net.Uri;
 import android.os.Bundle;
+import android.util.Pair;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.Fragment;
-
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.EditText;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.kdh.chart.ProjectFileManager;
 import com.kdh.chart.R;
 import com.kdh.chart.activities.ColumnBarChartActivity;
-import com.kdh.chart.activities.GroupBarChartActivity;
 import com.kdh.chart.datatypes.AdvancedInputRow;
+import com.kdh.chart.datatypes.Chart;
 import com.kdh.chart.datatypes.ChartLocation;
 import com.kdh.chart.datatypes.ChartTypeEnum;
 import com.kdh.chart.datatypes.ColumnBarChart;
-import com.kdh.chart.datatypes.GroupBarChart;
 import com.kdh.chart.datatypes.Project;
 import com.kdh.chart.datatypes.ProjectLocation;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.UUID;
@@ -44,13 +40,22 @@ public class CreateColumnBarChartDialogFragment extends DialogFragment {
     public static final String BUNDLE = "bundle";
     public static final String PROJECT_LOCATION = "project";
     public static final String LOCATION = "location";
+    public static final String NAME_LIST = "names_list";
+    private OnChartNameDuplicatedListener onChartNameDuplicatedListener;
 
     public CreateColumnBarChartDialogFragment() { }
 
-
     public static CreateColumnBarChartDialogFragment newInstance(ProjectLocation location) {
+        ArrayList<Pair<ChartLocation, Chart>> charts = ProjectFileManager.loadCharts(location);
+        ArrayList<String> projectNames = new ArrayList<>();
+        if (charts != null) {
+            for (Pair<ChartLocation, Chart> pair : charts) {
+                projectNames.add(pair.second.getChartName());
+            }
+        }
         Bundle args = new Bundle();
         args.putSerializable(PROJECT_LOCATION, location);
+        args.putStringArrayList(NAME_LIST, projectNames);
         CreateColumnBarChartDialogFragment fragment = new CreateColumnBarChartDialogFragment();
         fragment.setArguments(args);
         return fragment;
@@ -59,6 +64,8 @@ public class CreateColumnBarChartDialogFragment extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
+        final ArrayList<String> namesList = getArguments().getStringArrayList(NAME_LIST);
+        final ProjectLocation projectLocation = (ProjectLocation) getArguments().getSerializable(PROJECT_LOCATION);
         LayoutInflater layoutInflater = getActivity().getLayoutInflater();
         final View view = layoutInflater.inflate(R.layout.fragment_create_column_bar_chart_dialog, null, false);
         final EditText chartNameEdt = view.findViewById(R.id.edt_chart_name);
@@ -70,8 +77,11 @@ public class CreateColumnBarChartDialogFragment extends DialogFragment {
                 .setPositiveButton(R.string.create, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int v) {
-                        //init
-                        final ProjectLocation projectLocation = (ProjectLocation) getArguments().getSerializable(PROJECT_LOCATION);
+                        if (namesList.contains(chartNameEdt.getText().toString())) {
+                            if (onChartNameDuplicatedListener != null)
+                                onChartNameDuplicatedListener.onDuplicated();
+                            return;
+                        }
                         final ColumnBarChart chart = new ColumnBarChart(
                                 chartNameEdt.getText().toString(),
                                 "Biểu đồ column"
@@ -105,7 +115,8 @@ public class CreateColumnBarChartDialogFragment extends DialogFragment {
                         final Project project = projectLocation.getProject();
                         //modify
                         project.addChart(chartLocation);
-                        project.setModifiedTime(Calendar.getInstance().getTime().toString());
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", getResources().getConfiguration().locale);
+                        project.setModifiedTime(dateFormat.format(Calendar.getInstance().getTime()));
                         //save data
                         ProjectFileManager.saveProject(projectLocation);
                         ProjectFileManager.saveChart(projectLocation, chart, chartLocation);
@@ -130,5 +141,13 @@ public class CreateColumnBarChartDialogFragment extends DialogFragment {
                     }
                 })
                 .create();
+    }
+
+    public void setOnChartNameDuplicatedListener(OnChartNameDuplicatedListener onChartNameDuplicatedListener) {
+        this.onChartNameDuplicatedListener = onChartNameDuplicatedListener;
+    }
+
+    public interface OnChartNameDuplicatedListener {
+        void onDuplicated();
     }
 }

@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.TypedArray;
 import android.os.Bundle;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -19,6 +20,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.kdh.chart.ProjectFileManager;
 import com.kdh.chart.R;
 import com.kdh.chart.activities.PieChartActivity;
+import com.kdh.chart.datatypes.Chart;
 import com.kdh.chart.datatypes.ChartLocation;
 import com.kdh.chart.datatypes.ChartTypeEnum;
 import com.kdh.chart.datatypes.PieChart;
@@ -42,23 +44,37 @@ public class CreatePieChartDialogFragment extends DialogFragment {
     public static final String PROJECT_LOCATION = "project";
     public static final String CHART = "chart";
     public static final String LOCATION = "location";
-
-
-    public CreatePieChartDialogFragment() {
-    }
-
+    public static final String NAME_LIST = "names_list";
+    private OnChartNameDuplicatedListener onChartNameDuplicatedListener;
 
     public static CreatePieChartDialogFragment newInstance(ProjectLocation location) {
+        ArrayList<Pair<ChartLocation, Chart>> charts = ProjectFileManager.loadCharts(location);
+        ArrayList<String> projectNames = new ArrayList<>();
+        if (charts != null) {
+            for (Pair<ChartLocation, Chart> pair : charts) {
+                projectNames.add(pair.second.getChartName());
+            }
+        }
         Bundle args = new Bundle();
         args.putSerializable(PROJECT_LOCATION, location);
+        args.putStringArrayList(NAME_LIST, projectNames);
         CreatePieChartDialogFragment fragment = new CreatePieChartDialogFragment();
         fragment.setArguments(args);
         return fragment;
     }
 
+    public void setOnChartNameDuplicatedListener(OnChartNameDuplicatedListener onChartNameDuplicatedListener) {
+        this.onChartNameDuplicatedListener = onChartNameDuplicatedListener;
+    }
+
+    public CreatePieChartDialogFragment() {
+    }
+
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
+        final ArrayList<String> namesList = getArguments().getStringArrayList(NAME_LIST);
+        final ProjectLocation projectLocation = (ProjectLocation) getArguments().getSerializable(PROJECT_LOCATION);
         final LayoutInflater layoutInflater = getActivity().getLayoutInflater();
         final View view = layoutInflater.inflate(R.layout.fragment_create_pie_chart_dialog, null, false);
         final EditText chartNameEdt = view.findViewById(R.id.edt_chart_name);
@@ -71,8 +87,12 @@ public class CreatePieChartDialogFragment extends DialogFragment {
                 .setPositiveButton(R.string.create, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int v) {
+                        if (namesList.contains(chartNameEdt.getText().toString())) {
+                            if (onChartNameDuplicatedListener != null)
+                                onChartNameDuplicatedListener.onDuplicated();
+                            return;
+                        }
                         //init
-                        final ProjectLocation projectLocation = (ProjectLocation) getArguments().getSerializable(PROJECT_LOCATION);
                         final PieChart chart = new PieChart(
                                 chartNameEdt.getText().toString(),
                                 "Biểu đồ tròn"
@@ -121,5 +141,9 @@ public class CreatePieChartDialogFragment extends DialogFragment {
                     }
                 })
                 .create();
+    }
+
+    public interface OnChartNameDuplicatedListener {
+        void onDuplicated();
     }
 }

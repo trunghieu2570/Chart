@@ -12,7 +12,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -39,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
     public static final String BUNDLE = "bundle";
     public static final String PROJECT_LOCATION = "project";
     private ListView recentListView;
-    private TextView emptyView;
+    private View emptyView;
     private ArrayList<ProjectLocation> projectLocations;
 
     private void showCreateChartDialog() {

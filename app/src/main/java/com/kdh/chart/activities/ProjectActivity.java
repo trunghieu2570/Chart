@@ -8,6 +8,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
@@ -18,6 +19,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 import com.kdh.chart.ProjectFileManager;
 import com.kdh.chart.R;
 import com.kdh.chart.adapters.ChartListViewAdapter;
@@ -49,7 +51,7 @@ public class ProjectActivity extends AppCompatActivity {
     private BottomSheetDialog bottomSheetDialog;
     private ListView chartListView;
     private ProjectLocation projectLocation;
-    private TextView emptyView;
+    private View emptyView;
     private ArrayList<Pair<ChartLocation, Chart>> charts;
 
     @Override
@@ -58,7 +60,15 @@ public class ProjectActivity extends AppCompatActivity {
         setContentView(R.layout.activity_project);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        //actionBar.setDisplayHomeAsUpEnabled(true);
+        setTitle(R.string.chart_list);
+        final ImageButton btGoHome = findViewById(R.id.bt_go_home);
+        btGoHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+        final TextView tvProjectName = findViewById(R.id.tv_project_name);
         emptyView = findViewById(R.id.project_empty);
         final Bundle bundle = getIntent().getBundleExtra(CreateProjectDialogFragment.BUNDLE);
         if (bundle != null) {
@@ -69,7 +79,7 @@ public class ProjectActivity extends AppCompatActivity {
                 project = projectLocation.getProject();
                 Log.d("create", "create" + project.getCharts().size());
                 final String projectName = project.getName();
-                setTitle(projectName);
+                tvProjectName.setText(projectName);
             }
         }
         chartListView = findViewById(R.id.listview_chart);
@@ -204,27 +214,57 @@ public class ProjectActivity extends AppCompatActivity {
                 switch (position) {
                     case 0:
                         final CreatePieChartDialogFragment fragment = CreatePieChartDialogFragment.newInstance(projectLocation);
+                        fragment.setOnChartNameDuplicatedListener(new CreatePieChartDialogFragment.OnChartNameDuplicatedListener() {
+                            @Override
+                            public void onDuplicated() {
+                                Snackbar.make(chartListView, "Tên biểu đồ này đã được sử dụng", Snackbar.LENGTH_SHORT).show();
+                            }
+                        });
                         fragment.show(getSupportFragmentManager(), "create_chart");
                         cancelButtonSheetDialog();
                         break;
                     case 1:
                         final CreateLineChartDialogFragment fragment2 = CreateLineChartDialogFragment.newInstance(projectLocation);
+                        fragment2.setOnChartNameDuplicatedListener(new CreateLineChartDialogFragment.OnChartNameDuplicatedListener() {
+                            @Override
+                            public void onDuplicated() {
+                                Snackbar.make(chartListView, "Tên biểu đồ này đã được sử dụng", Snackbar.LENGTH_SHORT).show();
+                            }
+                        });
                         fragment2.show(getSupportFragmentManager(), "create_chart");
                         cancelButtonSheetDialog();
                         break;
                     case 2:
-                        final CreateGroupBarChartDialogFragment fragment5=CreateGroupBarChartDialogFragment.newInstance(projectLocation);
-                        fragment5.show(getSupportFragmentManager(),"create_chart");
+                        final CreateGroupBarChartDialogFragment fragment5 = CreateGroupBarChartDialogFragment.newInstance(projectLocation);
+                        fragment5.setOnChartNameDuplicatedListener(new CreateGroupBarChartDialogFragment.OnChartNameDuplicatedListener() {
+                            @Override
+                            public void onDuplicated() {
+                                Snackbar.make(chartListView, "Tên biểu đồ này đã được sử dụng", Snackbar.LENGTH_SHORT).show();
+                            }
+                        });
+                        fragment5.show(getSupportFragmentManager(), "create_chart");
                         cancelButtonSheetDialog();
                         break;
                     case 3:
                         final CreateDonutChartDialogFragment fragment3 = CreateDonutChartDialogFragment.newInstance(projectLocation);
+                        fragment3.setOnChartNameDuplicatedListener(new CreateDonutChartDialogFragment.OnChartNameDuplicatedListener() {
+                            @Override
+                            public void onDuplicated() {
+                                Snackbar.make(chartListView, "Tên biểu đồ này đã được sử dụng", Snackbar.LENGTH_SHORT).show();
+                            }
+                        });
                         fragment3.show(getSupportFragmentManager(), "create_chart");
                         cancelButtonSheetDialog();
                         break;
                     case 4:
-                        final CreateColumnBarChartDialogFragment fragment6=CreateColumnBarChartDialogFragment.newInstance(projectLocation);
-                        fragment6.show(getSupportFragmentManager(),"creat_chart");
+                        final CreateColumnBarChartDialogFragment fragment6 = CreateColumnBarChartDialogFragment.newInstance(projectLocation);
+                        fragment6.setOnChartNameDuplicatedListener(new CreateColumnBarChartDialogFragment.OnChartNameDuplicatedListener() {
+                            @Override
+                            public void onDuplicated() {
+                                Snackbar.make(chartListView, "Tên biểu đồ này đã được sử dụng", Snackbar.LENGTH_SHORT).show();
+                            }
+                        });
+                        fragment6.show(getSupportFragmentManager(), "creat_chart");
                         cancelButtonSheetDialog();
                 }
             }
