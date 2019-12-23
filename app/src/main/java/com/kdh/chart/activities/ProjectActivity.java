@@ -113,6 +113,7 @@ public class ProjectActivity extends AppCompatActivity {
                         bundle.putSerializable(LOCATION, chartLocation);
                         donutIntent.putExtra(BUNDLE, bundle);
                         startActivity(donutIntent);
+                        break;
                     case GROUPED:
                         final Intent groupIntent = new Intent(ProjectActivity.this, GroupBarChartActivity.class);
                         bundle.putSerializable(PROJECT_LOCATION, projectLocation);
