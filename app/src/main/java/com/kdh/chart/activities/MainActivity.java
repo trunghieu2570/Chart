@@ -21,6 +21,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 import com.kdh.chart.ProjectFileManager;
 import com.kdh.chart.R;
 import com.kdh.chart.datatypes.ProjectLocation;
@@ -42,7 +43,13 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<ProjectLocation> projectLocations;
 
     private void showCreateChartDialog() {
-        CreateProjectDialogFragment createProjectDialogFragment = CreateProjectDialogFragment.newInstance();
+        final CreateProjectDialogFragment createProjectDialogFragment = CreateProjectDialogFragment.newInstance(projectLocations);
+        createProjectDialogFragment.setOnProjectNameDuplicatedListener(new CreateProjectDialogFragment.OnProjectNameDuplicatedListener() {
+            @Override
+            public void onDuplicated() {
+                Snackbar.make(recentListView, "Tên project này đã được sử dụng", Snackbar.LENGTH_SHORT).show();
+            }
+        });
         createProjectDialogFragment.show(getSupportFragmentManager(), "create_dialog");
     }
 
@@ -63,7 +70,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         emptyView = findViewById(R.id.main_empty);
-
         recentListView = findViewById(R.id.listview_recent);
         recentListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

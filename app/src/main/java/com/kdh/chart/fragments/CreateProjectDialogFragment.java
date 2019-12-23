@@ -21,6 +21,7 @@ import com.kdh.chart.datatypes.Project;
 import com.kdh.chart.datatypes.ProjectLocation;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 
 public class CreateProjectDialogFragment extends DialogFragment {
@@ -28,17 +29,23 @@ public class CreateProjectDialogFragment extends DialogFragment {
 
     public static final String BUNDLE = "bundle";
     public static final String PROJECT_LOCATION = "project";
-
+    public static final String NAME_LIST = "names_list";
     private EditText projectNameEdt;
     private EditText chartFieldsEdt;
-    private View view;
+    private OnProjectNameDuplicatedListener onProjectNameDuplicatedListener;
+
 
     public CreateProjectDialogFragment() {
         // Required empty public constructor
     }
 
-    public static CreateProjectDialogFragment newInstance() {
+    public static CreateProjectDialogFragment newInstance(ArrayList<ProjectLocation> projectLocations) {
+        ArrayList<String> projectNames = new ArrayList<>();
+        for (ProjectLocation projectLocation : projectLocations) {
+            projectNames.add(projectLocation.getProject().getName());
+        }
         Bundle args = new Bundle();
+        args.putStringArrayList(NAME_LIST, projectNames);
         CreateProjectDialogFragment fragment = new CreateProjectDialogFragment();
         fragment.setArguments(args);
         return fragment;
@@ -47,9 +54,9 @@ public class CreateProjectDialogFragment extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-        //super.onCreateDialog(savedInstanceState);
+        final ArrayList<String> namesList = getArguments().getStringArrayList(NAME_LIST);
         LayoutInflater layoutInflater = getActivity().getLayoutInflater();
-        view = layoutInflater.inflate(R.layout.fragment_create_project_dialog, null, false);
+        final View view = layoutInflater.inflate(R.layout.fragment_create_project_dialog, null, false);
         projectNameEdt = view.findViewById(R.id.edt_project_name);
         return new MaterialAlertDialogBuilder(getActivity())
                 .setTitle(R.string.create_project_dialog_title)
@@ -57,7 +64,11 @@ public class CreateProjectDialogFragment extends DialogFragment {
                 .setPositiveButton(R.string.create, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        projectNameEdt = view.findViewById(R.id.edt_project_name);
+                        if (namesList.contains(projectNameEdt.getText().toString())) {
+                            if (onProjectNameDuplicatedListener != null)
+                                onProjectNameDuplicatedListener.onDuplicated();
+                            return;
+                        }
                         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", getResources().getConfiguration().locale);
                         final Project project = new Project(projectNameEdt.getText().toString(), dateFormat.format(Calendar.getInstance().getTime()));
                         final ProjectLocation projectLocation = new ProjectLocation(
@@ -82,6 +93,14 @@ public class CreateProjectDialogFragment extends DialogFragment {
                     }
                 })
                 .create();
+    }
+
+    public void setOnProjectNameDuplicatedListener(OnProjectNameDuplicatedListener onProjectNameDuplicatedListener) {
+        this.onProjectNameDuplicatedListener = onProjectNameDuplicatedListener;
+    }
+
+    public interface OnProjectNameDuplicatedListener {
+        void onDuplicated();
     }
 
 }
