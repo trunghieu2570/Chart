@@ -184,6 +184,8 @@ public class AdvancedInputFragment extends BottomSheetDialogFragment {
         rowsAdapter = new AdvancedInputRowAdapter(context, R.layout.advanced_input_data_row, rowsList);
         rowsListView.setAdapter(rowsAdapter);
         //end list
+        if (rowsListView.getParent() != null)
+            ((ViewGroup) rowsListView.getParent()).removeView(rowsListView);
         horizontalScrollView.addView(rowsListView);
         frameLayout.addView(horizontalScrollView);
     }

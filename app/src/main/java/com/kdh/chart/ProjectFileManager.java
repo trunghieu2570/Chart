@@ -39,6 +39,7 @@ import java.util.UUID;
 public class ProjectFileManager {
 
     public static final String DEFAULT_FOLDER = "ChartProjects";
+    private ArrayList<ProjectLocation> result;
 
     public static void deleteRecursive(File fileOrDirectory) {
 
@@ -104,14 +105,15 @@ public class ProjectFileManager {
     }
 
     public static ArrayList<ProjectLocation> loadProjects() {
+        final ArrayList<ProjectLocation> result = new ArrayList<>();
         File sdcard = Environment.getExternalStorageDirectory();
         File mainDir = new File(sdcard, DEFAULT_FOLDER);
         Log.d("PRINT", mainDir.toString());
         if (!mainDir.exists()) {
             mainDir.mkdir();
-            return null;
+            return result;
         }
-        final ArrayList<ProjectLocation> result = new ArrayList<>();
+
         final Gson gson = new Gson();
         File[] paths = mainDir.listFiles();
         for (File path : paths) {
