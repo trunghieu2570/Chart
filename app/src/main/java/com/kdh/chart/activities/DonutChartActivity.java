@@ -29,6 +29,7 @@ import com.kdh.chart.R;
 import com.kdh.chart.charts.DonutChartView;
 import com.kdh.chart.datatypes.AdvancedInputRow;
 import com.kdh.chart.datatypes.ChartLocation;
+import com.kdh.chart.datatypes.ChartTypeEnum;
 import com.kdh.chart.datatypes.DonutChart;
 import com.kdh.chart.datatypes.Project;
 import com.kdh.chart.datatypes.ProjectLocation;
@@ -40,6 +41,10 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+
+import static com.kdh.chart.activities.ChartDescribeActivity.BUNDLE;
+import static com.kdh.chart.activities.ChartDescribeActivity.CHART;
+import static com.kdh.chart.activities.ChartDescribeActivity.CHART_TYPE;
 
 public class DonutChartActivity extends AppCompatActivity implements ChartActivityInterface<AdvancedInputRow>, AdvancedInputFragment.OnUpdateDataListener {
 
@@ -91,10 +96,10 @@ public class DonutChartActivity extends AppCompatActivity implements ChartActivi
                 final String objectName = rows.get(itemId + 1).getLabel();
                 final String valueName = rows.get(0).getValues().get(ringId);
                 final String value = rows.get(itemId + 1).getValues().get(ringId);
-                final String seriesMeaning = donutChart.getSeriesMeaning();
+                final String timeMeaning = donutChart.getTimeName();
                 final String valuesMeaning = donutChart.getValuesMeaning();
                 mChip.setVisibility(View.VISIBLE);
-                mChip.setText(String.format("Giá trị của %s %s %s là %s", objectName, seriesMeaning.toLowerCase(), valueName, value));
+                mChip.setText(String.format("Giá trị của %s %s %s là %s", objectName, timeMeaning.toLowerCase(), valueName, value));
             }
 
             @Override
@@ -171,8 +176,22 @@ public class DonutChartActivity extends AppCompatActivity implements ChartActivi
             case android.R.id.home:
                 finish();
                 return true;
+            case R.id.describe_chart:
+                describeChart();
+                return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+
+    //Nhận xét
+    private void describeChart() {
+        final Bundle chartBundle = new Bundle();
+        chartBundle.putSerializable(CHART, donutChart);
+        chartBundle.putSerializable(CHART_TYPE, ChartTypeEnum.DONUT);
+        Intent describeIntent = new Intent(DonutChartActivity.this, StatisticDonutChart.class);
+        describeIntent.putExtra(BUNDLE, chartBundle);
+        startActivity(describeIntent);
     }
 
     private void saveChartAsPicture() {

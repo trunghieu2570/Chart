@@ -44,13 +44,13 @@
     <string name="edit_item">Sửa hạng mục</string>
     <string name="delete">Xóa đối tượng này</string>
     <string name="default_group_name">Quốc gia</string>
-    <string name="default_value_group_name">Tỉ lệ</string>
+    <string name="default_value_group_name">Sản lượng</string>
     <string name="edit">Chỉnh sửa</string>
     <string name="delete_chart">Xóa biểu đồ</string>
     <string name="untitled_donut_chart">Untitled donut chart</string>
     <string name="describe">Nhận xét</string>
-    <string name="enter_series_meaning">Nhập ý nghĩa của mốc thời gian:</string>
-    <string name="default_donut_items_meaning">Cơ cấu</string>
+    <string name="enter_series_meaning">Ý nghĩa của mốc thời gian:</string>
+    <string name="default_donut_items_meaning">Nước</string>
     <string name="default_donut_series_meaning">Năm</string>
     <string name="statistic">Nhận xét biểu đồ</string>
     <string name="delete_project">Xóa project</string>
