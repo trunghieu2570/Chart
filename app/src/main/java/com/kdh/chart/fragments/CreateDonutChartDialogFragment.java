@@ -74,11 +74,14 @@ public class CreateDonutChartDialogFragment extends DialogFragment {
         final LayoutInflater layoutInflater = getActivity().getLayoutInflater();
         final View view = layoutInflater.inflate(R.layout.fragment_create_donut_chart_dialog, null, false);
         final EditText chartNameEdt = view.findViewById(R.id.edt_chart_name);
+        final EditText objMeaningEdt = view.findViewById(R.id.edt_object_meaning);
+        final EditText valueNameEdt = view.findViewById(R.id.edt_value_name);
+        final EditText valueMeaningEdt = view.findViewById(R.id.edt_value_meaning);
+        final EditText timeMeaningEdt = view.findViewById(R.id.edt_time_meaning);
         final EditText chartRowsEdt = view.findViewById(R.id.edt_rows);
         final EditText chartColsEdt = view.findViewById(R.id.edt_cols);
-        final EditText groupNameEdt = view.findViewById(R.id.edt_group_name);
-        final EditText valueGroupNameEdt = view.findViewById(R.id.edt_value_group_name);
-        final EditText seriesMeaningEdt = view.findViewById(R.id.edt_series_meaning);
+
+
         return new MaterialAlertDialogBuilder(getActivity(), R.style.ThemeOverlay_MaterialComponents_MaterialAlertDialog)
                 .setTitle(R.string.create_chart)
                 .setView(view)
@@ -93,8 +96,10 @@ public class CreateDonutChartDialogFragment extends DialogFragment {
                         final DonutChart chart = new DonutChart(
                                 chartNameEdt.getText().toString(),
                                 "Biểu đồ donut",
-                                valueGroupNameEdt.getText().toString(),
-                                seriesMeaningEdt.getText().toString()
+                                objMeaningEdt.getText().toString(),
+                                valueNameEdt.getText().toString(),
+                                valueMeaningEdt.getText().toString(),
+                                timeMeaningEdt.getText().toString()
                         );
                         final ArrayList<AdvancedInputRow> inputRows = new ArrayList<>();
                         final int numOfRows = Integer.parseInt("0" + chartRowsEdt.getText().toString());
@@ -105,7 +110,7 @@ public class CreateDonutChartDialogFragment extends DialogFragment {
                         ArrayList<String> values = new ArrayList<>();
                         for (int j = 0; j < numOfCols; j++)
                             values.add("201" + j);
-                        inputRows.add(new AdvancedInputRow(groupNameEdt.getText().toString(), color, values));
+                        inputRows.add(new AdvancedInputRow(objMeaningEdt.getText().toString(), color, values));
                         //content
                         for (int i = 0; i < numOfRows; i++) {
                             color = getResources().getColor(R.color.blue_500);

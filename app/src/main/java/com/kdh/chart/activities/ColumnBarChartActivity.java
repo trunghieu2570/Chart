@@ -22,6 +22,7 @@ import com.kdh.chart.R;
 import com.kdh.chart.charts.ColumnBarChartView;
 import com.kdh.chart.datatypes.AdvancedInputRow;
 import com.kdh.chart.datatypes.ChartLocation;
+import com.kdh.chart.datatypes.ChartTypeEnum;
 import com.kdh.chart.datatypes.ColumnBarChart;
 import com.kdh.chart.datatypes.Project;
 import com.kdh.chart.datatypes.ProjectLocation;
@@ -32,6 +33,10 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+
+import static com.kdh.chart.activities.ChartDescribeActivity.BUNDLE;
+import static com.kdh.chart.activities.ChartDescribeActivity.CHART;
+import static com.kdh.chart.activities.ChartDescribeActivity.CHART_TYPE;
 
 public class ColumnBarChartActivity extends AppCompatActivity implements ChartActivityInterface<AdvancedInputRow>, AdvancedInputFragment.OnUpdateDataListener {
 
@@ -118,8 +123,21 @@ public class ColumnBarChartActivity extends AppCompatActivity implements ChartAc
             case android.R.id.home:
                 finish();
                 return true;
+            case R.id.describe_chart:
+                describeChart();
+                return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    //Nhận xét
+    private void describeChart() {
+        final Bundle chartBundle = new Bundle();
+        chartBundle.putSerializable(CHART, barChart);
+        chartBundle.putSerializable(CHART_TYPE, ChartTypeEnum.COLUMN);
+        Intent describeIntent = new Intent(ColumnBarChartActivity.this, StatisticColumnChart.class);
+        describeIntent.putExtra(BUNDLE, chartBundle);
+        startActivity(describeIntent);
     }
 
     private void saveChartAsPicture() {

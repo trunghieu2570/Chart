@@ -32,13 +32,14 @@
                     android:text="@string/untitled_donut_chart" />
             </com.google.android.material.textfield.TextInputLayout>
 
+
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="10dp">
 
                 <EditText
-                    android:id="@+id/edt_group_name"
+                    android:id="@+id/edt_object_meaning"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/enter_items_group_name"
@@ -51,10 +52,23 @@
                 android:layout_marginVertical="10dp">
 
                 <EditText
-                    android:id="@+id/edt_value_group_name"
+                    android:id="@+id/edt_value_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/enter_value_group_name"
+                    android:hint="Đơn vị:"
+                    android:text="Tấn" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="10dp">
+
+                <EditText
+                    android:id="@+id/edt_value_meaning"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Ý nghĩa đơn vị:"
                     android:text="@string/default_value_group_name" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -64,7 +78,7 @@
                 android:layout_marginVertical="10dp">
 
                 <EditText
-                    android:id="@+id/edt_series_meaning"
+                    android:id="@+id/edt_time_meaning"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/enter_series_meaning"

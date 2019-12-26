@@ -78,6 +78,10 @@ public class CreateGroupBarChartDialogFragment extends DialogFragment {
         LayoutInflater layoutInflater = getActivity().getLayoutInflater();
         final View view = layoutInflater.inflate(R.layout.fragment_create_group_bar_chart_dialog, null, false);
         final EditText chartNameEdt = view.findViewById(R.id.edt_chart_name);
+        final EditText xUnitEdt = view.findViewById(R.id.edt_x_axis_unit);
+        final EditText yUnitEdt = view.findViewById(R.id.edt_y_axis_unit);
+        final EditText yUnitMeaningEdt = view.findViewById(R.id.edt_y_axis_unit_meaning);
+        final EditText objMeaningEdt = view.findViewById(R.id.edt_object_meaning);
         final EditText chartRowsEdt = view.findViewById(R.id.edt_rows);
         final EditText chartColsEdt = view.findViewById(R.id.edt_cols);
         return new MaterialAlertDialogBuilder(getActivity(), R.style.ThemeOverlay_MaterialComponents_MaterialAlertDialog)
@@ -94,7 +98,11 @@ public class CreateGroupBarChartDialogFragment extends DialogFragment {
                         //init
                         final GroupBarChart chart = new GroupBarChart(
                                 chartNameEdt.getText().toString(),
-                                "Biểu đồ group"
+                                "Biểu đồ group",
+                                xUnitEdt.getText().toString(),
+                                yUnitEdt.getText().toString(),
+                                yUnitMeaningEdt.getText().toString(),
+                                objMeaningEdt.getText().toString()
                         );
                         final ArrayList<AdvancedInputRow> inputRows = new ArrayList<>();
                         final int numOfRows = Integer.parseInt("0" + chartRowsEdt.getText().toString());
