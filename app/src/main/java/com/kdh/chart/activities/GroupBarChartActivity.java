@@ -133,6 +133,11 @@ public class GroupBarChartActivity extends AppCompatActivity implements ChartAct
 
     //Nhận xét
     private void describeChart() {
+        if(!checkValue(advancedInputRows))
+        {
+            Snackbar.make(mChartView, "Invalid data", Snackbar.LENGTH_SHORT).show();
+            return;
+        }
         final Bundle chartBundle = new Bundle();
         chartBundle.putSerializable(CHART, barChart);
         chartBundle.putSerializable(CHART_TYPE, ChartTypeEnum.GROUPED);

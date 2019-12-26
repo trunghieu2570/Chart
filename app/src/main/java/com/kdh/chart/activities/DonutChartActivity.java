@@ -186,6 +186,11 @@ public class DonutChartActivity extends AppCompatActivity implements ChartActivi
 
     //Nhận xét
     private void describeChart() {
+        if(!checkValue(advancedInputRows))
+        {
+            Snackbar.make(mChartView, "Invalid data", Snackbar.LENGTH_SHORT).show();
+            return;
+        }
         final Bundle chartBundle = new Bundle();
         chartBundle.putSerializable(CHART, donutChart);
         chartBundle.putSerializable(CHART_TYPE, ChartTypeEnum.DONUT);

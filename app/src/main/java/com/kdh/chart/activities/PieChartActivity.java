@@ -215,6 +215,11 @@ public class PieChartActivity extends AppCompatActivity implements ChartActivity
 
     //Nhận xét
     private void describeChart() {
+        if(!checkValue(simpleInputRows))
+        {
+            Snackbar.make(mChartView, "Invalid data", Snackbar.LENGTH_SHORT).show();
+            return;
+        }
         final Bundle chartBundle = new Bundle();
         chartBundle.putSerializable(CHART, pieChart);
         chartBundle.putSerializable(CHART_TYPE, ChartTypeEnum.PIE);

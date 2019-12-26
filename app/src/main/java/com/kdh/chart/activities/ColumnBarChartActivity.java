@@ -132,6 +132,11 @@ public class ColumnBarChartActivity extends AppCompatActivity implements ChartAc
 
     //Nhận xét
     private void describeChart() {
+        if(!checkValue(advancedInputRows))
+        {
+            Snackbar.make(mChartView, "Invalid data", Snackbar.LENGTH_SHORT).show();
+            return;
+        }
         final Bundle chartBundle = new Bundle();
         chartBundle.putSerializable(CHART, barChart);
         chartBundle.putSerializable(CHART_TYPE, ChartTypeEnum.COLUMN);
