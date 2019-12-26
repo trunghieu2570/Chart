@@ -2,10 +2,13 @@ package com.kdh.chart.activities;
 
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.kdh.chart.R;
 import com.kdh.chart.datatypes.AdvancedInputRow;
@@ -37,10 +40,27 @@ public class StatisticGroupChart extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_statistic_group_chart);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setHomeAsUpIndicator(R.drawable.ic_close_white_24dp);
+        setTitle(R.string.statistic_title);
 
         getID();
         getInputData();
         Statistic();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch (id) {
+            case android.R.id.home:
+                finish();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private float[] convertStringToFloatArr(String data) {
@@ -52,7 +72,7 @@ public class StatisticGroupChart extends AppCompatActivity {
         return res;
     }
 
-    private String caculateTongThe() {
+    private String calculateTongThe() {
         DecimalFormat df = new DecimalFormat("##.##");
         String res = "";
         float sum1 = 0;
@@ -67,15 +87,15 @@ public class StatisticGroupChart extends AppCompatActivity {
         if (sum1 == sum2) res = "không thay đổi";
         else if (sum1 > sum2) {
             res = "giảm ";
-            res += df.format((1 - sum2 / sum1) * 100) + "%";
+            res += String.format("%s%%", df.format((1 - sum2 / sum1) * 100));
         } else {
             res = "tăng ";
-            res += df.format((sum2 / sum1 - 1) * 100) + "%";
+            res += String.format("%s%%", df.format((sum2 / sum1 - 1) * 100));
         }
         return res;
     }
 
-    private void addTextVeiw(String text, int size, int mar, int id) {
+    private void addTextView(String text, int size, int mar, int id) {
         TextView x = new TextView(this);
         x.setTextSize(size);
         x.setText(text);
@@ -170,7 +190,7 @@ public class StatisticGroupChart extends AppCompatActivity {
                 }
             }
         }
-        res = fields[maxPos] + ", chiếm " + df.format(max * 100 / sum) + "%";
+        res = String.format("%s, chiếm %s%%", fields[maxPos], df.format(max * 100 / sum));
 
         return res;
     }
@@ -200,18 +220,18 @@ public class StatisticGroupChart extends AppCompatActivity {
 
     private void Statistic() {
         DecimalFormat df = new DecimalFormat("##.##");
-        txt_Name_grouped.setText("Nhận xét " + name.toLowerCase());
-        txt_TongThe_grouped.setText("-Từ " + unitXName.toLowerCase() + " " + timeLines[0] + " đến " + unitXName.toLowerCase() + " " + timeLines[1] + ": " + valueName.toLowerCase() + " tổng thể " + caculateTongThe());
+        txt_Name_grouped.setText(String.format("Nhận xét %s", name.toLowerCase()));
+        txt_TongThe_grouped.setText(String.format("-Từ %s %s đến %s %s: %s tổng thể %s", unitXName.toLowerCase(), timeLines[0], unitXName.toLowerCase(), timeLines[1], valueName.toLowerCase(), calculateTongThe()));
         //====================================================================================
         for (int i = 0; i < fields.length; i++) {
-            addTextVeiw("-" + fields[i] + ":", 20, 40, 1);
+            addTextView("-" + fields[i] + ":", 20, 40, 1);
             float[] data = convertStringToFloatArr(values[i]);
             String str = "";
             if (data[data.length - 1] > data[0])
-                str = "+ Từ " + unitXName.toLowerCase() + " " + timeLines[0] + " đến " + unitXName.toLowerCase() + " " + timeLines[timeLines.length - 1] + ": " + valueName.toLowerCase() + " tăng " + df.format(((data[data.length - 1] / data[0]) - 1) * 100) + "%";
+                str = String.format("+ Từ %s %s đến %s %s: %s tăng %s%%", unitXName.toLowerCase(), timeLines[0], unitXName.toLowerCase(), timeLines[timeLines.length - 1], valueName.toLowerCase(), df.format(((data[data.length - 1] / data[0]) - 1) * 100));
             else
-                str = "+ Từ " + unitXName.toLowerCase() + " " + timeLines[0] + " đến " + unitXName.toLowerCase() + " " + timeLines[timeLines.length - 1] + ": " + valueName.toLowerCase() + " giảm " + df.format(((1 - data[data.length - 1] / data[0])) * 100) + "%";
-            addTextVeiw(str, 20, 120, 1);
+                str = String.format("+ Từ %s %s đến %s %s: %s giảm %s%%", unitXName.toLowerCase(), timeLines[0], unitXName.toLowerCase(), timeLines[timeLines.length - 1], valueName.toLowerCase(), df.format(((1 - data[data.length - 1] / data[0])) * 100));
+            addTextView(str, 20, 120, 1);
 
 
             //nhận xét liên tục:
@@ -224,13 +244,13 @@ public class StatisticGroupChart extends AppCompatActivity {
                     str += "Tăng liên tục:";
                     int max = findMaxLienTuc(data, true);
                     int min = findMinLienTuc(data, true);
-                    str1 = "*Giai đoạn tăng nhanh nhất: từ " + unitXName.toLowerCase() + " " + timeLines[max] + " đến " + unitXName.toLowerCase() + " " + timeLines[max + 1] + ", tăng " + df.format((data[max + 1] / data[max] - 1) * 100) + "%";
-                    str2 = "*Giai đoạn tăng chậm nhất: từ " + unitXName.toLowerCase() + " " + timeLines[min] + " đến " + unitXName.toLowerCase() + " " + timeLines[min + 1] + ", tăng " + df.format((data[min + 1] / data[min] - 1) * 100) + "%";
+                    str1 = String.format("*Giai đoạn tăng nhanh nhất: từ %s %s đến %s %s, tăng %s%%", unitXName.toLowerCase(), timeLines[max], unitXName.toLowerCase(), timeLines[max + 1], df.format((data[max + 1] / data[max] - 1) * 100));
+                    str2 = String.format("*Giai đoạn tăng chậm nhất: từ %s %s đến %s %s, tăng %s%%", unitXName.toLowerCase(), timeLines[min], unitXName.toLowerCase(), timeLines[min + 1], df.format((data[min + 1] / data[min] - 1) * 100));
 
                 } else {
                     str += "Tăng không liên tục:";
                     int breakPos = -checkLienTuc(data, true);
-                    str1 = "*Bắt đầu tăng không liên tục từ giai đoạn đoạn: " + unitXName.toLowerCase() + " " + timeLines[breakPos - 1] + " đến " + unitXName.toLowerCase() + " " + timeLines[breakPos] + ", giảm " + df.format((1 - data[breakPos] / data[breakPos - 1]) * 100) + "%";
+                    str1 = String.format("*Bắt đầu tăng không liên tục từ giai đoạn đoạn: %s %s đến %s %s, giảm %s%%", unitXName.toLowerCase(), timeLines[breakPos - 1], unitXName.toLowerCase(), timeLines[breakPos], df.format((1 - data[breakPos] / data[breakPos - 1]) * 100));
                 }
 
             } else {
@@ -239,27 +259,27 @@ public class StatisticGroupChart extends AppCompatActivity {
                     str += "Giảm liên tục:";
                     int max = findMaxLienTuc(data, false);
                     int min = findMinLienTuc(data, false);
-                    str1 = "*Giai đoạn giảm nhanh nhất: từ " + unitXName.toLowerCase() + " " + timeLines[max] + " đến " + unitXName.toLowerCase() + " " + timeLines[max + 1] + ", giảm " + df.format((1 - data[max + 1] / data[max]) * 100) + "%";
-                    str2 = "*Giai đoạn giảm chậm nhất: từ " + unitXName.toLowerCase() + " " + timeLines[min] + " đến " + unitXName.toLowerCase() + " " + timeLines[min + 1] + ", giảm " + df.format((1 - data[min + 1] / data[min]) * 100) + "%";
+                    str1 = String.format("*Giai đoạn giảm nhanh nhất: từ %s %s đến %s %s, giảm %s%%", unitXName.toLowerCase(), timeLines[max], unitXName.toLowerCase(), timeLines[max + 1], df.format((1 - data[max + 1] / data[max]) * 100));
+                    str2 = String.format("*Giai đoạn giảm chậm nhất: từ %s %s đến %s %s, giảm %s%%", unitXName.toLowerCase(), timeLines[min], unitXName.toLowerCase(), timeLines[min + 1], df.format((1 - data[min + 1] / data[min]) * 100));
                 } else {
                     str += "Giảm không liên tục:";
                     int breakPos = -checkLienTuc(data, false);
-                    str1 = "*Bắt đầu giảm không liên tục từ giai đoạn đoạn: " + unitXName.toLowerCase() + " " + timeLines[breakPos - 1] + " đến " + unitXName.toLowerCase() + " " + timeLines[breakPos] + ", tăng " + df.format((data[breakPos] / data[breakPos - 1] - 1) * 100) + "%";
+                    str1 = String.format("*Bắt đầu giảm không liên tục từ giai đoạn đoạn: %s %s đến %s %s, tăng %s%%", unitXName.toLowerCase(), timeLines[breakPos - 1], unitXName.toLowerCase(), timeLines[breakPos], df.format((data[breakPos] / data[breakPos - 1] - 1) * 100));
                 }
             }
-            addTextVeiw(str, 20, 120, 1);
-            if (!str1.equals("")) addTextVeiw(str1, 20, 200, 1);
-            if (!str2.equals("")) addTextVeiw(str2, 20, 200, 1);
+            addTextView(str, 20, 120, 1);
+            if (!str1.equals("")) addTextView(str1, 20, 200, 1);
+            if (!str2.equals("")) addTextView(str2, 20, 200, 1);
 
         }
         //====================================================================================
         for (int i = 0; i < timeLines.length; i++) {
-            addTextVeiw("-" + unitXName + " " + timeLines[i] + ":", 20, 40, 2);
+            addTextView(String.format("-%s %s:", unitXName, timeLines[i]), 20, 40, 2);
             float[] objValues = getYearValues(i);
-            String max = "+" + fieldName + " có " + valueName.toLowerCase() + " lớn nhất là: " + findMax(objValues);
-            addTextVeiw(max, 20, 120, 2);
-            String min = "+" + fieldName + " có " + valueName.toLowerCase() + " nhỏ nhất là: " + findMin(objValues);
-            addTextVeiw(min, 20, 120, 2);
+            String max = String.format("+%s có %s lớn nhất là: %s", fieldName, valueName.toLowerCase(), findMax(objValues));
+            addTextView(max, 20, 120, 2);
+            String min = String.format("+%s có %s nhỏ nhất là: %s", fieldName, valueName.toLowerCase(), findMin(objValues));
+            addTextView(min, 20, 120, 2);
         }
     }
 

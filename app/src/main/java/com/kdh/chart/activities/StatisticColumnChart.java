@@ -2,10 +2,13 @@ package com.kdh.chart.activities;
 
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.kdh.chart.R;
 import com.kdh.chart.datatypes.AdvancedInputRow;
@@ -36,10 +39,26 @@ public class StatisticColumnChart extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_statistic_column_chart);
-
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setHomeAsUpIndicator(R.drawable.ic_close_white_24dp);
+        setTitle(R.string.statistic_title);
         getID();
         getInputData();
         Statistic();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch (id) {
+            case android.R.id.home:
+                finish();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private float[] convertStringToFloatArr(String data) {
@@ -51,7 +70,7 @@ public class StatisticColumnChart extends AppCompatActivity {
         return res;
     }
 
-    private String caculateTongThe() {
+    private String calculateTongThe() {
         DecimalFormat df = new DecimalFormat("##.##");
         String res = "";
         float[] temp1 = convertStringToFloatArr(values[0]);
@@ -65,13 +84,13 @@ public class StatisticColumnChart extends AppCompatActivity {
         if (sum1 == sum2)
             res = "không thay đổi";
         else if (sum1 > sum2)
-            res = "giảm " + df.format((1 - sum2 / sum1) * 100) + "%";
+            res = String.format("giảm %s%%", df.format((1 - sum2 / sum1) * 100));
         else
-            res = "tăng " + df.format((sum2 / sum1 - 1) * 100) + "%";
+            res = String.format("tăng %s%%", df.format((sum2 / sum1 - 1) * 100));
         return res;
     }
 
-    private void addTextVeiw(String text, int size, int mar) {
+    private void addTextView(String text, int size, int mar) {
         TextView x = new TextView(this);
         x.setTextSize(size);
         x.setText(text);
@@ -87,7 +106,7 @@ public class StatisticColumnChart extends AppCompatActivity {
 
     }
 
-    private void caculateMax(int year) {
+    private void calculateMax(int year) {
         DecimalFormat df = new DecimalFormat("##.##");
         float[] yearValues = convertStringToFloatArr(values[year]);
         float average = 0;
@@ -106,12 +125,12 @@ public class StatisticColumnChart extends AppCompatActivity {
             }
         }
         average /= yearValues.length;
-        addTextVeiw("*" + fieldName + " " + fields[maxPos], 20, 120);
-        String temp = "*Cao hơn " + df.format((max / average - 1) * 100) + "% so với " + valueName.toLowerCase() + " trung bình";
-        addTextVeiw(temp, 20, 120);
+        addTextView(String.format("*%s %s", fieldName, fields[maxPos]), 20, 120);
+        String temp = String.format("*Cao hơn %s%% so với %s trung bình", df.format((max / average - 1) * 100), valueName.toLowerCase());
+        addTextView(temp, 20, 120);
     }
 
-    private void caculateMin(int year) {
+    private void calculateMin(int year) {
         DecimalFormat df = new DecimalFormat("##.##");
         float[] yearValues = convertStringToFloatArr(values[year]);
         float average = 0;
@@ -130,20 +149,20 @@ public class StatisticColumnChart extends AppCompatActivity {
             }
         }
         average /= yearValues.length;
-        addTextVeiw("*" + fieldName + " " + fields[minPos], 20, 120);
-        String temp = "*Thấp hơn " + df.format((1 - min / average) * 100) + "% so với " + valueName.toLowerCase() + " trung bình";
-        addTextVeiw(temp, 20, 120);
+        addTextView(String.format("*%s %s", fieldName, fields[minPos]), 20, 120);
+        String temp = String.format("*Thấp hơn %s%% so với %s trung bình", df.format((1 - min / average) * 100), valueName.toLowerCase());
+        addTextView(temp, 20, 120);
     }
 
     private void Statistic() {
         txt_Name_column.setText("Nhận xét ".toUpperCase() + name.toUpperCase());
-        txt_TongThe_column.setText("Tổng thể: " + valueName + " " + caculateTongThe() + " từ " + unitXName.toLowerCase() + " " + timeLines[0] + " đến " + unitXName.toLowerCase() + " " + timeLines[timeLines.length - 1]);
+        txt_TongThe_column.setText(String.format("Tổng thể: %s %s từ %s %s đến %s %s", valueName, calculateTongThe(), unitXName.toLowerCase(), timeLines[0], unitXName.toLowerCase(), timeLines[timeLines.length - 1]));
         for (int i = 0; i < timeLines.length; i++) {
-            addTextVeiw("-" + unitXName + " " + timeLines[i] + ":", 20, 40);
-            addTextVeiw("+" + fieldName + " chiếm " + valueName.toLowerCase() + " lớn nhất là: ", 20, 80);
-            caculateMax(i);
-            addTextVeiw("+" + fieldName + " chiếm " + valueName.toLowerCase() + " nhỏ nhất là: ", 20, 80);
-            caculateMin(i);
+            addTextView(String.format("-%s %s:", unitXName, timeLines[i]), 20, 40);
+            addTextView(String.format("+%s chiếm %s lớn nhất là: ", fieldName, valueName.toLowerCase()), 20, 80);
+            calculateMax(i);
+            addTextView(String.format("+%s chiếm %s nhỏ nhất là: ", fieldName, valueName.toLowerCase()), 20, 80);
+            calculateMin(i);
         }
     }
 

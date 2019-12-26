@@ -2,6 +2,7 @@ package com.kdh.chart.activities;
 
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -58,7 +59,19 @@ public class StatisticDonutChart extends AppCompatActivity {
         Statistic();
     }
 
-    private float caculateTheTang() {
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch (id) {
+            case android.R.id.home:
+                finish();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+
+    private float calculateTheTang() {
         float res = 0;
 
         float sum1 = 0;
@@ -79,16 +92,16 @@ public class StatisticDonutChart extends AppCompatActivity {
 
     private void Statistic() {
         DecimalFormat df = new DecimalFormat("##.##");
-        txt_Name_donut.setText("Nhận xét " + chartName);
+        txt_Name_donut.setText(String.format("Nhận xét %s", chartName));
         //=================================================
-        float temp1 = caculateTheTang();
+        float temp1 = calculateTheTang();
         String resStr = "";
         if (temp1 == 0) resStr = " không thay đổi";
-        else if (temp1 < 0) resStr = " giảm " + df.format(-temp1) + "%";
-        else resStr = " tăng " + df.format(temp1) + "%";
-        txt_TongThe_donut.setText("Tổng thể: " + valueMeaning.toLowerCase() + " từ " + timeMeaning.toLowerCase() + " " + times[0] + " đến " + timeMeaning.toLowerCase() + " " + times[times.length - 1].toLowerCase() + resStr.toLowerCase());
+        else if (temp1 < 0) resStr = String.format(" giảm %s%%", df.format(-temp1));
+        else resStr = String.format(" tăng %s%%", df.format(temp1));
+        txt_TongThe_donut.setText(String.format("Tổng thể: %s từ %s %s đến %s %s%s", valueMeaning.toLowerCase(), timeMeaning.toLowerCase(), times[0], timeMeaning.toLowerCase(), times[times.length - 1].toLowerCase(), resStr.toLowerCase()));
         //=================================================
-        txt_nam_donut.setText("Từ " + timeMeaning.toLowerCase() + " " + times[0] + " đến " + timeMeaning.toLowerCase() + " " + times[times.length - 1].toLowerCase() + ":");
+        txt_nam_donut.setText(String.format("Từ %s %s đến %s %s:", timeMeaning.toLowerCase(), times[0], timeMeaning.toLowerCase(), times[times.length - 1].toLowerCase()));
         //=================================================
         String maxInc = findMaxIncrease();
         if (maxInc.equals("")) {
@@ -98,8 +111,8 @@ public class StatisticDonutChart extends AppCompatActivity {
         } else {
             txt_MaxIncrease_donut.setText("-Đối tượng tăng nhiều nhất:");
             String[] temp2 = maxInc.split(";");
-            txt_MaxIncObj_donut.setText("+" + fields[Integer.parseInt(temp2[0])] + ", tăng " + temp2[1] + "%");
-            txt_IncXuHuong_donut.setText("+Xu hướng: " + temp2[2]);
+            txt_MaxIncObj_donut.setText(String.format("+%s, tăng %s%%", fields[Integer.parseInt(temp2[0])], temp2[1]));
+            txt_IncXuHuong_donut.setText(String.format("+Xu hướng: %s", temp2[2]));
         }
         //=================================================
         String maxDec = findMaxDecrease();
@@ -110,39 +123,39 @@ public class StatisticDonutChart extends AppCompatActivity {
         } else {
             txt_MaxDecrease_donut.setText("-Đối tượng giảm nhiều nhất:");
             String[] temp2 = maxDec.split(";");
-            txt_MaxDecObj_donut.setText("+" + fields[Integer.parseInt(temp2[0])] + ", giảm " + temp2[1] + "%");
-            txt_DecXuHuong_donut.setText("+Xu hướng: " + temp2[2]);
+            txt_MaxDecObj_donut.setText(String.format("+%s, giảm %s%%", fields[Integer.parseInt(temp2[0])], temp2[1]));
+            txt_DecXuHuong_donut.setText(String.format("+Xu hướng: %s", temp2[2]));
         }
 
         //=================================================
         //layout_donut
         for (int i = 0; i < times.length; i++) {
-            addTextVeiw("-" + timeMeaning + " " + times[i] + ":", 20, 60);
+            addTextView("-" + timeMeaning + " " + times[i] + ":", 20, 60);
             //xét max và second giống nhau:
             float maxPos = Float.parseFloat(findMax(i).split(";")[1]);
             float secPos = Float.parseFloat(findSecond(i).split(";")[1]);
             if (maxPos != secPos) {
                 //max
                 String[] tempMax = findMax(i).split(";");
-                String text1 = "+" + fieldName + " có " + valueMeaning.toLowerCase() + " nhiều nhất là: " + fields[Integer.parseInt(tempMax[0])] + " (" + tempMax[1] + " " + valueName.toLowerCase() + ", chiếm " + tempMax[2] + "%)";
-                addTextVeiw(text1, 20, 120);
+                String text1 = String.format("+%s có %s nhiều nhất là: %s (%s %s, chiếm %s%%)", fieldName, valueMeaning.toLowerCase(), fields[Integer.parseInt(tempMax[0])], tempMax[1], valueName.toLowerCase(), tempMax[2]);
+                addTextView(text1, 20, 120);
                 //second
                 if (fields.length > 2) {
                     String[] tempSec = findSecond(i).split(";");
-                    String text3 = "+" + fieldName + " có " + valueMeaning.toLowerCase() + " nhiều nhì là: " + fields[Integer.parseInt(tempSec[0])] + " (" + tempSec[1] + " " + valueName.toLowerCase() + ", chiếm " + tempSec[2] + "%)";
-                    addTextVeiw(text3, 20, 120);
+                    String text3 = String.format("+%s có %s nhiều nhì là: %s (%s %s, chiếm %s%%)", fieldName, valueMeaning.toLowerCase(), fields[Integer.parseInt(tempSec[0])], tempSec[1], valueName.toLowerCase(), tempSec[2]);
+                    addTextView(text3, 20, 120);
                 }
             } else {
                 String[] tempMax = findMax(i).split(";");
                 String[] tempSec = findSecond(i).split(";");
-                String text1 = "+Hai " + fieldName.toLowerCase() + " có " + valueMeaning.toLowerCase() + " nhiều nhất là: " + fields[Integer.parseInt(tempMax[0])] + " và " + fields[Integer.parseInt(tempSec[0])] + " (" + tempMax[1] + " " + valueName.toLowerCase() + ", chiếm " + tempMax[2] + "%)";
-                addTextVeiw(text1, 20, 120);
+                String text1 = String.format("+Hai %s có %s nhiều nhất là: %s và %s (%s %s, chiếm %s%%)", fieldName.toLowerCase(), valueMeaning.toLowerCase(), fields[Integer.parseInt(tempMax[0])], fields[Integer.parseInt(tempSec[0])], tempMax[1], valueName.toLowerCase(), tempMax[2]);
+                addTextView(text1, 20, 120);
             }
 
             //min
             String[] tempMin = findMin(i).split(";");
-            String text2 = "+" + fieldName + " có " + valueMeaning.toLowerCase() + " ít nhất là: " + fields[Integer.parseInt(tempMin[0])] + " (" + tempMin[1] + " " + valueName.toLowerCase() + ", chiếm " + tempMin[2] + "%)";
-            addTextVeiw(text2, 20, 120);
+            String text2 = String.format("+%s có %s ít nhất là: %s (%s %s, chiếm %s%%)", fieldName, valueMeaning.toLowerCase(), fields[Integer.parseInt(tempMin[0])], tempMin[1], valueName.toLowerCase(), tempMin[2]);
+            addTextView(text2, 20, 120);
         }
 
     }
@@ -240,7 +253,7 @@ public class StatisticDonutChart extends AppCompatActivity {
         return res;
     }
 
-    private void addTextVeiw(String text, int size, int mar) {
+    private void addTextView(String text, int size, int mar) {
         TextView x = new TextView(this);
         x.setTextSize(size);
         x.setText(text);

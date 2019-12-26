@@ -190,8 +190,8 @@ public class StatisticPieChart extends AppCompatActivity {
         txt_Nhanxet.setText(String.format("Chênh lệch %s giữa %s cao nhất và thấp nhất là: %s%%", valueName.toLowerCase(), fieldName.toLowerCase(), df2.format(chenhLech)));
         String KetLuan = "";
         if (chenhLech >= 50)
-            KetLuan = "=>" + valueName + " không đồng đều giữa các " + fieldName + ".";
-        else KetLuan = valueName + " đồng đều giữa các " + fieldName + ".";
+            KetLuan = String.format("=>%s không đồng đều giữa các %s.", valueName, fieldName);
+        else KetLuan = String.format("%s đồng đều giữa các %s.", valueName, fieldName);
         txt_KetLuan.setText(KetLuan);
 
     }

@@ -150,13 +150,13 @@ public class StatisticLineChart extends AppCompatActivity {
     private void Statistic() {
         DecimalFormat df = new DecimalFormat("##.##");
         for (int i = 0; i < fields.length; i++) {
-            addTextVeiw("-" + fields[i] + ":", 20, 40);
+            addTextVeiw(String.format("-%s:", fields[i]), 20, 40);
             float[] data = convertStringToFloatArr(values[i]);
             String str = "";
             if (data[data.length - 1] > data[0])
-                str = "+ Từ " + unitXName.toLowerCase() + " " + timeLines[0] + " đến " + unitXName.toLowerCase() + " " + timeLines[timeLines.length - 1] + ": " + valueName.toLowerCase() + " tăng " + df.format(((data[data.length - 1] / data[0]) - 1) * 100) + "%";
+                str = String.format("+ Từ %s %s đến %s %s: %s tăng %s%%", unitXName.toLowerCase(), timeLines[0], unitXName.toLowerCase(), timeLines[timeLines.length - 1], valueName.toLowerCase(), df.format(((data[data.length - 1] / data[0]) - 1) * 100));
             else
-                str = "+ Từ " + unitXName.toLowerCase() + " " + timeLines[0] + " đến " + unitXName.toLowerCase() + " " + timeLines[timeLines.length - 1] + ": " + valueName.toLowerCase() + " giảm " + df.format(((1 - data[data.length - 1] / data[0])) * 100) + "%";
+                str = String.format("+ Từ %s %s đến %s %s: %s giảm %s%%", unitXName.toLowerCase(), timeLines[0], unitXName.toLowerCase(), timeLines[timeLines.length - 1], valueName.toLowerCase(), df.format(((1 - data[data.length - 1] / data[0])) * 100));
             addTextVeiw(str, 20, 120);
 
 
@@ -171,13 +171,13 @@ public class StatisticLineChart extends AppCompatActivity {
                     str += "Tăng liên tục:";
                     int max = findMaxLienTuc(data, true);
                     int min = findMinLienTuc(data, true);
-                    str1 = "*Giai đoạn tăng nhanh nhất: từ " + unitXName.toLowerCase() + " " + timeLines[max] + " đến " + unitXName.toLowerCase() + " " + timeLines[max + 1] + ", tăng " + df.format((data[max + 1] / data[max] - 1) * 100) + "%";
-                    str2 = "*Giai đoạn tăng chậm nhất: từ " + unitXName.toLowerCase() + " " + timeLines[min] + " đến " + unitXName.toLowerCase() + " " + timeLines[min + 1] + ", tăng " + df.format((data[min + 1] / data[min] - 1) * 100) + "%";
+                    str1 = String.format("*Giai đoạn tăng nhanh nhất: từ %s %s đến %s %s, tăng %s%%", unitXName.toLowerCase(), timeLines[max], unitXName.toLowerCase(), timeLines[max + 1], df.format((data[max + 1] / data[max] - 1) * 100));
+                    str2 = String.format("*Giai đoạn tăng chậm nhất: từ %s %s đến %s %s, tăng %s%%", unitXName.toLowerCase(), timeLines[min], unitXName.toLowerCase(), timeLines[min + 1], df.format((data[min + 1] / data[min] - 1) * 100));
 
                 } else {
                     str += "Tăng không liên tục:";
                     int breakPos = -checkLienTuc(data, true);
-                    str1 = "*Bắt đầu tăng không liên tục từ giai đoạn đoạn: " + unitXName.toLowerCase() + " " + timeLines[breakPos - 1] + " đến " + unitXName.toLowerCase() + " " + timeLines[breakPos] + ", giảm " + df.format((1 - data[breakPos] / data[breakPos - 1]) * 100) + "%";
+                    str1 = String.format("*Bắt đầu tăng không liên tục từ giai đoạn đoạn: %s %s đến %s %s, giảm %s%%", unitXName.toLowerCase(), timeLines[breakPos - 1], unitXName.toLowerCase(), timeLines[breakPos], df.format((1 - data[breakPos] / data[breakPos - 1]) * 100));
                 }
 
             } else {
@@ -186,12 +186,12 @@ public class StatisticLineChart extends AppCompatActivity {
                     str += "Giảm liên tục:";
                     int max = findMaxLienTuc(data, false);
                     int min = findMinLienTuc(data, false);
-                    str1 = "*Giai đoạn giảm nhanh nhất: từ " + unitXName.toLowerCase() + " " + timeLines[max] + " đến " + unitXName.toLowerCase() + " " + timeLines[max + 1] + ", giảm " + df.format((1 - data[max + 1] / data[max]) * 100) + "%";
-                    str2 = "*Giai đoạn giảm chậm nhất: từ " + unitXName.toLowerCase() + " " + timeLines[min] + " đến " + unitXName.toLowerCase() + " " + timeLines[min + 1] + ", giảm " + df.format((1 - data[min + 1] / data[min]) * 100) + "%";
+                    str1 = String.format("*Giai đoạn giảm nhanh nhất: từ %s %s đến %s %s, giảm %s%%", unitXName.toLowerCase(), timeLines[max], unitXName.toLowerCase(), timeLines[max + 1], df.format((1 - data[max + 1] / data[max]) * 100));
+                    str2 = String.format("*Giai đoạn giảm chậm nhất: từ %s %s đến %s %s, giảm %s%%", unitXName.toLowerCase(), timeLines[min], unitXName.toLowerCase(), timeLines[min + 1], df.format((1 - data[min + 1] / data[min]) * 100));
                 } else {
                     str += "Giảm không liên tục:";
                     int breakPos = -checkLienTuc(data, false);
-                    str1 = "*Bắt đầu giảm không liên tục từ giai đoạn đoạn: " + unitXName.toLowerCase() + " " + timeLines[breakPos - 1] + " đến " + unitXName.toLowerCase() + " " + timeLines[breakPos] + ", tăng " + df.format((1 - data[breakPos] / data[breakPos - 1]) * 100) + "%";
+                    str1 = String.format("*Bắt đầu giảm không liên tục từ giai đoạn đoạn: %s %s đến %s %s, tăng %s%%", unitXName.toLowerCase(), timeLines[breakPos - 1], unitXName.toLowerCase(), timeLines[breakPos], df.format((1 - data[breakPos] / data[breakPos - 1]) * 100));
                 }
             }
             addTextVeiw(str, 20, 120);
