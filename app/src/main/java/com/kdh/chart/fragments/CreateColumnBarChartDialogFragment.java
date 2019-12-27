@@ -88,7 +88,7 @@ public class CreateColumnBarChartDialogFragment extends DialogFragment {
                         }
                         final ColumnBarChart chart = new ColumnBarChart(
                                 chartNameEdt.getText().toString(),
-                                "Biểu đồ column",
+                                "Biểu đồ cột chồng",
                                 xUnitEdt.getText().toString(),
                                 yUnitEdt.getText().toString(),
                                 yUnitMeaningEdt.getText().toString(),

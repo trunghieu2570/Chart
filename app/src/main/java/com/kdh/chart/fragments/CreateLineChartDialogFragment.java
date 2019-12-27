@@ -98,7 +98,7 @@ public class CreateLineChartDialogFragment extends DialogFragment {
                         //init
                         final LineChart chart = new LineChart(
                                 chartNameEdt.getText().toString(),
-                                "Biểu đồ tuyến tính",
+                                "Biểu đồ đường",
                                 xAxisUnitEdt.getText().toString(),
                                 yAxisUnitEdt.getText().toString(),
                                 yAxisUnitEdtMeaning.getText().toString(),

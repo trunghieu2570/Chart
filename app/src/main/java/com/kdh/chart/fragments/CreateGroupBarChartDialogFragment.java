@@ -98,7 +98,7 @@ public class CreateGroupBarChartDialogFragment extends DialogFragment {
                         //init
                         final GroupBarChart chart = new GroupBarChart(
                                 chartNameEdt.getText().toString(),
-                                "Biểu đồ group",
+                                "Biểu đồ nhóm",
                                 xUnitEdt.getText().toString(),
                                 yUnitEdt.getText().toString(),
                                 yUnitMeaningEdt.getText().toString(),
