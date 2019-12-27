@@ -221,7 +221,7 @@ public class StatisticGroupChart extends AppCompatActivity {
     private void Statistic() {
         DecimalFormat df = new DecimalFormat("##.##");
         txt_Name_grouped.setText(String.format("Nhận xét %s", name.toLowerCase()));
-        txt_TongThe_grouped.setText(String.format("-Từ %s %s đến %s %s: %s tổng thể %s", unitXName.toLowerCase(), timeLines[0], unitXName.toLowerCase(), timeLines[1], valueName.toLowerCase(), calculateTongThe()));
+        txt_TongThe_grouped.setText(String.format("-Từ %s %s đến %s %s: %s tổng thể %s", unitXName.toLowerCase(), timeLines[0], unitXName.toLowerCase(), timeLines[timeLines.length-1], valueName.toLowerCase(), calculateTongThe()));
         //====================================================================================
         for (int i = 0; i < fields.length; i++) {
             addTextView("-" + fields[i] + ":", 20, 40, 1);

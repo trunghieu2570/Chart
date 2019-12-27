@@ -2,6 +2,7 @@ package com.kdh.chart.activities;
 
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -175,9 +176,9 @@ public class StatisticColumnChart extends AppCompatActivity {
 //        unitXName="Năm"; //đơn vị trục hoành (năm,tháng,..)
 //        timeLines=new String[]{"2000", "2001", "2002"}; //mốc thời gian trục hoành
 //
-//        values=new String[]{"2.5 2.5 1","2 2 3","3 1 1"}; //values theo "nhóm nước 1","nhóm nước 2",... theo thứ tự từ dưới lên
+//        values=new String[]{"2 3","5 9","8 2"}; //values theo "nhóm nước 1","nhóm nước 2",... theo thứ tự từ dưới lên
 //        fieldName="Nước"; //Ý nghĩa của đối tượng đối tượng
-//        fields=new String[]{"Việt Nam","Singapore","Hàn Quốc"};  //tên của từng đối tượng
+//        fields=new String[]{"Việt Nam","Singapore"};  //tên của từng đối tượng
 
         final Bundle bundle = getIntent().getBundleExtra(BUNDLE);
         if (bundle == null) return;
@@ -217,7 +218,23 @@ public class StatisticColumnChart extends AppCompatActivity {
 
             temp1[i] = connect;
         }
-        values = temp1;   // new String[]{"1 1.5 2 3 3", "6 6 5 5 3.5","3 5 6 5.5 6","7 4 3 0.5 8"};
+        //GET VALUES
+        String [] temp2=new String[timeLines.length];
+        for(int year=0;year<timeLines.length;year++)
+        {
+            String connect = "";
+            for(int i=0;i<fields.length;i++)
+            {
+                List<String> valueI = inputRowsNoHeader.get(i).getValues();
+                connect+=valueI.get(year);
+                if(i<fields.length-1) connect+=" ";
+            }
+            temp2[year]=connect;
+
+        }
+
+        values = temp2;   // new String[]{"1 1.5 2 3 3", "6 6 5 5 3.5","3 5 6 5.5 6","7 4 3 0.5 8"};
+        Log.d("khoa",values[0]+"---"+values[1]+"---"+values[2]);
     }
 
     private String[] convertListToArrayString(List<String> list) {
