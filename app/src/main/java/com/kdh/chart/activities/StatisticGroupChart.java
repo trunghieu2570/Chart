@@ -95,11 +95,13 @@ public class StatisticGroupChart extends AppCompatActivity {
         return res;
     }
 
-    private void addTextView(String text, int size, int mar, int id) {
+    private void addTextView(String text, int size, int mar, int id,boolean isItalic) {
         TextView x = new TextView(this);
         x.setTextSize(size);
         x.setText(text);
-        x.setTypeface(null, Typeface.BOLD);
+        if(isItalic) x.setTypeface(null, Typeface.BOLD_ITALIC);
+        else
+            x.setTypeface(null, Typeface.BOLD);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.WRAP_CONTENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT
@@ -224,14 +226,14 @@ public class StatisticGroupChart extends AppCompatActivity {
         txt_TongThe_grouped.setText(String.format("-Từ %s %s đến %s %s: %s tổng thể %s", unitXName.toLowerCase(), timeLines[0], unitXName.toLowerCase(), timeLines[timeLines.length-1], valueName.toLowerCase(), calculateTongThe()));
         //====================================================================================
         for (int i = 0; i < fields.length; i++) {
-            addTextView("-" + fields[i] + ":", 20, 40, 1);
+            addTextView("-" + fields[i] + ":", 20, 40, 1,true);
             float[] data = convertStringToFloatArr(values[i]);
             String str = "";
             if (data[data.length - 1] > data[0])
                 str = String.format("+ Từ %s %s đến %s %s: %s tăng %s%%", unitXName.toLowerCase(), timeLines[0], unitXName.toLowerCase(), timeLines[timeLines.length - 1], valueName.toLowerCase(), df.format(((data[data.length - 1] / data[0]) - 1) * 100));
             else
                 str = String.format("+ Từ %s %s đến %s %s: %s giảm %s%%", unitXName.toLowerCase(), timeLines[0], unitXName.toLowerCase(), timeLines[timeLines.length - 1], valueName.toLowerCase(), df.format(((1 - data[data.length - 1] / data[0])) * 100));
-            addTextView(str, 20, 120, 1);
+            addTextView(str, 20, 120, 1,false);
 
 
             //nhận xét liên tục:
@@ -267,19 +269,19 @@ public class StatisticGroupChart extends AppCompatActivity {
                     str1 = String.format("*Bắt đầu giảm không liên tục từ giai đoạn đoạn: %s %s đến %s %s, tăng %s%%", unitXName.toLowerCase(), timeLines[breakPos - 1], unitXName.toLowerCase(), timeLines[breakPos], df.format((data[breakPos] / data[breakPos - 1] - 1) * 100));
                 }
             }
-            addTextView(str, 20, 120, 1);
-            if (!str1.equals("")) addTextView(str1, 20, 200, 1);
-            if (!str2.equals("")) addTextView(str2, 20, 200, 1);
+            addTextView(str, 20, 120, 1,false);
+            if (!str1.equals("")) addTextView(str1, 20, 200, 1,false);
+            if (!str2.equals("")) addTextView(str2, 20, 200, 1,false);
 
         }
         //====================================================================================
         for (int i = 0; i < timeLines.length; i++) {
-            addTextView(String.format("-%s %s:", unitXName, timeLines[i]), 20, 40, 2);
+            addTextView(String.format("-%s %s:", unitXName, timeLines[i]), 20, 40, 2,true);
             float[] objValues = getYearValues(i);
             String max = String.format("+%s có %s lớn nhất là: %s", fieldName, valueName.toLowerCase(), findMax(objValues));
-            addTextView(max, 20, 120, 2);
+            addTextView(max, 20, 120, 2,false);
             String min = String.format("+%s có %s nhỏ nhất là: %s", fieldName, valueName.toLowerCase(), findMin(objValues));
-            addTextView(min, 20, 120, 2);
+            addTextView(min, 20, 120, 2,false);
         }
     }
 

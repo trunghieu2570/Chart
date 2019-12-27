@@ -130,7 +130,7 @@ public class StatisticDonutChart extends AppCompatActivity {
         //=================================================
         //layout_donut
         for (int i = 0; i < times.length; i++) {
-            addTextView("-" + timeMeaning + " " + times[i] + ":", 20, 60);
+            addTextView("-" + timeMeaning + " " + times[i] + ":", 20, 60,true);
             //xét max và second giống nhau:
             float maxPos = Float.parseFloat(findMax(i).split(";")[1]);
             float secPos = Float.parseFloat(findSecond(i).split(";")[1]);
@@ -138,24 +138,24 @@ public class StatisticDonutChart extends AppCompatActivity {
                 //max
                 String[] tempMax = findMax(i).split(";");
                 String text1 = String.format("+%s có %s nhiều nhất là: %s (%s %s, chiếm %s%%)", fieldName, valueMeaning.toLowerCase(), fields[Integer.parseInt(tempMax[0])], tempMax[1], valueName.toLowerCase(), tempMax[2]);
-                addTextView(text1, 20, 120);
+                addTextView(text1, 20, 120,false);
                 //second
                 if (fields.length > 2) {
                     String[] tempSec = findSecond(i).split(";");
                     String text3 = String.format("+%s có %s nhiều nhì là: %s (%s %s, chiếm %s%%)", fieldName, valueMeaning.toLowerCase(), fields[Integer.parseInt(tempSec[0])], tempSec[1], valueName.toLowerCase(), tempSec[2]);
-                    addTextView(text3, 20, 120);
+                    addTextView(text3, 20, 120,false);
                 }
             } else {
                 String[] tempMax = findMax(i).split(";");
                 String[] tempSec = findSecond(i).split(";");
                 String text1 = String.format("+Hai %s có %s nhiều nhất là: %s và %s (%s %s, chiếm %s%%)", fieldName.toLowerCase(), valueMeaning.toLowerCase(), fields[Integer.parseInt(tempMax[0])], fields[Integer.parseInt(tempSec[0])], tempMax[1], valueName.toLowerCase(), tempMax[2]);
-                addTextView(text1, 20, 120);
+                addTextView(text1, 20, 120,false);
             }
 
             //min
             String[] tempMin = findMin(i).split(";");
             String text2 = String.format("+%s có %s ít nhất là: %s (%s %s, chiếm %s%%)", fieldName, valueMeaning.toLowerCase(), fields[Integer.parseInt(tempMin[0])], tempMin[1], valueName.toLowerCase(), tempMin[2]);
-            addTextView(text2, 20, 120);
+            addTextView(text2, 20, 120,false);
         }
 
     }
@@ -253,11 +253,13 @@ public class StatisticDonutChart extends AppCompatActivity {
         return res;
     }
 
-    private void addTextView(String text, int size, int mar) {
+    private void addTextView(String text, int size, int mar,boolean isItalic) {
         TextView x = new TextView(this);
         x.setTextSize(size);
         x.setText(text);
-        x.setTypeface(null, Typeface.BOLD);
+        if(isItalic) x.setTypeface(null, Typeface.BOLD_ITALIC);
+        else
+            x.setTypeface(null, Typeface.BOLD);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.WRAP_CONTENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT

@@ -78,11 +78,13 @@ public class StatisticLineChart extends AppCompatActivity {
     }
 
 
-    private void addTextVeiw(String text, int size, int mar) {
+    private void addTextVeiw(String text, int size, int mar,boolean isItalic) {
         TextView x = new TextView(this);
         x.setTextSize(size);
         x.setText(text);
-        x.setTypeface(null, Typeface.BOLD);
+        if(isItalic) x.setTypeface(null, Typeface.BOLD_ITALIC);
+        else
+            x.setTypeface(null, Typeface.BOLD);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.WRAP_CONTENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT
@@ -150,14 +152,14 @@ public class StatisticLineChart extends AppCompatActivity {
     private void Statistic() {
         DecimalFormat df = new DecimalFormat("##.##");
         for (int i = 0; i < fields.length; i++) {
-            addTextVeiw(String.format("-%s:", fields[i]), 20, 40);
+            addTextVeiw(String.format("-%s:", fields[i]), 20, 40,true);
             float[] data = convertStringToFloatArr(values[i]);
             String str = "";
             if (data[data.length - 1] > data[0])
                 str = String.format("+ Từ %s %s đến %s %s: %s tăng %s%%", unitXName.toLowerCase(), timeLines[0], unitXName.toLowerCase(), timeLines[timeLines.length - 1], valueName.toLowerCase(), df.format(((data[data.length - 1] / data[0]) - 1) * 100));
             else
                 str = String.format("+ Từ %s %s đến %s %s: %s giảm %s%%", unitXName.toLowerCase(), timeLines[0], unitXName.toLowerCase(), timeLines[timeLines.length - 1], valueName.toLowerCase(), df.format(((1 - data[data.length - 1] / data[0])) * 100));
-            addTextVeiw(str, 20, 120);
+            addTextVeiw(str, 20, 120,false);
 
 
             //nhận xét liên tục:
@@ -194,9 +196,9 @@ public class StatisticLineChart extends AppCompatActivity {
                     str1 = String.format("*Bắt đầu giảm không liên tục từ giai đoạn đoạn: %s %s đến %s %s, tăng %s%%", unitXName.toLowerCase(), timeLines[breakPos - 1], unitXName.toLowerCase(), timeLines[breakPos], df.format((1 - data[breakPos] / data[breakPos - 1]) * 100));
                 }
             }
-            addTextVeiw(str, 20, 120);
-            if (!str1.equals("")) addTextVeiw(str1, 20, 200);
-            if (!str2.equals("")) addTextVeiw(str2, 20, 200);
+            addTextVeiw(str, 20, 120,false);
+            if (!str1.equals("")) addTextVeiw(str1, 20, 200,false);
+            if (!str2.equals("")) addTextVeiw(str2, 20, 200,false);
 
         }
 

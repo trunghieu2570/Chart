@@ -91,11 +91,13 @@ public class StatisticColumnChart extends AppCompatActivity {
         return res;
     }
 
-    private void addTextView(String text, int size, int mar) {
+    private void addTextView(String text, int size, int mar,boolean isItalic) {
         TextView x = new TextView(this);
         x.setTextSize(size);
         x.setText(text);
-        x.setTypeface(null, Typeface.BOLD);
+        if(isItalic) x.setTypeface(null, Typeface.BOLD_ITALIC);
+        else
+            x.setTypeface(null, Typeface.BOLD);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.WRAP_CONTENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT
@@ -126,9 +128,9 @@ public class StatisticColumnChart extends AppCompatActivity {
             }
         }
         average /= yearValues.length;
-        addTextView(String.format("*%s %s", fieldName, fields[maxPos]), 20, 120);
+        addTextView(String.format("*%s %s", fieldName, fields[maxPos]), 20, 120,false);
         String temp = String.format("*Cao hơn %s%% so với %s trung bình", df.format((max / average - 1) * 100), valueName.toLowerCase());
-        addTextView(temp, 20, 120);
+        addTextView(temp, 20, 120,false);
     }
 
     private void calculateMin(int year) {
@@ -150,19 +152,19 @@ public class StatisticColumnChart extends AppCompatActivity {
             }
         }
         average /= yearValues.length;
-        addTextView(String.format("*%s %s", fieldName, fields[minPos]), 20, 120);
+        addTextView(String.format("*%s %s", fieldName, fields[minPos]), 20, 120,false);
         String temp = String.format("*Thấp hơn %s%% so với %s trung bình", df.format((1 - min / average) * 100), valueName.toLowerCase());
-        addTextView(temp, 20, 120);
+        addTextView(temp, 20, 120,false);
     }
 
     private void Statistic() {
         txt_Name_column.setText("Nhận xét ".toUpperCase() + name.toUpperCase());
         txt_TongThe_column.setText(String.format("Tổng thể: %s %s từ %s %s đến %s %s", valueName, calculateTongThe(), unitXName.toLowerCase(), timeLines[0], unitXName.toLowerCase(), timeLines[timeLines.length - 1]));
         for (int i = 0; i < timeLines.length; i++) {
-            addTextView(String.format("-%s %s:", unitXName, timeLines[i]), 20, 40);
-            addTextView(String.format("+%s chiếm %s lớn nhất là: ", fieldName, valueName.toLowerCase()), 20, 80);
+            addTextView(String.format("-%s %s:", unitXName, timeLines[i]), 20, 40,true);
+            addTextView(String.format("+%s chiếm %s lớn nhất là: ", fieldName, valueName.toLowerCase()), 20, 80,false);
             calculateMax(i);
-            addTextView(String.format("+%s chiếm %s nhỏ nhất là: ", fieldName, valueName.toLowerCase()), 20, 80);
+            addTextView(String.format("+%s chiếm %s nhỏ nhất là: ", fieldName, valueName.toLowerCase()), 20, 80,false);
             calculateMin(i);
         }
     }
