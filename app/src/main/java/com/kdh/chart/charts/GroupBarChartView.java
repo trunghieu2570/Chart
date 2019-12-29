@@ -35,7 +35,7 @@ public class GroupBarChartView extends View implements ChartView<AdvancedInputRo
     private ArrayList<Float> arr = new ArrayList<Float>();
     private int cl[];
     private ArrayList<String> str = new ArrayList<>();
-    private Point origin;
+    private Point origin=null;
     private Paint p;
     private Paint paintDrawText;
     private Paint paintDrawAxis;
@@ -113,10 +113,10 @@ public class GroupBarChartView extends View implements ChartView<AdvancedInputRo
                 canvas.drawRect(rect, p);
                 canvas.drawText(new DecimalFormat("0.0").format(arr.get(i)), rect.left, rect.top - 10, paintDrawText);
             }
-
+            showLabelYAxis(canvas);
+            showLabelXAxis(canvas);
         }
-        showLabelYAxis(canvas);
-        showLabelXAxis(canvas);
+
     }
 
     public void update(int soNhom, int soBar, ArrayList<String> str) {

@@ -35,7 +35,7 @@ public class ColumnBarChartView extends View implements ChartView<AdvancedInputR
     private int[] cl;
     private String[] groupsName;
     private float max = Float.MIN_VALUE;
-    private Point origin;
+    private Point origin=null;
     private String chartName;
     private String xUnit;
     private String yUnit;
@@ -128,9 +128,10 @@ public class ColumnBarChartView extends View implements ChartView<AdvancedInputR
                     }
                 }
             }
+            showLabelYAxis(canvas);
+            showLabelXAxis(canvas);
         }
-        showLabelYAxis(canvas);
-        showLabelXAxis(canvas);
+
     }
 
     public void showLabelYAxis(Canvas canvas) {
