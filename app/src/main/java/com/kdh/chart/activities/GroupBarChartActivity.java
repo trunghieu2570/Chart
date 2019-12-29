@@ -49,6 +49,8 @@ public class GroupBarChartActivity extends AppCompatActivity implements ChartAct
     private ChartLocation chartLocation;
     private Project project;
     private String chartName;
+    private String xUnit;
+    private String yunit;
     private LinearLayout chartLayout;
 
 
@@ -68,6 +70,8 @@ public class GroupBarChartActivity extends AppCompatActivity implements ChartAct
             chartLocation = (ChartLocation) bundle.getSerializable(CreateGroupBarChartDialogFragment.LOCATION);
         }
         chartName = barChart.getChartName();
+        xUnit=barChart.getxAxisUnit();
+        yunit=barChart.getyAxisUnit();
         project = projectLocation.getProject();
 
         if (actionBar != null)
@@ -83,7 +87,7 @@ public class GroupBarChartActivity extends AppCompatActivity implements ChartAct
         chartLayout.addView(mChartView);
         //show input table
         if (checkValue(advancedInputRows)) {
-            mChartView.updateData(advancedInputRows, chartName);
+            mChartView.updateData(advancedInputRows, chartName,xUnit,yunit);
         } else
             mInputTable.show(getSupportFragmentManager(), AdvancedInputFragment.TAG);
     }
@@ -195,7 +199,7 @@ public class GroupBarChartActivity extends AppCompatActivity implements ChartAct
         if (checkValue(advancedInputRows)) {
             //update data
             barChart.setData(advancedInputRows);
-            mChartView.updateData(advancedInputRows, chartName);
+            mChartView.updateData(advancedInputRows, chartName,xUnit,yunit);
             //save data to file
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", getResources().getConfiguration().locale);
             project.setModifiedTime(dateFormat.format(Calendar.getInstance().getTime()));

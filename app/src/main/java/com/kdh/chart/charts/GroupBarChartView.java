@@ -41,6 +41,8 @@ public class GroupBarChartView extends View implements ChartView<AdvancedInputRo
     private Paint paintDrawAxis;
     private int barWidth;
     private String chartName;
+    private String xUnit;
+    private String yUnit;
 
 
     private float max;
@@ -75,6 +77,7 @@ public class GroupBarChartView extends View implements ChartView<AdvancedInputRo
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+        if (arr.size() > 0) {
         //origin
         origin = new Point(100, getHeight() - 200);
         //draw axis
@@ -86,7 +89,7 @@ public class GroupBarChartView extends View implements ChartView<AdvancedInputRo
         canvas.drawLine(origin.x + 790, origin.y + 10, origin.x + 800, origin.y, paintDrawAxis);
         canvas.drawLine(origin.x + 790, origin.y - 10, origin.x + 800, origin.y, paintDrawAxis);
 
-        if (arr.size() > 0) {
+
             float d = (float) 500.0 / max;
             int key = origin.x;
             findBarWidth();
@@ -153,7 +156,7 @@ public class GroupBarChartView extends View implements ChartView<AdvancedInputRo
         float yAxisValueInterval = 500.0f / (soBar * soNhom); //600-100
         float dataInterval = maxValueOfData / (soBar * soNhom);
         float valueToBeShown = maxValueOfData;
-        paint.setTypeface(Typeface.DEFAULT);
+        paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
         paint.setTextSize(20);
 
 
@@ -169,28 +172,38 @@ public class GroupBarChartView extends View implements ChartView<AdvancedInputRo
             valueToBeShown = valueToBeShown - dataInterval;
         }
 
+        //draw unit
+        canvas.drawText(yUnit,origin.x,origin.y-550,paint);
     }
 
     public void showLabelXAxis(Canvas canvas) {
+        //draw time
         Paint mypaint = new Paint();
         mypaint.setTextSize(20);
+        mypaint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
         Rect bounds = new Rect();
         for (int i = 0; i < str.size(); i++) {
             mypaint.getTextBounds(str.get(i), 0, str.get(i).length(), bounds);
             int y = origin.y + 30;
             int x;
             x=origin.x+30+(soBar+1)*i*barWidth;
-            mypaint.setTypeface(Typeface.DEFAULT);
-            canvas.drawText(str.get(i), x, y, mypaint);
-            mypaint.setTypeface(Typeface.DEFAULT);
             canvas.drawText(str.get(i), x, y, mypaint);
         }
+        //draw chart name
         Point pName = new Point();
-        mypaint.getTextBounds("Chart : " + chartName, 0, ("Chart : " + chartName).length(), bounds);
-        pName.x = origin.x + 30;
+        Paint paintName=new Paint();
+        paintName.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
+        bounds=new Rect();
+        paintName.setTextSize(40);
+        paintName.getTextBounds(chartName, 0, chartName.length(), bounds);
+        int temp=(getWidth()-bounds.width())/2;
+        pName.x = origin.x + temp;
         pName.y = origin.y + 90;
-        mypaint.setTextSize(40);
-        canvas.drawText("Chart : " + chartName, pName.x, pName.y, mypaint);
+        paintName.setTextSize(25);
+        paintName.setTextAlign(Paint.Align.CENTER);
+        canvas.drawText(chartName, pName.x, pName.y, paintName);
+        //draw unit
+        canvas.drawText(xUnit,origin.x+802,origin.y,mypaint);
     }
 
     public GroupBarChartView(Context context, @Nullable AttributeSet attrs) {
@@ -241,9 +254,11 @@ public class GroupBarChartView extends View implements ChartView<AdvancedInputRo
         setMeasuredDimension(width, height);
     }
 
-    public void updateData(List<AdvancedInputRow> objects, String chartName) {
+    public void updateData(List<AdvancedInputRow> objects, String chartName,String xUnit,String yUnit) {
 
         this.chartName = chartName;
+        this.xUnit=xUnit;
+        this.yUnit=yUnit;
         int columns = objects.get(0).getValues().size();
         String[] timeLines = objects.get(0).getValues().toArray(new String[columns]);
         arr.clear();

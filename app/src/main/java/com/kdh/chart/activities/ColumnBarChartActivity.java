@@ -48,6 +48,8 @@ public class ColumnBarChartActivity extends AppCompatActivity implements ChartAc
     private ChartLocation chartLocation;
     private Project project;
     private String chartName;
+    private String xUnit;
+    private String yUnit;
     private LinearLayout chartLayout;
 
 
@@ -67,6 +69,8 @@ public class ColumnBarChartActivity extends AppCompatActivity implements ChartAc
             chartLocation = (ChartLocation) bundle.getSerializable(CreateColumnBarChartDialogFragment.LOCATION);
         }
         chartName = barChart.getChartName();
+        xUnit=barChart.getxAxisUnit();
+        yUnit=barChart.getyAxisUnit();
         project = projectLocation.getProject();
 
         if (actionBar != null)
@@ -82,7 +86,7 @@ public class ColumnBarChartActivity extends AppCompatActivity implements ChartAc
         chartLayout.addView(mChartView);
         //show input table
         if (checkValue(advancedInputRows)) {
-            mChartView.updateData(advancedInputRows, chartName);
+            mChartView.updateData(advancedInputRows, chartName,xUnit,yUnit);
         } else
             mInputTable.show(getSupportFragmentManager(), AdvancedInputFragment.TAG);
     }
@@ -194,7 +198,7 @@ public class ColumnBarChartActivity extends AppCompatActivity implements ChartAc
         if (checkValue(advancedInputRows)) {
             //update data
             barChart.setData(advancedInputRows);
-            mChartView.updateData(advancedInputRows, chartName);
+            mChartView.updateData(advancedInputRows, chartName,xUnit,yUnit);
             //save data to file
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", getResources().getConfiguration().locale);
             project.setModifiedTime(dateFormat.format(Calendar.getInstance().getTime()));
