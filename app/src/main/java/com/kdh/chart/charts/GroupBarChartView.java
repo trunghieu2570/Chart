@@ -48,20 +48,20 @@ public class GroupBarChartView extends View implements ChartView<AdvancedInputRo
     private float max;
 
     public void init() {
-        p = new Paint();
+        p = new Paint(Paint.ANTI_ALIAS_FLAG);
         p.setStyle(Paint.Style.FILL);
         p.setColor(Color.RED);
         p.setStrokeWidth(1.5f);
 
-        paintDrawText = new Paint();
+        paintDrawText = new Paint(Paint.ANTI_ALIAS_FLAG);
         paintDrawText.setStyle(Paint.Style.FILL);
         paintDrawText.setColor(Color.RED);
         paintDrawText.setStrokeWidth(1.5f);
         paintDrawText.setTextSize(20);
 
-        paintDrawAxis = new Paint();
+        paintDrawAxis = new Paint(Paint.ANTI_ALIAS_FLAG);
         paintDrawAxis.setStyle(Paint.Style.FILL);
-        paintDrawAxis.setStrokeWidth(1.5f);
+        paintDrawAxis.setStrokeWidth(3f);
         paintDrawAxis.setColor(Color.BLACK);
         animators = new ArrayList<Animator>();
         animSet = new AnimatorSet();
@@ -151,7 +151,7 @@ public class GroupBarChartView extends View implements ChartView<AdvancedInputRo
     }
 
     public void showLabelYAxis(Canvas canvas) {
-        Paint paint = new Paint();
+        Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
         float maxValueOfData = max;
         float yAxisValueInterval = 500.0f / (soBar * soNhom); //600-100
         float dataInterval = maxValueOfData / (soBar * soNhom);
@@ -178,30 +178,29 @@ public class GroupBarChartView extends View implements ChartView<AdvancedInputRo
 
     public void showLabelXAxis(Canvas canvas) {
         //draw time
-        Paint mypaint = new Paint();
+        Paint mypaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mypaint.setTextSize(20);
         mypaint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
         Rect bounds = new Rect();
         for (int i = 0; i < str.size(); i++) {
-            mypaint.getTextBounds(str.get(i), 0, str.get(i).length(), bounds);
+            //mypaint.getTextBounds(str.get(i), 0, str.get(i).length(), bounds);
             int y = origin.y + 30;
             int x;
             x=origin.x+30+(soBar+1)*i*barWidth;
             canvas.drawText(str.get(i), x, y, mypaint);
         }
         //draw chart name
-        Point pName = new Point();
-        Paint paintName=new Paint();
+        Point pointName = new Point();
+        Paint paintName=new Paint(Paint.ANTI_ALIAS_FLAG);
         paintName.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
         bounds=new Rect();
-        paintName.setTextSize(40);
         paintName.getTextBounds(chartName, 0, chartName.length(), bounds);
         int temp=(getWidth()-bounds.width())/2;
-        pName.x = origin.x + temp;
-        pName.y = origin.y + 90;
+        pointName.x = origin.x + temp;
+        pointName.y = origin.y + 90;
         paintName.setTextSize(25);
         paintName.setTextAlign(Paint.Align.CENTER);
-        canvas.drawText(chartName, pName.x, pName.y, paintName);
+        canvas.drawText(chartName, pointName.x, pointName.y, paintName);
         //draw unit
         canvas.drawText(xUnit,origin.x+802,origin.y,mypaint);
     }

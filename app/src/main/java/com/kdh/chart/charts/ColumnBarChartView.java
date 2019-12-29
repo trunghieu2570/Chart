@@ -47,14 +47,14 @@ public class ColumnBarChartView extends View implements ChartView<AdvancedInputR
     }
 
     public void init() {
-        p = new Paint();
+        p = new Paint(Paint.ANTI_ALIAS_FLAG);
         p.setStyle(Paint.Style.FILL);
         p.setColor(Color.RED);
         p.setStrokeWidth(1.5f);
 
-        paintDrawAxis = new Paint();
+        paintDrawAxis = new Paint(Paint.ANTI_ALIAS_FLAG);
         paintDrawAxis.setStyle(Paint.Style.FILL);
-        paintDrawAxis.setStrokeWidth(1.5f);
+        paintDrawAxis.setStrokeWidth(3f);
         paintDrawAxis.setColor(Color.BLACK);
         animators = new ArrayList<Animator>();
         animSet = new AnimatorSet();
@@ -134,7 +134,7 @@ public class ColumnBarChartView extends View implements ChartView<AdvancedInputR
     }
 
     public void showLabelYAxis(Canvas canvas) {
-        Paint paint = new Paint();
+        Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
         float maxValueOfData = (int) max;
         float yAxisValueInterval = 500.0f / 9; //600-100
         float dataInterval = maxValueOfData / 9;
@@ -159,30 +159,29 @@ public class ColumnBarChartView extends View implements ChartView<AdvancedInputR
 
     public void showLabelXAxis(Canvas canvas) {
         //draw time
-        Paint mypaint = new Paint();
+        Paint mypaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mypaint.setTextSize(20);
         mypaint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
         Rect bounds = new Rect();
         for (int i = 0; i < groupsName.length; i++) {
-            mypaint.getTextBounds(groupsName[i], 0, groupsName[i].length(), bounds);
+            //mypaint.getTextBounds(groupsName[i], 0, groupsName[i].length(), bounds);
             int y = origin.y + 30;
             int x;
             x=origin.x +30+ i*2 * barWidth;
             canvas.drawText(groupsName[i], x, y, mypaint);
         }
         //draw chart name
-        Point pName = new Point();
+        Point pointName = new Point();
         Paint paintName=new Paint();
         paintName.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
         bounds=new Rect();
-        paintName.setTextSize(40);
         paintName.getTextBounds(chartName, 0, chartName.length(), bounds);
         int temp=(getWidth()-bounds.width())/2;
-        pName.x = origin.x + temp;
-        pName.y = origin.y + 90;
+        pointName.x = origin.x + temp;
+        pointName.y = origin.y + 90;
         paintName.setTextSize(25);
         paintName.setTextAlign(Paint.Align.CENTER);
-        canvas.drawText(chartName, pName.x, pName.y, paintName);
+        canvas.drawText(chartName, pointName.x, pointName.y, paintName);
         //draw unit
         canvas.drawText(xUnit,origin.x+802,origin.y,mypaint);
     }
@@ -217,9 +216,6 @@ public class ColumnBarChartView extends View implements ChartView<AdvancedInputR
         arrDrawData.clear();
 
         processData();
-        for (float f : arrDrawData) {
-            System.out.println("lol lolol :" + f);
-        }
         for (int i = 0; i < arrDrawData.size(); i++) {
             final int iii = i;
             ValueAnimator anim = ValueAnimator.ofFloat(0, arrDrawData.get(iii));
