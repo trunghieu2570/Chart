@@ -112,11 +112,11 @@ public class GroupBarChartView extends View implements ChartView<AdvancedInputRo
                 p.setColor(cl[i % soBar]);
                 canvas.drawRect(rect, p);
                 canvas.drawText(new DecimalFormat("0.0").format(arr.get(i)), rect.left, rect.top - 10, paintDrawText);
-                showLabelYAxis(canvas);
-                showLabelXAxis(canvas);
             }
 
         }
+        showLabelYAxis(canvas);
+        showLabelXAxis(canvas);
     }
 
     public void update(int soNhom, int soBar, ArrayList<String> str) {
@@ -179,7 +179,7 @@ public class GroupBarChartView extends View implements ChartView<AdvancedInputRo
     public void showLabelXAxis(Canvas canvas) {
         //draw time
         Paint mypaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        mypaint.setTextSize(20);
+        mypaint.setTextSize(25);
         mypaint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
         Rect bounds = new Rect();
         for (int i = 0; i < str.size(); i++) {
@@ -199,6 +199,8 @@ public class GroupBarChartView extends View implements ChartView<AdvancedInputRo
         pointName.x = origin.x + temp;
         pointName.y = origin.y + 90;
         paintName.setTextSize(25);
+
+
         paintName.setTextAlign(Paint.Align.CENTER);
         canvas.drawText(chartName, pointName.x, pointName.y, paintName);
         //draw unit

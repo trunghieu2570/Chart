@@ -127,10 +127,10 @@ public class ColumnBarChartView extends View implements ChartView<AdvancedInputR
                         canvas.drawRect(rect, p);
                     }
                 }
-                showLabelYAxis(canvas);
-                showLabelXAxis(canvas);
             }
         }
+        showLabelYAxis(canvas);
+        showLabelXAxis(canvas);
     }
 
     public void showLabelYAxis(Canvas canvas) {
