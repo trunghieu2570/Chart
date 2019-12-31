@@ -33,8 +33,7 @@
     <string name="default_object_meaning">Nước</string>
 
     <string name="add_item">Thêm đối tượng</string>
-    <string name="add_serie">Thêm giai đoạn</string>
-    <string name="add_serial">Thêm giai đoạn</string>
+    <string name="add_serial">Thêm mốc</string>
     <string name="apply">Áp dụng</string>
     <string name="data_table">Bảng dữ liệu</string>
     <string name="create_chart">Tạo biểu đồ</string>

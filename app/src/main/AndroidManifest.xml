@@ -56,7 +56,6 @@
             android:name=".activities.StatisticPieChart"
             android:label="@string/statistic_title"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".activities.ChartDescribeActivity" />
         <activity
             android:name=".activities.ProjectActivity"
             android:label="@string/title_activity_project"

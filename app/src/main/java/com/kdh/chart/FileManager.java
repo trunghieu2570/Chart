@@ -36,7 +36,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.UUID;
 
-public class ProjectFileManager {
+public class FileManager {
 
     public static final String DEFAULT_FOLDER = "ChartProjects";
     private ArrayList<ProjectLocation> result;
@@ -195,7 +195,6 @@ public class ProjectFileManager {
     }
 
     public static void saveChart(final ProjectLocation projectLocation, final Chart chart, final ChartLocation chartLocation) {
-
         File projectFolder = new File(projectLocation.getLocation()).getParentFile();
         File file = new File(projectFolder, chartLocation.getLocation());
         Gson gson = new Gson();
@@ -213,18 +212,34 @@ public class ProjectFileManager {
         }
     }
 
-    public static File saveImage(Context context, View view1, View view2) {
+    public static File saveTempImage(View view1, View view2) {
         File sdcard = Environment.getExternalStorageDirectory();
         File mainDir = new File(sdcard, DEFAULT_FOLDER);
         String filename = UUID.randomUUID().toString().replace('-', '_');
         File sFile = new File(mainDir, filename.concat(".png"));
-        //Bitmap bmp = createBitmapFromView(context, view);
         Bitmap bmp1 = getBitmapFromView(view1);
         Bitmap bmp2 = getBitmapFromView(view2);
         Bitmap bmp = merge2Bitmap(bmp1, bmp2);
         try (FileOutputStream out = new FileOutputStream(sFile)) {
-            bmp.compress(Bitmap.CompressFormat.PNG, 100, out); // bmp is your Bitmap instance
-            // PNG is a lossless format, the compression factor (100) is ignored
+            bmp.compress(Bitmap.CompressFormat.PNG, 100, out);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return sFile;
+    }
+
+    public static File saveImage(View view1, View view2, String imageName) {
+        File sdcard = Environment.getExternalStorageDirectory();
+        File mainDir = new File(sdcard, "Pictures/Charts");
+        if (!mainDir.exists()) {
+            mainDir.mkdirs();
+        }
+        File sFile = new File(mainDir, imageName.concat(".png"));
+        Bitmap bmp1 = getBitmapFromView(view1);
+        Bitmap bmp2 = getBitmapFromView(view2);
+        Bitmap bmp = merge2Bitmap(bmp1, bmp2);
+        try (FileOutputStream out = new FileOutputStream(sFile)) {
+            bmp.compress(Bitmap.CompressFormat.PNG, 100, out);
         } catch (IOException e) {
             e.printStackTrace();
         }
