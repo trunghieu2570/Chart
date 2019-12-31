@@ -17,7 +17,7 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.kdh.chart.ProjectFileManager;
+import com.kdh.chart.FileManager;
 import com.kdh.chart.R;
 import com.kdh.chart.activities.PieChartActivity;
 import com.kdh.chart.datatypes.Chart;
@@ -48,7 +48,7 @@ public class CreatePieChartDialogFragment extends DialogFragment {
     private OnChartNameDuplicatedListener onChartNameDuplicatedListener;
 
     public static CreatePieChartDialogFragment newInstance(ProjectLocation location) {
-        ArrayList<Pair<ChartLocation, Chart>> charts = ProjectFileManager.loadCharts(location);
+        ArrayList<Pair<ChartLocation, Chart>> charts = FileManager.loadCharts(location);
         ArrayList<String> projectNames = new ArrayList<>();
         if (charts != null) {
             for (Pair<ChartLocation, Chart> pair : charts) {
@@ -120,8 +120,8 @@ public class CreatePieChartDialogFragment extends DialogFragment {
                         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", getResources().getConfiguration().locale);
                         project.setModifiedTime(dateFormat.format(Calendar.getInstance().getTime()));
                         //save data
-                        ProjectFileManager.saveProject(projectLocation);
-                        ProjectFileManager.saveChart(projectLocation, chart, chartLocation);
+                        FileManager.saveProject(projectLocation);
+                        FileManager.saveChart(projectLocation, chart, chartLocation);
                         //pass bundle
                         final Intent intent = new Intent(getActivity(), PieChartActivity.class);
                         final Bundle bundle = new Bundle();

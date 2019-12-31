@@ -71,31 +71,7 @@ public class PieChartView extends View implements ChartView<SimpleInputRow> {
 
     }
 
-/*    public void updateAngleNoAnimation(int[] values) {
-        animSet.cancel();
-        items.clear();
-        int sum = 0;
-        float currentAngle = 0;
-        int color = 0;
-        for (int value : values) {
-            sum += value;
-        }
-        float u = 360f / sum;
-        float p = 100f / sum;
-        Random rnd = new Random();
-        for (int value : values) {
-            color = getRandomColor();
-            final Item item = new Item(currentAngle, color);
-            currentAngle += value * u;
-            item.sweepAngle = currentAngle;
-            item.percent = value * p;
-            items.add(item);
-
-        }
-        Collections.reverse(items);
-        invalidate();
-    }*/
-    //@Override
+    @Override
     public void updateData(List<SimpleInputRow> fullList) {
         final List<SimpleInputRow> list = fullList.subList(1,fullList.size());
         animSet.cancel();
@@ -138,22 +114,6 @@ public class PieChartView extends View implements ChartView<SimpleInputRow> {
     }
 
 
-
-
-/*    public void updateAngle(int[] values, AnimType animType) {
-        switch (animType) {
-            case TOGETHER:
-                updateData(values);
-                break;
-            case SEQUENTIALLY:
-                updateAngleSequentially(values);
-                break;
-            default:
-                updateAngleNoAnimation(values);
-                break;
-        }
-    }*/
-
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
@@ -163,46 +123,6 @@ public class PieChartView extends View implements ChartView<SimpleInputRow> {
         radius -= 50;
         bound = new RectF(cx - radius, cy - radius, cx + radius, cy + radius);
     }
-
-    /*public void updateAngleSequentially(int[] values) {
-        animSet.cancel();
-        items.clear();
-        animators.clear();
-        int sum = 0;
-        float currentAngle = 0;
-        int color = 0;
-        for (int value : values) {
-            sum += value;
-        }
-        float u = 360f / sum;
-        float p = 100f / sum;
-        Random rnd = new Random();
-        for (int value : values) {
-            color = getRandomColor();
-
-            final Item item = new Item(currentAngle, color);
-            currentAngle += value * u;
-            item.percent = value * p;
-            //add animator
-            ValueAnimator anim = ValueAnimator.ofFloat(0, currentAngle);
-            anim.setDuration(3000 / values.length);
-            anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                @Override
-                public void onAnimationUpdate(ValueAnimator animation) {
-                    item.sweepAngle = (float) animation.getAnimatedValue();
-                    invalidate();
-                }
-            });
-            items.add(item);
-            animators.add(anim);
-        }
-
-        Collections.reverse(items);
-        Collections.reverse(animators);
-
-        animSet.playSequentially(animators);
-        animSet.start();
-    }*/
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {

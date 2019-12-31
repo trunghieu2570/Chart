@@ -14,7 +14,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.kdh.chart.ProjectFileManager;
+import com.kdh.chart.FileManager;
 import com.kdh.chart.R;
 import com.kdh.chart.activities.ProjectActivity;
 import com.kdh.chart.datatypes.Project;
@@ -72,10 +72,10 @@ public class CreateProjectDialogFragment extends DialogFragment {
                         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", getResources().getConfiguration().locale);
                         final Project project = new Project(projectNameEdt.getText().toString(), dateFormat.format(Calendar.getInstance().getTime()));
                         final ProjectLocation projectLocation = new ProjectLocation(
-                                ProjectFileManager.makeDefaultProjectPath(project).toString(),
+                                FileManager.makeDefaultProjectPath(project).toString(),
                                 project
                         );
-                        ProjectFileManager.saveProject(projectLocation);
+                        FileManager.saveProject(projectLocation);
 
                         Intent intent = new Intent(getActivity(), ProjectActivity.class);
                         Bundle bundle = new Bundle();

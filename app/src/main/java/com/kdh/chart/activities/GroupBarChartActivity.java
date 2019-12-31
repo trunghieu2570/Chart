@@ -17,12 +17,11 @@ import androidx.core.content.FileProvider;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.kdh.chart.BuildConfig;
-import com.kdh.chart.ProjectFileManager;
+import com.kdh.chart.FileManager;
 import com.kdh.chart.R;
 import com.kdh.chart.charts.GroupBarChartView;
 import com.kdh.chart.datatypes.AdvancedInputRow;
 import com.kdh.chart.datatypes.ChartLocation;
-import com.kdh.chart.datatypes.ChartTypeEnum;
 import com.kdh.chart.datatypes.GroupBarChart;
 import com.kdh.chart.datatypes.Project;
 import com.kdh.chart.datatypes.ProjectLocation;
@@ -35,9 +34,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-import static com.kdh.chart.activities.ChartDescribeActivity.BUNDLE;
-import static com.kdh.chart.activities.ChartDescribeActivity.CHART;
-import static com.kdh.chart.activities.ChartDescribeActivity.CHART_TYPE;
+import static com.kdh.chart.activities.StatisticGroupChart.BUNDLE;
+import static com.kdh.chart.activities.StatisticGroupChart.CHART;
 
 public class GroupBarChartActivity extends AppCompatActivity implements ChartActivityInterface<AdvancedInputRow>, AdvancedInputFragment.OnUpdateDataListener {
 
@@ -144,14 +142,15 @@ public class GroupBarChartActivity extends AppCompatActivity implements ChartAct
         }
         final Bundle chartBundle = new Bundle();
         chartBundle.putSerializable(CHART, barChart);
-        chartBundle.putSerializable(CHART_TYPE, ChartTypeEnum.GROUPED);
         Intent describeIntent = new Intent(GroupBarChartActivity.this, StatisticGroupChart.class);
         describeIntent.putExtra(BUNDLE, chartBundle);
         startActivity(describeIntent);
     }
 
     private void saveChartAsPicture() {
-        File file = ProjectFileManager.saveImage(this, chartLayout, mInputTable.rowsListView);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd_HHmmss", getResources().getConfiguration().locale);
+        String imageName = dateFormat.format(Calendar.getInstance().getTime());
+        File file = FileManager.saveImage(chartLayout, mInputTable.rowsListView, imageName);
 
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             Intent intent = new Intent();
@@ -169,7 +168,7 @@ public class GroupBarChartActivity extends AppCompatActivity implements ChartAct
     }
 
     private void shareChart() {
-        File file = ProjectFileManager.saveImage(this, chartLayout, mInputTable.rowsListView);
+        File file = FileManager.saveTempImage(chartLayout, mInputTable.rowsListView);
         Uri uriToImage;
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             uriToImage = FileProvider.getUriForFile(this,
@@ -203,8 +202,8 @@ public class GroupBarChartActivity extends AppCompatActivity implements ChartAct
             //save data to file
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", getResources().getConfiguration().locale);
             project.setModifiedTime(dateFormat.format(Calendar.getInstance().getTime()));
-            ProjectFileManager.saveChart(projectLocation, barChart, chartLocation);
-            ProjectFileManager.saveProject(projectLocation);
+            FileManager.saveChart(projectLocation, barChart, chartLocation);
+            FileManager.saveProject(projectLocation);
         } else
             Snackbar.make(mChartView, "Invalid data", Snackbar.LENGTH_SHORT).show();
     }
@@ -218,7 +217,7 @@ public class GroupBarChartActivity extends AppCompatActivity implements ChartAct
             }
         }
         if(cList.remove(target) != null) {
-            ProjectFileManager.saveProject(projectLocation);
+            FileManager.saveProject(projectLocation);
             Log.d("Delete", "Delete successfully" + cList.size());
             Toast.makeText(this, "Xóa biểu đồ thành công", Toast.LENGTH_SHORT).show();
 

@@ -17,12 +17,11 @@ import androidx.core.content.FileProvider;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.kdh.chart.BuildConfig;
-import com.kdh.chart.ProjectFileManager;
+import com.kdh.chart.FileManager;
 import com.kdh.chart.R;
 import com.kdh.chart.charts.LineChartView;
 import com.kdh.chart.datatypes.AdvancedInputRow;
 import com.kdh.chart.datatypes.ChartLocation;
-import com.kdh.chart.datatypes.ChartTypeEnum;
 import com.kdh.chart.datatypes.LineChart;
 import com.kdh.chart.datatypes.Project;
 import com.kdh.chart.datatypes.ProjectLocation;
@@ -35,9 +34,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-import static com.kdh.chart.activities.ChartDescribeActivity.BUNDLE;
-import static com.kdh.chart.activities.ChartDescribeActivity.CHART;
-import static com.kdh.chart.activities.ChartDescribeActivity.CHART_TYPE;
+import static com.kdh.chart.activities.StatisticLineChart.BUNDLE;
+import static com.kdh.chart.activities.StatisticLineChart.CHART;
+
 
 public class LineChartActivity extends AppCompatActivity implements ChartActivityInterface<AdvancedInputRow>, AdvancedInputFragment.OnUpdateDataListener {
 
@@ -133,7 +132,10 @@ public class LineChartActivity extends AppCompatActivity implements ChartActivit
     }
 
     private void saveChartAsPicture() {
-        File file = ProjectFileManager.saveImage(this, chartLayout, mInputTable.rowsListView);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd_HHmmss", getResources().getConfiguration().locale);
+        String imageName = dateFormat.format(Calendar.getInstance().getTime());
+        File file = FileManager.saveImage(chartLayout, mInputTable.rowsListView, imageName);
+
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             Intent intent = new Intent();
             intent.setAction(Intent.ACTION_VIEW);
@@ -150,7 +152,7 @@ public class LineChartActivity extends AppCompatActivity implements ChartActivit
     }
 
     private void shareChart() {
-        File file = ProjectFileManager.saveImage(this, chartLayout, mInputTable.rowsListView);
+        File file = FileManager.saveTempImage(chartLayout, mInputTable.rowsListView);
         Uri uriToImage;
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             uriToImage = FileProvider.getUriForFile(this,
@@ -175,7 +177,6 @@ public class LineChartActivity extends AppCompatActivity implements ChartActivit
         }
         final Bundle chartBundle = new Bundle();
         chartBundle.putSerializable(CHART, lineChart);
-        chartBundle.putSerializable(CHART_TYPE, ChartTypeEnum.LINE);
         Intent describeIntent = new Intent(LineChartActivity.this, StatisticLineChart.class);
         describeIntent.putExtra(BUNDLE, chartBundle);
         startActivity(describeIntent);
@@ -199,8 +200,8 @@ public class LineChartActivity extends AppCompatActivity implements ChartActivit
             //save data to file
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", getResources().getConfiguration().locale);
             project.setModifiedTime(dateFormat.format(Calendar.getInstance().getTime()));
-            ProjectFileManager.saveChart(projectLocation, lineChart, chartLocation);
-            ProjectFileManager.saveProject(projectLocation);
+            FileManager.saveChart(projectLocation, lineChart, chartLocation);
+            FileManager.saveProject(projectLocation);
         } else
             Snackbar.make(mChartView, "Invalid data", Snackbar.LENGTH_SHORT).show();
     }
@@ -214,7 +215,7 @@ public class LineChartActivity extends AppCompatActivity implements ChartActivit
             }
         }
         if(cList.remove(target) != null) {
-            ProjectFileManager.saveProject(projectLocation);
+            FileManager.saveProject(projectLocation);
             Log.d("Delete", "Delete successfully" + cList.size());
             Toast.makeText(this, "Xóa biểu đồ thành công", Toast.LENGTH_SHORT).show();
 

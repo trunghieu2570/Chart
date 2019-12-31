@@ -22,10 +22,6 @@ public class AdvancedInputRow implements Serializable {
         return mValues;
     }
 
-/*    public void setValue(List<String> values) {
-        this.mValues = values;
-    }*/
-
     public String getLabel() {
         return mLabel;
     }

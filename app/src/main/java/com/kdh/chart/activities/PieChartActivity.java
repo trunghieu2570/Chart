@@ -24,11 +24,10 @@ import androidx.core.content.FileProvider;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.snackbar.Snackbar;
 import com.kdh.chart.BuildConfig;
-import com.kdh.chart.ProjectFileManager;
+import com.kdh.chart.FileManager;
 import com.kdh.chart.R;
 import com.kdh.chart.charts.PieChartView;
 import com.kdh.chart.datatypes.ChartLocation;
-import com.kdh.chart.datatypes.ChartTypeEnum;
 import com.kdh.chart.datatypes.PieChart;
 import com.kdh.chart.datatypes.Project;
 import com.kdh.chart.datatypes.ProjectLocation;
@@ -41,9 +40,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-import static com.kdh.chart.activities.ChartDescribeActivity.BUNDLE;
-import static com.kdh.chart.activities.ChartDescribeActivity.CHART;
-import static com.kdh.chart.activities.ChartDescribeActivity.CHART_TYPE;
+import static com.kdh.chart.activities.StatisticPieChart.BUNDLE;
+import static com.kdh.chart.activities.StatisticPieChart.CHART;
 
 public class PieChartActivity extends AppCompatActivity implements ChartActivityInterface<SimpleInputRow>, SimpleInputFragment.OnUpdateDataListener {
 
@@ -112,13 +110,6 @@ public class PieChartActivity extends AppCompatActivity implements ChartActivity
         chartTitle.setPadding(10, 0, 10, 0);
         chartLayout.addView(mChartView);
         chartLayout.addView(chartTitle);
-        // on input table data changed
-/*        mInputTable.setOnUpdateDataListener(new SimpleInputFragment.OnUpdateDataListener() {
-            @Override
-            public void onUpdate(ArrayList<SimpleInputRow> lists) {
-
-            }
-        });*/
         //show input table
         if (simpleInputRows != null && checkValue(simpleInputRows))
             mChartView.updateData(simpleInputRows);
@@ -179,7 +170,9 @@ public class PieChartActivity extends AppCompatActivity implements ChartActivity
     }
 
     private void saveChartAsPicture() {
-        File file = ProjectFileManager.saveImage(this, chartLayout, mInputTable.rowsListView);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd_HHmmss", getResources().getConfiguration().locale);
+        String imageName = dateFormat.format(Calendar.getInstance().getTime());
+        File file = FileManager.saveImage(chartLayout, mInputTable.rowsListView, imageName);
 
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             Intent intent = new Intent();
@@ -197,7 +190,7 @@ public class PieChartActivity extends AppCompatActivity implements ChartActivity
     }
 
     private void shareChart() {
-        File file = ProjectFileManager.saveImage(this, chartLayout, mInputTable.rowsListView);
+        File file = FileManager.saveTempImage(chartLayout, mInputTable.rowsListView);
         Uri uriToImage;
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             uriToImage = FileProvider.getUriForFile(this,
@@ -222,7 +215,7 @@ public class PieChartActivity extends AppCompatActivity implements ChartActivity
         }
         final Bundle chartBundle = new Bundle();
         chartBundle.putSerializable(CHART, pieChart);
-        chartBundle.putSerializable(CHART_TYPE, ChartTypeEnum.PIE);
+        //chartBundle.putSerializable(CHART_TYPE, ChartTypeEnum.PIE);
         Intent describeIntent = new Intent(PieChartActivity.this, StatisticPieChart.class);
         describeIntent.putExtra(BUNDLE, chartBundle);
         startActivity(describeIntent);
@@ -246,8 +239,8 @@ public class PieChartActivity extends AppCompatActivity implements ChartActivity
             //save data to file
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", getResources().getConfiguration().locale);
             project.setModifiedTime(dateFormat.format(Calendar.getInstance().getTime()));
-            ProjectFileManager.saveChart(projectLocation, pieChart, chartLocation);
-            ProjectFileManager.saveProject(projectLocation);
+            FileManager.saveChart(projectLocation, pieChart, chartLocation);
+            FileManager.saveProject(projectLocation);
         } else
             Snackbar.make(mChartView, "Invalid data", Snackbar.LENGTH_SHORT).show();
     }
@@ -261,7 +254,7 @@ public class PieChartActivity extends AppCompatActivity implements ChartActivity
             }
         }
         if (cList.remove(target) != null) {
-            ProjectFileManager.saveProject(projectLocation);
+            FileManager.saveProject(projectLocation);
             Log.d("Delete", "Delete successfully" + cList.size());
             Toast.makeText(this, "Xóa biểu đồ thành công", Toast.LENGTH_SHORT).show();
             finish();

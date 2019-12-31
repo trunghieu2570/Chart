@@ -6,7 +6,6 @@ import android.graphics.drawable.GradientDrawable;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -116,30 +115,6 @@ public class SimpleInputRowAdapter extends ArrayAdapter<SimpleInputRow> {
                     if (myTextWatcher != null)
                         label.removeTextChangedListener(myTextWatcher);
                     label.setText(row.getLabel());
-                    //add new
-                    label.setTag(new MyTextWatcher(mRows.get(position), -1));
-                    label.addTextChangedListener((MyTextWatcher) label.getTag());
-                    /*label.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            FragmentManager manager = ((AppCompatActivity) getContext()).getSupportFragmentManager();
-                            EditSimpleInputRowDialogFragment fragment = EditSimpleInputRowDialogFragment.newInstance(position, row.getLabel());
-                            fragment.setOnClickPositiveButtonListener(new EditSimpleInputRowDialogFragment.OnClickPositiveButtonListener() {
-                                @Override
-                                public void onClick() {
-                                    label.setText(row.getLabel());
-                                    notifyDataSetChanged();
-                                }
-                            });
-                            fragment.setOnClickNeutralButtonListener(new EditSimpleInputRowDialogFragment.OnClickNeutralButtonListener() {
-                                @Override
-                                public void onClick() {
-                                    notifyDataSetChanged();
-                                }
-                            });
-                            fragment.show(manager, "edit row");
-                        }
-                    });*/
                 }
                 if (editValue != null) {
                     //remove old
@@ -188,7 +163,6 @@ public class SimpleInputRowAdapter extends ArrayAdapter<SimpleInputRow> {
             String str = editable.toString();
             if (id >= 0) {
                 String value = str.equals("") ? "0" : str;
-                Log.d("DEBUG", "Change to" + value);
                 mInputRow.setValue(value);
             } else {
                 String label = str.equals("") ? "Item" : str;

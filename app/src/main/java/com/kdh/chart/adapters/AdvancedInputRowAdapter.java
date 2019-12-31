@@ -6,7 +6,6 @@ import android.graphics.drawable.GradientDrawable;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -152,28 +151,6 @@ public class AdvancedInputRowAdapter extends ArrayAdapter<AdvancedInputRow> {
                     //add new
                     label.setTag(new AdvancedInputRowAdapter.MyTextWatcher(mRows.get(position), -1));
                     label.addTextChangedListener((AdvancedInputRowAdapter.MyTextWatcher) label.getTag());
-                    /*label.setOnLongClickListener(new View.OnLongClickListener() {
-                        @Override
-                        public boolean onLongClick(View view) {
-                            FragmentManager manager = ((AppCompatActivity) getContext()).getSupportFragmentManager();
-                            EditAdvancedInputRowDialogFragment fragment = EditAdvancedInputRowDialogFragment.newInstance(position, row.getLabel());
-                            fragment.setOnClickPositiveButtonListener(new EditAdvancedInputRowDialogFragment.OnClickPositiveButtonListener() {
-                                @Override
-                                public void onClick() {
-                                    label.setText(row.getLabel());
-                                    notifyDataSetChanged();
-                                }
-                            });
-                            fragment.setOnClickNeutralButtonListener(new EditAdvancedInputRowDialogFragment.OnClickNeutralButtonListener() {
-                                @Override
-                                public void onClick() {
-                                    notifyDataSetChanged();
-                                }
-                            });
-                            fragment.show(manager, "edit row");
-                            return true;
-                        }
-                    });*/
                 }
                 if (inputLayout != null) {
                     inputLayout.removeAllViews();
@@ -226,7 +203,6 @@ public class AdvancedInputRowAdapter extends ArrayAdapter<AdvancedInputRow> {
             String str = editable.toString();
             if (id >= 0) {
                 String value = str.equals("") ? "0" : str;
-                Log.d("DEBUG", "Change to" + value);
                 mInputRow.getValues().set(id, value);
             } else {
                 String label = str.equals("") ? "Item" : str;

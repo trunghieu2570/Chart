@@ -21,10 +21,7 @@ import com.kdh.chart.datatypes.AdvancedInputRow;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Random;
 
 public class GroupBarChartView extends View implements ChartView<AdvancedInputRow> {
 
@@ -33,9 +30,9 @@ public class GroupBarChartView extends View implements ChartView<AdvancedInputRo
     private ArrayList<Animator> animators;
     private AnimatorSet animSet;
     private ArrayList<Float> arr = new ArrayList<Float>();
-    private int cl[];
+    private int[] cl;
     private ArrayList<String> str = new ArrayList<>();
-    private Point origin=null;
+    private Point origin = null;
     private Paint p;
     private Paint paintDrawText;
     private Paint paintDrawAxis;
@@ -69,25 +66,25 @@ public class GroupBarChartView extends View implements ChartView<AdvancedInputRo
 
 
     public void findBarWidth() {
-        int x=soNhom-1+soNhom*soBar;
-        int usageW=700-20;
-        barWidth=usageW/x;
+        int x = soNhom - 1 + soNhom * soBar;
+        int usageW = 700 - 20;
+        barWidth = usageW / x;
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         if (arr.size() > 0) {
-        //origin
-        origin = new Point(100, getHeight() - 200);
-        //draw axis
-        canvas.drawLine(origin.x, origin.y, origin.x, origin.y - 530, paintDrawAxis);
-        canvas.drawLine(origin.x, origin.y, origin.x + 800, origin.y, paintDrawAxis);
-        //draw arrow
-        canvas.drawLine(origin.x - 10, origin.y - 520, origin.x, origin.y - 530, paintDrawAxis);
-        canvas.drawLine(origin.x + 10, origin.y - 520, origin.x, origin.y - 530, paintDrawAxis);
-        canvas.drawLine(origin.x + 790, origin.y + 10, origin.x + 800, origin.y, paintDrawAxis);
-        canvas.drawLine(origin.x + 790, origin.y - 10, origin.x + 800, origin.y, paintDrawAxis);
+            //origin
+            origin = new Point(100, getHeight() - 200);
+            //draw axis
+            canvas.drawLine(origin.x, origin.y, origin.x, origin.y - 530, paintDrawAxis);
+            canvas.drawLine(origin.x, origin.y, origin.x + 800, origin.y, paintDrawAxis);
+            //draw arrow
+            canvas.drawLine(origin.x - 10, origin.y - 520, origin.x, origin.y - 530, paintDrawAxis);
+            canvas.drawLine(origin.x + 10, origin.y - 520, origin.x, origin.y - 530, paintDrawAxis);
+            canvas.drawLine(origin.x + 790, origin.y + 10, origin.x + 800, origin.y, paintDrawAxis);
+            canvas.drawLine(origin.x + 790, origin.y - 10, origin.x + 800, origin.y, paintDrawAxis);
 
 
             float d = (float) 500.0 / max;
@@ -96,14 +93,14 @@ public class GroupBarChartView extends View implements ChartView<AdvancedInputRo
             for (int i = 0; i < arr.size(); i++) {
                 RectF rect = new RectF();
                 if (i < soBar) {
-                    rect.left = key + 20+i* barWidth;
-                    rect.top = (float) (origin.y - arr.get(i) * d);
+                    rect.left = key + 20 + i * barWidth;
+                    rect.top = origin.y - arr.get(i) * d;
                     rect.right = rect.left + barWidth;
                     rect.bottom = origin.y;
                 }
                 if (i >= soBar) {
-                    rect.left = key + 20+i * barWidth + barWidth * (i / soBar);
-                    rect.top = (float) (origin.y - arr.get(i) * d);
+                    rect.left = key + 20 + i * barWidth + barWidth * (i / soBar);
+                    rect.top = origin.y - arr.get(i) * d;
                     rect.right = rect.left + barWidth;
                     rect.bottom = origin.y;
                 }
@@ -173,7 +170,7 @@ public class GroupBarChartView extends View implements ChartView<AdvancedInputRo
         }
 
         //draw unit
-        canvas.drawText(yUnit,origin.x,origin.y-550,paint);
+        canvas.drawText(yUnit, origin.x, origin.y - 550, paint);
     }
 
     public void showLabelXAxis(Canvas canvas) {
@@ -186,16 +183,16 @@ public class GroupBarChartView extends View implements ChartView<AdvancedInputRo
             //mypaint.getTextBounds(str.get(i), 0, str.get(i).length(), bounds);
             int y = origin.y + 30;
             int x;
-            x=origin.x+30+(soBar+1)*i*barWidth;
+            x = origin.x + 30 + (soBar + 1) * i * barWidth;
             canvas.drawText(str.get(i), x, y, mypaint);
         }
         //draw chart name
         Point pointName = new Point();
-        Paint paintName=new Paint(Paint.ANTI_ALIAS_FLAG);
+        Paint paintName = new Paint(Paint.ANTI_ALIAS_FLAG);
         paintName.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
-        bounds=new Rect();
+        bounds = new Rect();
         paintName.getTextBounds(chartName, 0, chartName.length(), bounds);
-        int temp=(getWidth()-bounds.width())/2;
+        int temp = (getWidth() - bounds.width()) / 2;
         pointName.x = origin.x + temp;
         pointName.y = origin.y + 90;
         paintName.setTextSize(25);
@@ -204,7 +201,7 @@ public class GroupBarChartView extends View implements ChartView<AdvancedInputRo
         paintName.setTextAlign(Paint.Align.CENTER);
         canvas.drawText(chartName, pointName.x, pointName.y, paintName);
         //draw unit
-        canvas.drawText(xUnit,origin.x+802,origin.y,mypaint);
+        canvas.drawText(xUnit, origin.x + 802, origin.y, mypaint);
     }
 
     public GroupBarChartView(Context context, @Nullable AttributeSet attrs) {
@@ -255,11 +252,11 @@ public class GroupBarChartView extends View implements ChartView<AdvancedInputRo
         setMeasuredDimension(width, height);
     }
 
-    public void updateData(List<AdvancedInputRow> objects, String chartName,String xUnit,String yUnit) {
+    public void updateData(List<AdvancedInputRow> objects, String chartName, String xUnit, String yUnit) {
 
         this.chartName = chartName;
-        this.xUnit=xUnit;
-        this.yUnit=yUnit;
+        this.xUnit = xUnit;
+        this.yUnit = yUnit;
         int columns = objects.get(0).getValues().size();
         String[] timeLines = objects.get(0).getValues().toArray(new String[columns]);
         arr.clear();

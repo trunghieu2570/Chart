@@ -15,7 +15,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.kdh.chart.ProjectFileManager;
+import com.kdh.chart.FileManager;
 import com.kdh.chart.R;
 import com.kdh.chart.activities.ColumnBarChartActivity;
 import com.kdh.chart.datatypes.AdvancedInputRow;
@@ -46,7 +46,7 @@ public class CreateColumnBarChartDialogFragment extends DialogFragment {
     public CreateColumnBarChartDialogFragment() { }
 
     public static CreateColumnBarChartDialogFragment newInstance(ProjectLocation location) {
-        ArrayList<Pair<ChartLocation, Chart>> charts = ProjectFileManager.loadCharts(location);
+        ArrayList<Pair<ChartLocation, Chart>> charts = FileManager.loadCharts(location);
         ArrayList<String> projectNames = new ArrayList<>();
         if (charts != null) {
             for (Pair<ChartLocation, Chart> pair : charts) {
@@ -126,8 +126,8 @@ public class CreateColumnBarChartDialogFragment extends DialogFragment {
                         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", getResources().getConfiguration().locale);
                         project.setModifiedTime(dateFormat.format(Calendar.getInstance().getTime()));
                         //save data
-                        ProjectFileManager.saveProject(projectLocation);
-                        ProjectFileManager.saveChart(projectLocation, chart, chartLocation);
+                        FileManager.saveProject(projectLocation);
+                        FileManager.saveChart(projectLocation, chart, chartLocation);
                         //pass data
 
                         Intent intent = new Intent(getActivity(), ColumnBarChartActivity.class);

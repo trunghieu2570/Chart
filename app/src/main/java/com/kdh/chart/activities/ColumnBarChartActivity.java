@@ -17,12 +17,11 @@ import androidx.core.content.FileProvider;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.kdh.chart.BuildConfig;
-import com.kdh.chart.ProjectFileManager;
+import com.kdh.chart.FileManager;
 import com.kdh.chart.R;
 import com.kdh.chart.charts.ColumnBarChartView;
 import com.kdh.chart.datatypes.AdvancedInputRow;
 import com.kdh.chart.datatypes.ChartLocation;
-import com.kdh.chart.datatypes.ChartTypeEnum;
 import com.kdh.chart.datatypes.ColumnBarChart;
 import com.kdh.chart.datatypes.Project;
 import com.kdh.chart.datatypes.ProjectLocation;
@@ -34,9 +33,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-import static com.kdh.chart.activities.ChartDescribeActivity.BUNDLE;
-import static com.kdh.chart.activities.ChartDescribeActivity.CHART;
-import static com.kdh.chart.activities.ChartDescribeActivity.CHART_TYPE;
+import static com.kdh.chart.activities.StatisticColumnChart.BUNDLE;
+import static com.kdh.chart.activities.StatisticColumnChart.CHART;
 
 public class ColumnBarChartActivity extends AppCompatActivity implements ChartActivityInterface<AdvancedInputRow>, AdvancedInputFragment.OnUpdateDataListener {
 
@@ -69,8 +67,8 @@ public class ColumnBarChartActivity extends AppCompatActivity implements ChartAc
             chartLocation = (ChartLocation) bundle.getSerializable(CreateColumnBarChartDialogFragment.LOCATION);
         }
         chartName = barChart.getChartName();
-        xUnit=barChart.getxAxisUnit();
-        yUnit=barChart.getyAxisUnit();
+        xUnit = barChart.getxAxisUnit();
+        yUnit = barChart.getyAxisUnit();
         project = projectLocation.getProject();
 
         if (actionBar != null)
@@ -86,7 +84,7 @@ public class ColumnBarChartActivity extends AppCompatActivity implements ChartAc
         chartLayout.addView(mChartView);
         //show input table
         if (checkValue(advancedInputRows)) {
-            mChartView.updateData(advancedInputRows, chartName,xUnit,yUnit);
+            mChartView.updateData(advancedInputRows, chartName, xUnit, yUnit);
         } else
             mInputTable.show(getSupportFragmentManager(), AdvancedInputFragment.TAG);
     }
@@ -94,7 +92,7 @@ public class ColumnBarChartActivity extends AppCompatActivity implements ChartAc
     private boolean checkValue(ArrayList<AdvancedInputRow> list) {
         for (AdvancedInputRow row : list.subList(1, list.size())) {
             for (String value : row.getValues()) {
-                System.out.println("giá trị là: "+value);
+                System.out.println("giá trị là: " + value);
                 if (value.equals(""))
                     return false;
             }
@@ -136,21 +134,21 @@ public class ColumnBarChartActivity extends AppCompatActivity implements ChartAc
 
     //Nhận xét
     private void describeChart() {
-        if(!checkValue(advancedInputRows))
-        {
+        if (!checkValue(advancedInputRows)) {
             Snackbar.make(mChartView, "Invalid data", Snackbar.LENGTH_SHORT).show();
             return;
         }
         final Bundle chartBundle = new Bundle();
         chartBundle.putSerializable(CHART, barChart);
-        chartBundle.putSerializable(CHART_TYPE, ChartTypeEnum.COLUMN);
         Intent describeIntent = new Intent(ColumnBarChartActivity.this, StatisticColumnChart.class);
         describeIntent.putExtra(BUNDLE, chartBundle);
         startActivity(describeIntent);
     }
 
     private void saveChartAsPicture() {
-        File file = ProjectFileManager.saveImage(this, chartLayout, mInputTable.rowsListView);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd_HHmmss", getResources().getConfiguration().locale);
+        String imageName = dateFormat.format(Calendar.getInstance().getTime());
+        File file = FileManager.saveImage(chartLayout, mInputTable.rowsListView, imageName);
 
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             Intent intent = new Intent();
@@ -168,7 +166,7 @@ public class ColumnBarChartActivity extends AppCompatActivity implements ChartAc
     }
 
     private void shareChart() {
-        File file = ProjectFileManager.saveImage(this, chartLayout, mInputTable.rowsListView);
+        File file = FileManager.saveTempImage(chartLayout, mInputTable.rowsListView);
         Uri uriToImage;
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             uriToImage = FileProvider.getUriForFile(this,
@@ -198,12 +196,12 @@ public class ColumnBarChartActivity extends AppCompatActivity implements ChartAc
         if (checkValue(advancedInputRows)) {
             //update data
             barChart.setData(advancedInputRows);
-            mChartView.updateData(advancedInputRows, chartName,xUnit,yUnit);
+            mChartView.updateData(advancedInputRows, chartName, xUnit, yUnit);
             //save data to file
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", getResources().getConfiguration().locale);
             project.setModifiedTime(dateFormat.format(Calendar.getInstance().getTime()));
-            ProjectFileManager.saveChart(projectLocation, barChart, chartLocation);
-            ProjectFileManager.saveProject(projectLocation);
+            FileManager.saveChart(projectLocation, barChart, chartLocation);
+            FileManager.saveProject(projectLocation);
         } else
             Snackbar.make(mChartView, "Invalid data", Snackbar.LENGTH_SHORT).show();
     }
@@ -211,13 +209,13 @@ public class ColumnBarChartActivity extends AppCompatActivity implements ChartAc
     private void deleteChart() {
         final ArrayList<ChartLocation> cList = projectLocation.getProject().getCharts();
         int target = -1;
-        for(int i = 0; i < cList.size(); i++) {
+        for (int i = 0; i < cList.size(); i++) {
             if (cList.get(i).getLocation().equals(chartLocation.getLocation())) {
                 target = i;
             }
         }
-        if(cList.remove(target) != null) {
-            ProjectFileManager.saveProject(projectLocation);
+        if (cList.remove(target) != null) {
+            FileManager.saveProject(projectLocation);
             Log.d("Delete", "Delete successfully" + cList.size());
             Toast.makeText(this, "Xóa biểu đồ thành công", Toast.LENGTH_SHORT).show();
 

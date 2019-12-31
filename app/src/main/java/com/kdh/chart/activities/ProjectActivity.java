@@ -20,7 +20,7 @@ import androidx.appcompat.widget.Toolbar;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
-import com.kdh.chart.ProjectFileManager;
+import com.kdh.chart.FileManager;
 import com.kdh.chart.R;
 import com.kdh.chart.adapters.ChartListViewAdapter;
 import com.kdh.chart.datatypes.Chart;
@@ -75,7 +75,6 @@ public class ProjectActivity extends AppCompatActivity {
             projectLocation = (ProjectLocation) bundle.getSerializable(CreateProjectDialogFragment.PROJECT_LOCATION);
             final Project project;
             if (projectLocation != null) {
-                //projectLocation = ProjectFileManager.loadProject(projectLocation);
                 project = projectLocation.getProject();
                 Log.d("create", "create" + project.getCharts().size());
                 final String projectName = project.getName();
@@ -166,8 +165,8 @@ public class ProjectActivity extends AppCompatActivity {
         chartListView.setVisibility(GONE);
         emptyView.setVisibility(VISIBLE);
         //load chart list
-        projectLocation = ProjectFileManager.loadProject(projectLocation);
-        charts = ProjectFileManager.loadCharts(projectLocation);
+        projectLocation = FileManager.loadProject(projectLocation);
+        charts = FileManager.loadCharts(projectLocation);
         if (charts.size() > 0) {
             chartListView.setVisibility(VISIBLE);
             emptyView.setVisibility(GONE);
@@ -266,6 +265,7 @@ public class ProjectActivity extends AppCompatActivity {
                         });
                         fragment6.show(getSupportFragmentManager(), "creat_chart");
                         cancelButtonSheetDialog();
+                        break;
                 }
             }
         });
@@ -289,14 +289,6 @@ public class ProjectActivity extends AppCompatActivity {
             this.nameChart = nameChart;
         }
 
-/*        public void setImageResource(int imageResource) {
-            this.imageResource = imageResource;
-        }
-
-        public void setNameChart(String nameChart) {
-            this.nameChart = nameChart;
-        }*/
-
         public int getImageResource() {
             return imageResource;
         }
@@ -304,7 +296,5 @@ public class ProjectActivity extends AppCompatActivity {
         public String getNameChart() {
             return nameChart;
         }
-
-
     }
 }
