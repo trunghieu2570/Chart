@@ -16,12 +16,14 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_marginVertical="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
             android:layout_height="wrap_content">
             <EditText
                 android:id="@+id/edt_row_name"
+                android:importantForAutofill="no"
+                android:inputType="text"
                 android:layout_width="match_parent"
-                android:maxLength="30"
                 android:hint="@string/enter_item_name"
                 android:layout_height="wrap_content"/>
         </com.google.android.material.textfield.TextInputLayout>

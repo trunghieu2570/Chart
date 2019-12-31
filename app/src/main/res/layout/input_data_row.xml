@@ -22,6 +22,7 @@
         android:layout_weight="1"
         android:background="@drawable/table_cell_shape"
         android:padding="5dp"
+        android:maxLines="1"
         android:textAlignment="viewStart"
         android:textSize="20sp" />
 
